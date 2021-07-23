@@ -11,6 +11,7 @@ class Level extends CI_Controller
         is_login();
         $this->load->model('Level_model');
         $this->load->model('Menu_model');
+        $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
 
@@ -19,6 +20,7 @@ class Level extends CI_Controller
         $level = $this->Level_model->get_all();
         $data = array(
             'level_data' => $level,
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
         );
         $this->template->load('template','level/level_list', $data);
     }
@@ -173,6 +175,7 @@ class Level extends CI_Controller
         if ($row) {
             $data = array(
 		'level_id' => $row->level_id,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 		'nama_level' => $row->nama_level,
 	    );
             $this->template->load('template','level/level_read', $data);
@@ -186,6 +189,8 @@ class Level extends CI_Controller
     {
         $data['role'] = $this->db->get_where('level', ['level_id' =>$id])->row_array();
         $data['row']= $this->Menu_model->get();
+        $data['sett_apps']= $this->Setting_app_model->get_by_id(1);
+       
         $this->template->load('template','level/role',$data);
     }
 
@@ -193,6 +198,7 @@ class Level extends CI_Controller
     {
         $data = array(
             'button' => 'Create',
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
             'action' => site_url('level/create_action'),
 	    'level_id' => set_value('level_id'),
 	    'nama_level' => set_value('nama_level'),
@@ -224,6 +230,7 @@ class Level extends CI_Controller
         if ($row) {
             $data = array(
                 'button' => 'Update',
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'action' => site_url('level/update_action'),
 		'level_id' => set_value('level_id', $row->level_id),
 		'nama_level' => set_value('nama_level', $row->nama_level),

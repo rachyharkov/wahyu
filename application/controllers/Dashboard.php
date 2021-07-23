@@ -6,12 +6,16 @@ class Dashboard extends CI_Controller {
 	function __construct()
     {
         parent::__construct();
-        // is_login();
+        is_login();
+        $this->load->model('Setting_app_model');
     }
 
 	public function index()
 	{
-		$this->template->load('template','dashboard');
+		$data = array(
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+        );
+		$this->template->load('template','dashboard',$data);
 	}
 
 

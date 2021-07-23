@@ -13,21 +13,21 @@
 </div>
 <div class="panel-body">
 <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
-      <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
+      <table class="table table-bordered table-hover table-td-valign-middle">
         <thead>
-	    <tr><td width='200'>Nama User <?php echo form_error('nama_user') ?></td><td><input type="text" class="form-control" name="nama_user" id="nama_user" placeholder="Nama User" value="<?php echo $nama_user; ?>" /></td></tr>
-	    <tr><td width='200'>Username <?php echo form_error('username') ?></td><td><input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?php echo $username; ?>" /></td></tr>
+	    <tr><td >Nama User <?php echo form_error('nama_user') ?></td><td><input type="text" class="form-control" name="nama_user" id="nama_user" placeholder="Nama User" value="<?php echo $nama_user; ?>" /></td></tr>
+	    <tr><td >Username <?php echo form_error('username') ?></td><td><input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?php echo $username; ?>" /></td></tr>
 	    
 	    <?php if ($this->uri->segment(2)== "create" || $this->uri->segment(2)== "create_action") { ?>
-        <tr><td width='200'>Password <?php echo form_error('password') ?></td><td><input type="password" class="form-control" name="password" id="password" placeholder="Password" value="<?php echo $password; ?>" /></td></tr>
+        <tr><td >Password <?php echo form_error('password') ?></td><td><input type="password" class="form-control" name="password" id="password" placeholder="Password" value="<?php echo $password; ?>" /></td></tr>
       <?php }else{ ?>
-        <tr><td width='200'>Password <?php echo form_error('password') ?></td><td><input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" />
+        <tr><td >Password <?php echo form_error('password') ?></td><td><input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" />
       <small style="color: red">(Biarkan kosong jika tidak diganti)</small></td></tr>
       <?php } ?>
 	    
 
 	    <tr>
-            <td width='200'>level <?php echo form_error('level_id') ?></td>
+            <td >level <?php echo form_error('level_id') ?></td>
             <td><select name="level_id" class="form-control">
                 <option value="">-- Pilih -- </option>
                 <?php foreach ($level as $key => $data) { ?>
@@ -39,31 +39,26 @@
                 <?php } ?>
               </select></td>
           </tr>
-
-
-	    <tr><td width='200'>Email <?php echo form_error('email') ?></td><td><input type="text" class="form-control" name="email" id="email" placeholder="Email" value="<?php echo $email; ?>" /></td></tr>
-	    <tr><td width='200'>No Hp User <?php echo form_error('no_hp_user') ?></td><td><input type="text" class="form-control" name="no_hp_user" id="no_hp_user" placeholder="No Hp User" value="<?php echo $no_hp_user; ?>" /></td></tr>
+	    <tr><td >Email <?php echo form_error('email') ?></td><td><input type="text" class="form-control" name="email" id="email" placeholder="Email" value="<?php echo $email; ?>" /></td></tr>
+	    <tr><td >No Hp User <?php echo form_error('no_hp_user') ?></td><td><input type="text" class="form-control" name="no_hp_user" id="no_hp_user" placeholder="No Hp User" value="<?php echo $no_hp_user; ?>" /></td></tr>
 	    
-        <tr><td width='200'>Alamat User <?php echo form_error('alamat_user') ?></td><td>
-          <textarea class="textarea form-control" id="wysihtml5" name="alamat_user" placeholder="Alamat User" rows="5"><?php echo $alamat_user; ?></textarea>
+        <tr><td >Alamat User <?php echo form_error('alamat_user') ?></td><td>
+          <textarea class="textarea form-control"  id="alamat_user" name="alamat_user" placeholder="Alamat User" rows="5"><?php echo $alamat_user; ?></textarea>
         </td></tr>
 
 	    <?php if ($this->uri->segment(2) == 'create' || $this->uri->segment(2) == 'create_action' ) { ?>
-                     <tr><td width='200'>photo <?php echo form_error('photo') ?></td><td><input type="file" class="form-control" name="photo" id="photo" placeholder="photo" required="" value="" onchange="return validasiEkstensi()" />
+                     <tr><td >photo <?php echo form_error('photo') ?></td><td><input type="file" class="form-control" name="photo" id="photo" placeholder="photo" required="" value="" onchange="return validasiEkstensi()" />
                         <!-- <div id="preview"></div> -->
                      </td></tr>
                   <?php }else{ ?>
                   <div class="form-group">
-                    
-
                     <tr>
-                        <td width='200'>Photo <?php echo form_error('photo') ?></td>
+                        <td >Photo <?php echo form_error('photo') ?></td>
                         <td>
                             <a href="#modal-dialog" data-bs-toggle="modal"><img  src="<?php echo base_url();?>assets/assets/img/user/<?=$photo?>" style="width: 150px;height: 150px;border-radius: 50%;"></img></a>
                             <input type="hidden" name="photo_lama" value="<?=$photo?>">
                             <p style="color: red">Note :Pilih photo Jika Ingin Merubah photo</p>
                             <input type="file" class="form-control" name="photo" id="photo" placeholder="photo" value="" onchange="return validasiEkstensi()" />
-                            <!-- <div id="preview"></div> -->
                         </td>
 
                     </tr>
@@ -106,7 +101,7 @@
   function validasiEkstensi(){
     var inputFile = document.getElementById('photo');
     var pathFile = inputFile.value;
-    var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    var ekstensiOk = /(\.jpg|\.jpeg|\.png)$/i;
     if(!ekstensiOk.exec(pathFile)){
         alert('Silakan upload file yang memiliki ekstensi .jpeg/.jpg/.png');
         inputFile.value = '';

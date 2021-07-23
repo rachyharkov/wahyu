@@ -11,6 +11,7 @@ class User extends CI_Controller
         is_login();
         $this->load->model('User_model');
         $this->load->model('Level_model');
+        $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
 
@@ -19,6 +20,7 @@ class User extends CI_Controller
         $user = $this->User_model->get_all();
         $data = array(
             'user_data' => $user,
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
         );
         $this->template->load('template','user/user_list', $data);
     }
@@ -29,6 +31,7 @@ class User extends CI_Controller
         if ($row) {
             $data = array(
                 'button' => 'Update',
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'action' => site_url('user/update_profile'),
                 'user_id' => set_value('user_id', $row->user_id),
                 'level_id' => set_value('level_id', $row->level_id),
@@ -60,6 +63,7 @@ class User extends CI_Controller
 		'no_hp_user' => $row->no_hp_user,
 		'alamat_user' => $row->alamat_user,
 		'photo' => $row->photo,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 	    );
             $this->template->load('template','user/user_read', $data);
         } else {
@@ -72,6 +76,7 @@ class User extends CI_Controller
     {
         $data = array(
             'button' => 'Create',
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
             'level' =>$this->Level_model->get_all(),
             'action' => site_url('user/create_action'),
 	    'user_id' => set_value('user_id'),
@@ -103,11 +108,10 @@ class User extends CI_Controller
         $this->upload->initialize($config);
         $this->upload->do_upload("photo");
         $data = $this->upload->data();
-        
         $photo =$data['file_name'];
 
 
-            $data = array(
+        $data = array(
         'nama_user' => $this->input->post('nama_user',TRUE),
         'username' => $this->input->post('username',TRUE),
         'password' => sha1($this->input->post('password',TRUE)),
@@ -132,6 +136,7 @@ class User extends CI_Controller
         if ($row) {
             $data = array(
                 'button' => 'Update',
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'level' =>$this->Level_model->get_all(),
                 'action' => site_url('user/update_action'),
 		'user_id' => set_value('user_id', $row->user_id),

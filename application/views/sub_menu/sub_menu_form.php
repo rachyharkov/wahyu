@@ -16,7 +16,7 @@
             <form action="<?php echo $action; ?>" method="post">
             <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
 	    <tr>
-            <td width='200'>Menu <?php echo form_error('menu_id') ?></td>
+            <td >Menu <?php echo form_error('menu_id') ?></td>
             <td><select name="menu_id" class="form-control">
                 <option value="">-- Pilih -- </option>
                 <?php foreach ($menu as $key => $data) { ?>
@@ -28,8 +28,8 @@
                 <?php } ?>
               </select></td>
           </tr>
-	    <tr><td width='200'>Nama Sub Menu <?php echo form_error('nama_sub_menu') ?></td><td><input type="text" class="form-control" name="nama_sub_menu" id="nama_sub_menu" placeholder="Nama Sub Menu" value="<?php echo $nama_sub_menu; ?>" /></td></tr>
-	    <tr><td width='200'>Url <?php echo form_error('url') ?></td><td><input type="text" class="form-control" name="url" id="url" placeholder="Url" value="<?php echo $url; ?>" /></td></tr>
+	    <tr><td >Nama Sub Menu <?php echo form_error('nama_sub_menu') ?></td><td><input type="text" class="form-control" name="nama_sub_menu" id="nama_sub_menu" placeholder="Nama Sub Menu" value="<?php echo $nama_sub_menu; ?>" /></td></tr>
+	    <tr><td >Url <?php echo form_error('url') ?></td><td><input type="text" class="form-control" name="url" id="url" placeholder="Url" value="<?php echo $url; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="sub_menu_id" value="<?php echo $sub_menu_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('menu') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>

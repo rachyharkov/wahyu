@@ -3,13 +3,13 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Kategori extends CI_Controller
+class Divisi extends CI_Controller
 {
     function __construct()
     {
         parent::__construct();
         is_login();
-        $this->load->model('Kategori_model');
+        $this->load->model('Divisi_model');
         $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
@@ -17,28 +17,29 @@ class Kategori extends CI_Controller
     public function index()
     {
         is_allowed($this->uri->segment(1),null);
-        $kategori = $this->Kategori_model->get_all();
+        $divisi = $this->Divisi_model->get_all();
         $data = array(
-            'kategori_data' => $kategori,
+            'divisi_data' => $divisi,
             'sett_apps' =>$this->Setting_app_model->get_by_id(1), 
         );
-        $this->template->load('template','kategori/kategori_list', $data);
+        $this->template->load('template','divisi/divisi_list', $data);
     }
 
     public function read($id) 
     {
         is_allowed($this->uri->segment(1),'read');
-        $row = $this->Kategori_model->get_by_id(decrypt_url($id));
+        $row = $this->Divisi_model->get_by_id(decrypt_url($id));
         if ($row) {
             $data = array(
-		'kategori_id' => $row->kategori_id,
+		'divisi_id' => $row->divisi_id,
         'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-		'nama_kategori' => $row->nama_kategori,
+		'kode_divisi' => $row->kode_divisi,
+		'nama_divisi' => $row->nama_divisi,
 	    );
-            $this->template->load('template','kategori/kategori_read', $data);
+            $this->template->load('template','divisi/divisi_read', $data);
         } else {
             $this->session->set_flashdata('message', 'Record Not Found');
-            redirect(site_url('kategori'));
+            redirect(site_url('divisi'));
         }
     }
 
@@ -48,11 +49,12 @@ class Kategori extends CI_Controller
         $data = array(
             'button' => 'Create',
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-            'action' => site_url('kategori/create_action'),
-	    'kategori_id' => set_value('kategori_id'),
-	    'nama_kategori' => set_value('nama_kategori'),
+            'action' => site_url('divisi/create_action'),
+	    'divisi_id' => set_value('divisi_id'),
+	    'kode_divisi' => set_value('kode_divisi'),
+	    'nama_divisi' => set_value('nama_divisi'),
 	);
-        $this->template->load('template','kategori/kategori_form', $data);
+        $this->template->load('template','divisi/divisi_form', $data);
     }
     
     public function create_action() 
@@ -64,32 +66,34 @@ class Kategori extends CI_Controller
             $this->create();
         } else {
             $data = array(
-		'nama_kategori' => $this->input->post('nama_kategori',TRUE),
+		'kode_divisi' => $this->input->post('kode_divisi',TRUE),
+		'nama_divisi' => $this->input->post('nama_divisi',TRUE),
 	    );
 
-            $this->Kategori_model->insert($data);
+            $this->Divisi_model->insert($data);
             $this->session->set_flashdata('message', 'Create Record Success');
-            redirect(site_url('kategori'));
+            redirect(site_url('divisi'));
         }
     }
     
     public function update($id) 
     {
         is_allowed($this->uri->segment(1),'update');
-        $row = $this->Kategori_model->get_by_id(decrypt_url($id));
+        $row = $this->Divisi_model->get_by_id(decrypt_url($id));
 
         if ($row) {
             $data = array(
                 'button' => 'Update',
                 'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-                'action' => site_url('kategori/update_action'),
-		'kategori_id' => set_value('kategori_id', $row->kategori_id),
-		'nama_kategori' => set_value('nama_kategori', $row->nama_kategori),
+                'action' => site_url('divisi/update_action'),
+		'divisi_id' => set_value('divisi_id', $row->divisi_id),
+		'kode_divisi' => set_value('kode_divisi', $row->kode_divisi),
+		'nama_divisi' => set_value('nama_divisi', $row->nama_divisi),
 	    );
-            $this->template->load('template','kategori/kategori_form', $data);
+            $this->template->load('template','divisi/divisi_form', $data);
         } else {
             $this->session->set_flashdata('message', 'Record Not Found');
-            redirect(site_url('kategori'));
+            redirect(site_url('divisi'));
         }
     }
     
@@ -99,38 +103,40 @@ class Kategori extends CI_Controller
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
-            $this->update($this->input->post('kategori_id', TRUE));
+            $this->update($this->input->post('divisi_id', TRUE));
         } else {
             $data = array(
-		'nama_kategori' => $this->input->post('nama_kategori',TRUE),
+		'kode_divisi' => $this->input->post('kode_divisi',TRUE),
+		'nama_divisi' => $this->input->post('nama_divisi',TRUE),
 	    );
 
-            $this->Kategori_model->update($this->input->post('kategori_id', TRUE), $data);
+            $this->Divisi_model->update($this->input->post('divisi_id', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
-            redirect(site_url('kategori'));
+            redirect(site_url('divisi'));
         }
     }
     
     public function delete($id) 
     {
         is_allowed($this->uri->segment(1),'delete');
-        $row = $this->Kategori_model->get_by_id(decrypt_url($id));
+        $row = $this->Divisi_model->get_by_id(decrypt_url($id));
 
         if ($row) {
-            $this->Kategori_model->delete(decrypt_url($id));
+            $this->Divisi_model->delete(decrypt_url($id));
             $this->session->set_flashdata('message', 'Delete Record Success');
-            redirect(site_url('kategori'));
+            redirect(site_url('divisi'));
         } else {
             $this->session->set_flashdata('message', 'Record Not Found');
-            redirect(site_url('kategori'));
+            redirect(site_url('divisi'));
         }
     }
 
     public function _rules() 
     {
-	$this->form_validation->set_rules('nama_kategori', 'nama kategori', 'trim|required');
+	$this->form_validation->set_rules('kode_divisi', 'kode divisi', 'trim|required');
+	$this->form_validation->set_rules('nama_divisi', 'nama divisi', 'trim|required');
 
-	$this->form_validation->set_rules('kategori_id', 'kategori_id', 'trim');
+	$this->form_validation->set_rules('divisi_id', 'divisi_id', 'trim');
 	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 
@@ -138,8 +144,8 @@ class Kategori extends CI_Controller
     {
         is_allowed($this->uri->segment(1),'read');
         $this->load->helper('exportexcel');
-        $namaFile = "kategori.xls";
-        $judul = "kategori";
+        $namaFile = "divisi.xls";
+        $judul = "divisi";
         $tablehead = 0;
         $tablebody = 1;
         $nourut = 1;
@@ -157,14 +163,16 @@ class Kategori extends CI_Controller
 
         $kolomhead = 0;
         xlsWriteLabel($tablehead, $kolomhead++, "No");
-	xlsWriteLabel($tablehead, $kolomhead++, "Nama Kategori");
+	xlsWriteLabel($tablehead, $kolomhead++, "Kode Divisi");
+	xlsWriteLabel($tablehead, $kolomhead++, "Nama Divisi");
 
-	foreach ($this->Kategori_model->get_all() as $data) {
+	foreach ($this->Divisi_model->get_all() as $data) {
             $kolombody = 0;
 
             //ubah xlsWriteLabel menjadi xlsWriteNumber untuk kolom numeric
             xlsWriteNumber($tablebody, $kolombody++, $nourut);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->nama_kategori);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->kode_divisi);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->nama_divisi);
 
 	    $tablebody++;
             $nourut++;
@@ -176,8 +184,8 @@ class Kategori extends CI_Controller
 
 }
 
-/* End of file Kategori.php */
-/* Location: ./application/controllers/Kategori.php */
+/* End of file Divisi.php */
+/* Location: ./application/controllers/Divisi.php */
 /* Please DO NOT modify this information : */
-/* Generated by Harviacode Codeigniter CRUD Generator 2021-07-22 06:52:35 */
+/* Generated by Harviacode Codeigniter CRUD Generator 2021-07-22 09:19:21 */
 /* http://harviacode.com */

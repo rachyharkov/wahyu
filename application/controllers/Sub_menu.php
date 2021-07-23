@@ -11,6 +11,7 @@ class Sub_menu extends CI_Controller
         is_login();
         $this->load->model('Sub_menu_model');
         $this->load->model('Menu_model');
+        $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
 
@@ -19,6 +20,7 @@ class Sub_menu extends CI_Controller
         $sub_menu = $this->Sub_menu_model->get_all();
         $data = array(
             'sub_menu_data' => $sub_menu,
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
         );
         $this->template->load('template','sub_menu/sub_menu_list', $data);
     }
@@ -29,6 +31,7 @@ class Sub_menu extends CI_Controller
         if ($row) {
             $data = array(
 		'sub_menu_id' => $row->sub_menu_id,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 		'menu_id' => $row->menu_id,
 		'nama_sub_menu' => $row->nama_sub_menu,
 		'url' => $row->url,
@@ -45,6 +48,7 @@ class Sub_menu extends CI_Controller
         $data = array(
             'button' => 'Create',
             'menu' =>$this->Menu_model->get_all(),
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
             'action' => site_url('sub_menu/create_action'),
 	    'sub_menu_id' => set_value('sub_menu_id'),
 	    'menu_id' => set_value('menu_id'),
@@ -80,6 +84,7 @@ class Sub_menu extends CI_Controller
         if ($row) {
             $data = array(
                 'button' => 'Update',
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'menu' =>$this->Menu_model->get_all(),
                 'action' => site_url('sub_menu/update_action'),
 		'sub_menu_id' => set_value('sub_menu_id', $row->sub_menu_id),

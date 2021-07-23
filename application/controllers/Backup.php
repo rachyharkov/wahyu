@@ -8,12 +8,16 @@ date_default_timezone_set('Asia/Jakarta');
 		{
 			parent::__construct();
 			is_login();
+			$this->load->model('Setting_app_model');
 
 		}
 
 		public function index()
 		{	
-			$this->template->load('template','backup/view');
+			$data = array(
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+        );
+			$this->template->load('template','backup/view',$data);
 		}
 
 		public function file()

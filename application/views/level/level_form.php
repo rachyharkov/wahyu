@@ -15,7 +15,7 @@
         
             <form action="<?php echo $action; ?>" method="post">
             <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
-	    <tr><td width='200'>Nama Level <?php echo form_error('nama_level') ?></td><td><input type="text" class="form-control" name="nama_level" id="nama_level" placeholder="Nama Level" value="<?php echo $nama_level; ?>" /></td></tr>
+	    <tr><td>Nama Level <?php echo form_error('nama_level') ?></td><td><input type="text" class="form-control" name="nama_level" id="nama_level" placeholder="Nama Level" value="<?php echo $nama_level; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="level_id" value="<?php echo $level_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('level') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>

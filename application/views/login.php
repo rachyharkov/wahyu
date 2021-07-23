@@ -3,7 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>ERP System</title>
+<title><?= $sett_apps->nama_aplikasi ?> - <?= $sett_apps->company ?> </title>
+ <link rel="icon" type="image/png" href="<?php echo base_url('assets/') ?>/assets/img/favicon.png" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 <meta content="" name="description" />
 <meta content="" name="author" />
@@ -40,7 +41,7 @@
 <div class="login-header">
 <div class="brand">
 <div class="d-flex align-items-center">
-<span class="logo"></span>ERP System
+<span class="logo"></span><?= $sett_apps->nama_aplikasi ?>
 </div>
 <small>Sign in to start your session</small>
 </div>

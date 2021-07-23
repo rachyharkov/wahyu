@@ -11,6 +11,7 @@ class Menu extends CI_Controller
         is_login();
         $this->load->model('Menu_model');
         $this->load->model('Sub_menu_model');
+        $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
 
@@ -22,6 +23,7 @@ class Menu extends CI_Controller
         $data = array(
             'menu_data' => $menu,
             'sub_menu_data' => $sub_menu,
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
         );
         $this->template->load('template','menu/menu_list', $data);
     }
@@ -35,6 +37,7 @@ class Menu extends CI_Controller
 		'menu' => $row->menu,
 		'icon' => $row->icon,
 		'urutan' => $row->urutan,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 	    );
             $this->template->load('template','menu/menu_read', $data);
         } else {
@@ -52,6 +55,7 @@ class Menu extends CI_Controller
 	    'menu' => set_value('menu'),
 	    'icon' => set_value('icon'),
 	    'urutan' => set_value('urutan'),
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 	);
         $this->template->load('template','menu/menu_form', $data);
     }
@@ -82,6 +86,7 @@ class Menu extends CI_Controller
         if ($row) {
             $data = array(
                 'button' => 'Update',
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'action' => site_url('menu/update_action'),
 		'menu_id' => set_value('menu_id', $row->menu_id),
 		'menu' => set_value('menu', $row->menu),

@@ -3,7 +3,8 @@
 
 <head>
 <meta charset="utf-8" />
-<title>ERP System</title>
+<title><?= $sett_apps->nama_aplikasi ?> - <?= $sett_apps->company ?> </title>
+ <link rel="icon" type="image/png" href="<?php echo base_url('assets') ?>/assets/img/<?= $sett_apps->favicon ?>" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 <meta content="" name="description" />
 <meta content="" name="author" />
@@ -12,7 +13,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="<?= base_url() ?>assets/assets/plugins/jvectormap-next/jquery-jvectormap.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css" rel="stylesheet" />
-<!-- <link href="<?= base_url() ?>assets/assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" /> -->
 <link href="<?= base_url() ?>assets/assets/plugins/nvd3/build/nv.d3.css" rel="stylesheet" />
 
 <!-- data table -->
@@ -20,7 +20,6 @@
 <link href="<?= base_url() ?>assets/assets/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <script src="<?= base_url() ?>assets/assets/ckeditor/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -43,7 +42,7 @@
 <div id="header" class="app-header">
 
 <div class="navbar-header">
-<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b class="me-1">ERP</b> System</a>
+<a href="<?= base_url() ?>Dashboard" class="navbar-brand"><span class="navbar-logo"></span> <b class="me-1"><?= $sett_apps->nama_aplikasi ?></b></a>
 <button type="button" class="navbar-mobile-toggler" data-toggle="app-sidebar-mobile">
 <span class="icon-bar"></span>
 <span class="icon-bar"></span>
@@ -127,7 +126,7 @@
 </div>
 <div id="appSidebarProfileMenu" class="collapse">
 <div class="menu-item pt-5px">
-<a href="javascript:;" class="menu-link">
+<a href="<?= base_url() ?>Setting_app" class="menu-link">
 <div class="menu-icon"><i class="fa fa-cog"></i></div>
 <div class="menu-text">Settings App</div>
 </a>
@@ -150,6 +149,7 @@
 	<div class="menu-text">Dashboard</div>
 	</a>
 </div>
+
 	<?php
           $session_level_id = $this->fungsi->user_login()->level_id;
           $queryMenu = "SELECT `user_access_menu`.`user_access_menu_id`,`level_id`,`menu`.`menu`,`menu`.`icon`,`menu`.`menu_id` as menu_id
@@ -193,6 +193,15 @@
 			</div>
 
           <?php endforeach ?>
+
+<div class="menu-item">
+	<a href="https://localhost/mjs_system/harviacode" class="menu-link">
+	<div class="menu-icon">
+	<i class="fa fa-cogs"></i>
+	</div>
+	<div class="menu-text">Generator</div>
+	</a>
+</div>
 
 <div class="menu-item d-flex">
 <a href="javascript:;" class="app-sidebar-minify-btn ms-auto" data-toggle="app-sidebar-minify"><i class="fa fa-angle-double-left"></i></a>

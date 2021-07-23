@@ -10,6 +10,7 @@ class Unit extends CI_Controller
         parent::__construct();
         is_login();
         $this->load->model('Unit_model');
+        $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
 
@@ -19,6 +20,7 @@ class Unit extends CI_Controller
         $unit = $this->Unit_model->get_all();
         $data = array(
             'unit_data' => $unit,
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1), 
         );
         $this->template->load('template','unit/unit_list', $data);
     }
@@ -30,6 +32,7 @@ class Unit extends CI_Controller
         if ($row) {
             $data = array(
 		'unit_id' => $row->unit_id,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 		'nama_unit' => $row->nama_unit,
 	    );
             $this->template->load('template','unit/unit_read', $data);
@@ -44,6 +47,7 @@ class Unit extends CI_Controller
         is_allowed($this->uri->segment(1),'create');
         $data = array(
             'button' => 'Create',
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
             'action' => site_url('unit/create_action'),
 	    'unit_id' => set_value('unit_id'),
 	    'nama_unit' => set_value('nama_unit'),
@@ -77,6 +81,7 @@ class Unit extends CI_Controller
         if ($row) {
             $data = array(
                 'button' => 'Update',
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'action' => site_url('unit/update_action'),
 		'unit_id' => set_value('unit_id', $row->unit_id),
 		'nama_unit' => set_value('nama_unit', $row->nama_unit),

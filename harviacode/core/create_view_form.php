@@ -16,8 +16,9 @@ $string = "<div id=\"content\" class=\"app-content\">
 <div class=\"panel-body\">
         
             <form action=\"<?php echo \$action; ?>\" method=\"post\">
-            <thead>
-            <table id=\"data-table-default\" class=\"table  table-bordered table-hover table-td-valign-middle\">";
+            
+            <table id=\"data-table-default\" class=\"table  table-bordered table-hover table-td-valign-middle\">
+            <thead>";
 foreach ($non_pk as $row) {
     if ($row["data_type"] == 'text')
     {
