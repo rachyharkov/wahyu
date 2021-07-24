@@ -15,8 +15,8 @@
         
             <form action="<?php echo $action; ?>" method="post">
             <thead>
-            <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
-	    <tr><td width='200'>Nama Status Karyawan <?php echo form_error('nama_status_karyawan') ?></td><td><input type="text" class="form-control" name="nama_status_karyawan" id="nama_status_karyawan" placeholder="Nama Status Karyawan" value="<?php echo $nama_status_karyawan; ?>" /></td></tr>
+            <table  class="table  table-bordered table-hover table-td-valign-middle">
+	    <tr><td>Nama Status<?php echo form_error('nama_status_karyawan') ?></td><td><input type="text" class="form-control" name="nama_status_karyawan" id="nama_status_karyawan" placeholder="Nama Status Karyawan" value="<?php echo $nama_status_karyawan; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="status_karyawan_id" value="<?php echo $status_karyawan_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('status_karyawan') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>

@@ -14,12 +14,12 @@
 <div class="panel-body">      
             <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
             <thead>
-            <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
-	    <tr><td width='200'>Nama Aplikasi <?php echo form_error('nama_aplikasi') ?></td><td><input type="text" class="form-control" name="nama_aplikasi" id="nama_aplikasi" placeholder="Nama Aplikasi" value="<?php echo $nama_aplikasi; ?>" /></td></tr>
-	    <tr><td width='200'>Company <?php echo form_error('company') ?></td><td><input type="text" class="form-control" name="company" id="company" placeholder="Company" value="<?php echo $company; ?>" /></td></tr>
-	    <tr><td width='200'>Author <?php echo form_error('author') ?></td><td><input type="text" class="form-control" name="author" id="author" placeholder="Author" value="<?php echo $author; ?>" /></td></tr>                 
+            <table class="table  table-bordered table-hover table-td-valign-middle">
+	    <tr><td >Nama Aplikasi <?php echo form_error('nama_aplikasi') ?></td><td><input type="text" class="form-control" name="nama_aplikasi" id="nama_aplikasi" placeholder="Nama Aplikasi" value="<?php echo $nama_aplikasi; ?>" /></td></tr>
+	    <tr><td >Company <?php echo form_error('company') ?></td><td><input type="text" class="form-control" name="company" id="company" placeholder="Company" value="<?php echo $company; ?>" /></td></tr>
+	    <tr><td >Author <?php echo form_error('author') ?></td><td><input type="text" class="form-control" name="author" id="author" placeholder="Author" value="<?php echo $author; ?>" /></td></tr>                 
                     <tr>
-                        <td width='200'>Favicon <?php echo form_error('favicon') ?></td>
+                        <td >Favicon <?php echo form_error('favicon') ?></td>
                         <td>
                             <a href="#modal-dialog" data-bs-toggle="modal"><img  src="<?php echo base_url();?>assets/assets/img/<?=$favicon?>" style="width: 150px;height: 150px;border-radius: 10%;"></img></a>
                             <input type="hidden" name="favicon_lama" value="<?=$favicon?>">

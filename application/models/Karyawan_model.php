@@ -8,6 +8,8 @@ class Karyawan_model extends CI_Model
 
     public $table = 'karyawan';
     public $id = 'karyawan_id';
+    public $table2 = 'berkas';
+    public $id2 = 'berkas_id';
     public $order = 'DESC';
 
     function __construct()
@@ -19,14 +21,39 @@ class Karyawan_model extends CI_Model
     function get_all()
     {
         $this->db->join('jabatan', 'jabatan.jabatan_id = karyawan.jabatan_id', 'left');
+        $this->db->join('divisi', 'divisi.divisi_id = karyawan.divisi_id', 'left');
         $this->db->join('status_karyawan', 'status_karyawan.status_karyawan_id = karyawan.status_karyawan_id', 'left');
         $this->db->order_by($this->id, $this->order);
         return $this->db->get($this->table)->result();
     }
 
+    function get_berkas ($id){
+        $this->db->select('berkas.*');
+        $this->db->from('berkas');
+        $this->db->where('karyawan_id', $id);
+        $query = $this->db->get();
+        return $query;
+    }
+
+    function get_berkas_by_id($id)
+    {
+        $this->db->where($this->id2, $id);
+        return $this->db->get($this->table2)->row();
+    }
+
+    function delete_berkas($id_berkas)
+    {
+        $this->db->where($this->id2, $id_berkas);
+        $this->db->delete($this->table2);
+    }
+    
+
     // get data by id
     function get_by_id($id)
     {
+        $this->db->join('divisi', 'divisi.divisi_id = karyawan.divisi_id','left');
+        $this->db->join('jabatan', 'jabatan.jabatan_id = karyawan.jabatan_id', 'left');
+        $this->db->join('status_karyawan', 'status_karyawan.status_karyawan_id = karyawan.status_karyawan_id', 'left');
         $this->db->where($this->id, $id);
         return $this->db->get($this->table)->row();
     }

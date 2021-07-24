@@ -15,9 +15,9 @@
         
             <form action="<?php echo $action; ?>" method="post">
             <thead>
-            <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
-	    <tr><td width='200'>Kode Divisi <?php echo form_error('kode_divisi') ?></td><td><input type="text" class="form-control" name="kode_divisi" id="kode_divisi" placeholder="Kode Divisi" value="<?php echo $kode_divisi; ?>" /></td></tr>
-	    <tr><td width='200'>Nama Divisi <?php echo form_error('nama_divisi') ?></td><td><input type="text" class="form-control" name="nama_divisi" id="nama_divisi" placeholder="Nama Divisi" value="<?php echo $nama_divisi; ?>" /></td></tr>
+            <table class="table  table-bordered table-hover table-td-valign-middle">
+	    <tr><td >Kode Divisi <?php echo form_error('kode_divisi') ?></td><td><input type="text" class="form-control" name="kode_divisi" id="kode_divisi" placeholder="Kode Divisi" value="<?php echo $kode_divisi; ?>" /></td></tr>
+	    <tr><td >Nama Divisi <?php echo form_error('nama_divisi') ?></td><td><input type="text" class="form-control" name="nama_divisi" id="nama_divisi" placeholder="Nama Divisi" value="<?php echo $nama_divisi; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="divisi_id" value="<?php echo $divisi_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('divisi') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>

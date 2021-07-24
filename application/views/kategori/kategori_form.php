@@ -13,7 +13,7 @@
 </div>
 <div class="panel-body" >
             <form action="<?php echo $action; ?>" method="post">
-            <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
+            <table class="table  table-bordered table-hover table-td-valign-middle">
             	<thead>
 			    <tr><td>Nama Kategori <?php echo form_error('nama_kategori') ?></td><td><input type="text" class="form-control" name="nama_kategori" id="nama_kategori" placeholder="Nama Kategori" value="<?php echo $nama_kategori; ?>" /></td></tr>
 			    <tr><td></td><td><input type="hidden" name="kategori_id" value="<?php echo $kategori_id; ?>" /> 

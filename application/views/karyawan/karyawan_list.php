@@ -34,6 +34,7 @@
 		<th>Email</th>
 		<th>No Hp</th>
 		<th>Pendidikan</th>
+        <th>Divisi</th>
 		<th>Jabatan</th>
 		<th>Status Karyawan</th>
 		<th>Alamat</th>
@@ -61,6 +62,7 @@
 			<td><?php echo $karyawan->email ?></td>
 			<td><?php echo $karyawan->no_hp ?></td>
 			<td><?php echo $karyawan->pendidikan ?></td>
+            <td><?php echo $karyawan->nama_divisi ?></td>
 			<td><?php echo $karyawan->nama_jabatan ?></td>
 			<td><?php echo $karyawan->nama_status_karyawan ?></td>
 			<td><?php echo $karyawan->alamat ?></td>
@@ -68,7 +70,9 @@
 			<td><?php echo $karyawan->status_kawin ?></td>
 			<td><?php echo $karyawan->tgl_masuk ?></td>
 			<td style="text-align:center" width="200px">
-				<?php 
+				<?php
+                echo anchor(site_url('karyawan/upload/'.encrypt_url($karyawan->karyawan_id)),'<i class="fas fa-upload" aria-hidden="true"></i>','class="btn btn-warning btn-sm read_data"'); 
+                echo '  '; 
 				echo anchor(site_url('karyawan/read/'.encrypt_url($karyawan->karyawan_id)),'<i class="fas fa-eye" aria-hidden="true"></i>','class="btn btn-success btn-sm read_data"'); 
 				echo '  '; 
 				echo anchor(site_url('karyawan/update/'.encrypt_url($karyawan->karyawan_id)),'<i class="fas fa-pencil-alt" aria-hidden="true"></i>','class="btn btn-primary btn-sm update_data"'); 

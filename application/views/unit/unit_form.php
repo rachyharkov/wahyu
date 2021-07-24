@@ -14,8 +14,8 @@
 <div class="panel-body">
         
             <form action="<?php echo $action; ?>" method="post">
-            <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
-	    <tr><td width='200'>Nama Unit <?php echo form_error('nama_unit') ?></td><td><input type="text" class="form-control" name="nama_unit" id="nama_unit" placeholder="Nama Unit" value="<?php echo $nama_unit; ?>" /></td></tr>
+            <table class="table  table-bordered table-hover table-td-valign-middle">
+	    <tr><td >Nama Unit <?php echo form_error('nama_unit') ?></td><td><input type="text" class="form-control" name="nama_unit" id="nama_unit" placeholder="Nama Unit" value="<?php echo $nama_unit; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="unit_id" value="<?php echo $unit_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('unit') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>

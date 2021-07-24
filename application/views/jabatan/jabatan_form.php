@@ -14,9 +14,10 @@
 <div class="panel-body">
         
             <form action="<?php echo $action; ?>" method="post">
-            <thead>
-            <table id="data-table-default" class="table  table-bordered table-hover table-td-valign-middle">
-	    <tr><td width='200'>Nama Jabatan <?php echo form_error('nama_jabatan') ?></td><td><input type="text" class="form-control" name="nama_jabatan" id="nama_jabatan" placeholder="Nama Jabatan" value="<?php echo $nama_jabatan; ?>" /></td></tr>
+            
+            <table  class="table  table-bordered table-hover table-td-valign-middle">
+            	<thead>
+	    <tr><td>Nama Jabatan <?php echo form_error('nama_jabatan') ?></td><td><input type="text" class="form-control" name="nama_jabatan" id="nama_jabatan" placeholder="Nama Jabatan" value="<?php echo $nama_jabatan; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="jabatan_id" value="<?php echo $jabatan_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('jabatan') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>
