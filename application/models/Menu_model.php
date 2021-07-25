@@ -8,6 +8,7 @@ class Menu_model extends CI_Model
 
     public $table = 'menu';
     public $id = 'menu_id';
+    public $urutan = 'urutan';
     public $order = 'DESC';
 
     function __construct()
@@ -18,7 +19,7 @@ class Menu_model extends CI_Model
     // get all
     function get_all()
     {
-        $this->db->order_by($this->id, $this->order);
+        $this->db->order_by($this->urutan,'Asc');
         return $this->db->get($this->table)->result();
     }
 

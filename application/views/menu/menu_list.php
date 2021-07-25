@@ -31,7 +31,7 @@
         <div class="panel-body">
 
           <div class="table-responsive">
-            <table class="table table-bordered table-hover m-b-0 text-white" id="data-table-default">
+            <table class="table table-bordered table-hover m-b-0 text-white" >
               <thead>
                 <tr>
                   <th width="1%">No</th>
@@ -49,7 +49,7 @@
                     <td><?php echo $menu->menu ?></td>
                     <td><?php echo $menu->icon ?></td>
                     <td><?php echo $menu->urutan ?></td>
-                    <td style="text-align:center" width="200px">
+                    <td style="text-align:center" >
                       <?php 
                       echo anchor(site_url('menu/read/'.$menu->menu_id),'<i class="fas fa-eye" aria-hidden="true"></i>','class="btn btn-success btn-sm"'); 
                       echo '  '; 
@@ -91,7 +91,7 @@
         <div class="panel-body">
 
           <div class="table-responsive">
-            <table class="table table-bordered table-hover m-b-0 text-white" id="data-table-default2">
+            <table class="table table-bordered table-hover m-b-0 text-white"> 
               <thead>
                 <tr>
                   <th width="1%">No</th>
@@ -109,7 +109,7 @@
                     <td><?php echo $sub_menu->menu ?></td>
                     <td><?php echo $sub_menu->nama_sub_menu ?></td>
                     <td><?php echo $sub_menu->url ?></td>
-                    <td style="text-align:center" width="200px">
+                    <td style="text-align:center" >
                       <?php 
                       echo anchor(site_url('sub_menu/read/'.$sub_menu->sub_menu_id),'<i class="fas fa-eye" aria-hidden="true"></i>','class="btn btn-success btn-sm"'); 
                       echo '  '; 

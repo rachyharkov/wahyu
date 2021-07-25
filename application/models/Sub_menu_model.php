@@ -8,6 +8,7 @@ class Sub_menu_model extends CI_Model
 
     public $table = 'sub_menu';
     public $id = 'sub_menu_id';
+    public $urutan = 'urutan';
     public $order = 'DESC';
 
     function __construct()
@@ -19,7 +20,7 @@ class Sub_menu_model extends CI_Model
     function get_all()
     {
         $this->db->join('menu', 'menu.menu_id = sub_menu.menu_id', 'left');
-        $this->db->order_by($this->id, $this->order);
+        $this->db->order_by($this->urutan, 'asc');
         return $this->db->get($this->table)->result();
     }
 
