@@ -25,13 +25,14 @@ class Setting_app extends CI_Controller
 		'id' => set_value('id', $row->id),
 		'nama_aplikasi' => set_value('nama_aplikasi', $row->nama_aplikasi),
 		'company' => set_value('company', $row->company),
-		'author' => set_value('author', $row->author),
-		'favicon' => set_value('favicon', $row->favicon),
+		'alamat' => set_value('alamat', $row->alamat),
+        'author' => set_value('author', $row->author),
+		'photo' => set_value('favicon', $row->photo),
 		'favicon' => set_value('favicon', $row->favicon),
 	    );
             $this->template->load('template','setting_app/setting_app_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('setting_app'));
         }
     }
@@ -66,6 +67,7 @@ class Setting_app extends CI_Controller
             $data = array(
     		'nama_aplikasi' => $this->input->post('nama_aplikasi',TRUE),
     		'company' => $this->input->post('company',TRUE),
+            'alamat' => $this->input->post('alamat',TRUE),
     		'author' => $this->input->post('author',TRUE),
     		'favicon' => $favicon,
     	    );

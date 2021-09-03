@@ -38,7 +38,7 @@ class Divisi extends CI_Controller
 	    );
             $this->template->load('template','divisi/divisi_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('divisi'));
         }
     }
@@ -92,7 +92,7 @@ class Divisi extends CI_Controller
 	    );
             $this->template->load('template','divisi/divisi_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('divisi'));
         }
     }
@@ -126,7 +126,7 @@ class Divisi extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('divisi'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('divisi'));
         }
     }

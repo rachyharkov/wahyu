@@ -17,16 +17,35 @@
             <table class="table  table-bordered table-hover table-td-valign-middle">
 	    <tr><td >Nama Aplikasi <?php echo form_error('nama_aplikasi') ?></td><td><input type="text" class="form-control" name="nama_aplikasi" id="nama_aplikasi" placeholder="Nama Aplikasi" value="<?php echo $nama_aplikasi; ?>" /></td></tr>
 	    <tr><td >Company <?php echo form_error('company') ?></td><td><input type="text" class="form-control" name="company" id="company" placeholder="Company" value="<?php echo $company; ?>" /></td></tr>
-	    <tr><td >Author <?php echo form_error('author') ?></td><td><input type="text" class="form-control" name="author" id="author" placeholder="Author" value="<?php echo $author; ?>" /></td></tr>                 
+
+        <tr><td >Alamat <?php echo form_error('company') ?></td><td><input type="text" class="form-control" name="alamat" id="alamat" placeholder="Alamat" value="<?php echo $alamat; ?>" /></td></tr>
+
+
+	    <tr><td >Author <?php echo form_error('author') ?></td><td><input type="text" class="form-control" name="author" id="author" placeholder="Author" value="<?php echo $author; ?>" /></td></tr>  
+        <tr>
+                        <td >Logo Company <?php echo form_error('photo') ?></td>
+                        <td>
+                            <a href="#modal-dialog" data-bs-toggle="modal"><img  src="<?php echo base_url();?>assets/assets/img/logo/<?=$photo?>" style="width: 200px;height: 120px;border-radius: 10%;"></img></a>
+                            <input type="hidden" name="photo_lama" value="<?=$photo?>">
+                            <p style="color: red">Note : Pilih logo perusahaan Jika Ingin Merubah</p>
+                            <input type="file" class="form-control" name="photo" id="photo" placeholder="photo" value="" onchange="return validasiEkstensi_fav()" />
+                        </td>
+                    </tr>
+
+
                     <tr>
                         <td >Favicon <?php echo form_error('favicon') ?></td>
                         <td>
                             <a href="#modal-dialog" data-bs-toggle="modal"><img  src="<?php echo base_url();?>assets/assets/img/<?=$favicon?>" style="width: 150px;height: 150px;border-radius: 10%;"></img></a>
                             <input type="hidden" name="favicon_lama" value="<?=$favicon?>">
-                            <p style="color: red">Note : Pilih favicon Jika Ingin Merubah favicon</p>
+                            <p style="color: red">Note : Pilih favicon Jika Ingin Merubah</p>
                             <input type="file" class="form-control" name="favicon" id="favicon" placeholder="favicon" value="" onchange="return validasiEkstensi_fav()" />
                         </td>
                     </tr>
+
+                    
+
+
 	    <tr><td></td><td><input type="hidden" name="id" value="<?php echo $id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a class="btn btn-info" onclick="self.history.back()"><i class="fas fa-undo"></i> Kembali</a>

@@ -59,7 +59,10 @@
               </select></td>
           </tr>	    
         <tr><td >Deskripsi <?php echo form_error('deskripsi') ?></td><td> <textarea class="form-control" rows="3" name="deskripsi" id="deskripsi" placeholder="Deskripsi"><?php echo $deskripsi; ?></textarea></td></tr>
-		<tr><td >Estimasi Harga <?php echo form_error('estimasi_harga') ?></td><td><input type="number" class="form-control" name="estimasi_harga" id="estimasi_harga" placeholder="Estimasi Harga" value="<?php echo $estimasi_harga; ?>" /></td></tr>
+		<tr><td >Estimasi Harga <?php echo form_error('estimasi_harga') ?></td><td>
+      <input type="hidden" class="form-control" name="estimasi_harga" id="estimasi_harga" placeholder="Estimasi Harga" value="<?php echo $estimasi_harga; ?>" />
+      <input type="text" class="form-control" name="estimasi_harga_txt" id="estimasi_harga_txt" placeholder="Estimasi Harga Text" value="<?php echo $estimasi_harga; ?>" />
+    </td></tr>
 
 	    <tr><td ></td><td>
 	    	<?php if ($button=='Create') { ?>
@@ -107,3 +110,15 @@
 </div>
 </div>
 </div>
+<script>
+  $(document).ready(function() {
+    
+    // konversi real-time ke number_format dan regex
+    $('#estimasi_harga_txt').keyup(function() {
+      var jumlah = $(this).val();
+      
+      $('#estimasi_harga').val(jumlah.replace(/\,/g, '', ));
+      $('#estimasi_harga_txt').val(number_format(jumlah));
+    });
+  });
+</script>

@@ -12,6 +12,7 @@ class Karyawan extends CI_Controller
         $this->load->model('Karyawan_model');
         $this->load->model('Setting_app_model');
         $this->load->model('Status_karyawan_model');
+        $this->load->model('Lokasi_model');
         $this->load->model('Jabatan_model');
         $this->load->model('Divisi_model');
         $this->load->library('form_validation');
@@ -42,20 +43,23 @@ class Karyawan extends CI_Controller
 		'email' => $row->email,
 		'no_hp' => $row->no_hp,
 		'pendidikan' => $row->pendidikan,
+        'nama_lokasi' => $row->nama_lokasi,
         'nama_divisi' => $row->nama_divisi,
 		'nama_jabatan' => $row->nama_jabatan,
 		'nama_status_karyawan' => $row->nama_status_karyawan,
 		'alamat' => $row->alamat,
+        'gaji_pokok' => $row->gaji_pokok,
 		'jenis_kelamin' => $row->jenis_kelamin,
 		'status_kawin' => $row->status_kawin,
 		'tgl_masuk' => $row->tgl_masuk,
 		'photo' => $row->photo,
+        'status_keaktifan' => $row->status_keaktifan,
 	    );
 
             
             $this->template->load('template','karyawan/karyawan_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('karyawan'));
         }
     }
@@ -67,16 +71,19 @@ class Karyawan extends CI_Controller
             'button' => 'Create',
             'jabatan' =>$this->Jabatan_model->get_all(),
             'status_karyawan' =>$this->Status_karyawan_model->get_all(),
+            'lokasi' =>$this->Lokasi_model->get_all(),
             'jabatan' =>$this->Jabatan_model->get_all(),
             'divisi' =>$this->Divisi_model->get_all(),
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
             'action' => site_url('karyawan/create_action'),
 	    'karyawan_id' => set_value('karyawan_id'),
 	    'nama_karyawan' => set_value('nama_karyawan'),
+        'gaji_pokok' => set_value('gaji_pokok'),
 	    'nik' => set_value('nik'),
 	    'email' => set_value('email'),
 	    'no_hp' => set_value('no_hp'),
 	    'pendidikan' => set_value('pendidikan'),
+        'lokasi_id' => set_value('lokasi_id'),
 	    'jabatan_id' => set_value('jabatan_id'),
         'divisi_id' => set_value('divisi_id'),
 	    'status_karyawan_id' => set_value('status_karyawan_id'),
@@ -85,6 +92,7 @@ class Karyawan extends CI_Controller
 	    'status_kawin' => set_value('status_kawin'),
 	    'tgl_masuk' => set_value('tgl_masuk'),
 	    'photo' => set_value('photo'),
+        'status_keaktifan' => set_value('status_keaktifan'),
 	);
         $this->template->load('template','karyawan/karyawan_form', $data);
     }
@@ -113,14 +121,17 @@ class Karyawan extends CI_Controller
 		'email' => $this->input->post('email',TRUE),
 		'no_hp' => $this->input->post('no_hp',TRUE),
 		'pendidikan' => $this->input->post('pendidikan',TRUE),
-        'divisi' => $this->input->post('divisi_id',TRUE),
+        'divisi_id' => $this->input->post('divisi_id',TRUE),
+        'lokasi_id' => $this->input->post('lokasi_id',TRUE),
 		'jabatan_id' => $this->input->post('jabatan_id',TRUE),
+        'gaji_pokok' => $this->input->post('gaji_pokok',TRUE),
 		'status_karyawan_id' => $this->input->post('status_karyawan_id',TRUE),
 		'alamat' => $this->input->post('alamat',TRUE),
 		'jenis_kelamin' => $this->input->post('jenis_kelamin',TRUE),
 		'status_kawin' => $this->input->post('status_kawin',TRUE),
 		'tgl_masuk' => $this->input->post('tgl_masuk',TRUE),
 		'photo' => $photo,
+        'status_keaktifan' => $status_keaktifan,
 	    );
 
             $this->Karyawan_model->insert($data);
@@ -139,6 +150,7 @@ class Karyawan extends CI_Controller
                 'status_karyawan' =>$this->Status_karyawan_model->get_all(),
                 'jabatan' =>$this->Jabatan_model->get_all(),
                 'divisi' =>$this->Divisi_model->get_all(),
+                'lokasi' =>$this->Lokasi_model->get_all(),
                 'sett_apps' =>$this->Setting_app_model->get_by_id(1),
                 'action' => site_url('karyawan/update_action'),
 		'karyawan_id' => set_value('karyawan_id', $row->karyawan_id),
@@ -146,8 +158,10 @@ class Karyawan extends CI_Controller
 		'nik' => set_value('nik', $row->nik),
 		'email' => set_value('email', $row->email),
 		'no_hp' => set_value('no_hp', $row->no_hp),
+        'gaji_pokok' => set_value('gaji_pokok', $row->gaji_pokok),
 		'pendidikan' => set_value('pendidikan', $row->pendidikan),
         'divisi_id' => set_value('divisi_id', $row->divisi_id),
+        'lokasi_id' => set_value('lokasi_id', $row->lokasi_id),
 		'jabatan_id' => set_value('jabatan_id', $row->jabatan_id),
 		'status_karyawan_id' => set_value('status_karyawan_id', $row->status_karyawan_id),
 		'alamat' => set_value('alamat', $row->alamat),
@@ -155,11 +169,12 @@ class Karyawan extends CI_Controller
 		'status_kawin' => set_value('status_kawin', $row->status_kawin),
 		'tgl_masuk' => set_value('tgl_masuk', $row->tgl_masuk),
 		'photo' => set_value('photo', $row->photo),
+        'status_keaktifan' => set_value('status_keaktifan', $row->status_keaktifan),
 	    );
 
             $this->template->load('template','karyawan/karyawan_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('karyawan'));
         }
     }
@@ -168,7 +183,6 @@ class Karyawan extends CI_Controller
     {
         is_allowed($this->uri->segment(1),'update');
         $this->_rules();
-
         if ($this->form_validation->run() == FALSE) {
             $this->update($this->input->post('karyawan_id', TRUE));
         } else {
@@ -201,13 +215,16 @@ class Karyawan extends CI_Controller
 		'email' => $this->input->post('email',TRUE),
 		'no_hp' => $this->input->post('no_hp',TRUE),
 		'pendidikan' => $this->input->post('pendidikan',TRUE),
+        'lokasi_id' => $this->input->post('lokasi_id',TRUE),
         'divisi_id' => $this->input->post('divisi_id',TRUE),
+        'gaji_pokok' => $this->input->post('gaji_pokok',TRUE),
 		'jabatan_id' => $this->input->post('jabatan_id',TRUE),
 		'status_karyawan_id' => $this->input->post('status_karyawan_id',TRUE),
 		'alamat' => $this->input->post('alamat',TRUE),
 		'jenis_kelamin' => $this->input->post('jenis_kelamin',TRUE),
 		'status_kawin' => $this->input->post('status_kawin',TRUE),
 		'tgl_masuk' => $this->input->post('tgl_masuk',TRUE),
+        'status_keaktifan' => $this->input->post('status_keaktifan',TRUE),
 		'photo' => $photo,
 	    );
 
@@ -234,7 +251,7 @@ class Karyawan extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('karyawan'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('karyawan'));
         }
     }
@@ -252,8 +269,9 @@ class Karyawan extends CI_Controller
 	$this->form_validation->set_rules('jenis_kelamin', 'jenis kelamin', 'trim|required');
 	$this->form_validation->set_rules('status_kawin', 'status kawin', 'trim|required');
 	$this->form_validation->set_rules('tgl_masuk', 'tgl masuk', 'trim|required');
+    $this->form_validation->set_rules('lokasi_id', 'lokasi Kerja', 'trim|required');
+    $this->form_validation->set_rules('status_keaktifan', 'Status Keaktifan', 'trim|required');
 	$this->form_validation->set_rules('photo', 'photo', 'trim');
-
 	$this->form_validation->set_rules('karyawan_id', 'karyawan_id', 'trim');
 	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
@@ -388,9 +406,50 @@ class Karyawan extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('Karyawan/read/'.$uri));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('Karyawan/read/'.$uri));
         }
     }
 
+    public function pdf($id)
+    {
+        is_allowed($this->uri->segment(1),'read');
+        $this->load->library('dompdf_gen');
+
+       $row = $this->Karyawan_model->get_by_id(decrypt_url($id));
+        if ($row) {
+            $data = array(
+        'berkas' =>$this->Karyawan_model->get_berkas(decrypt_url($id)),
+        'karyawan_id' => $row->karyawan_id,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+        'nama_karyawan' => $row->nama_karyawan,
+        'nik' => $row->nik,
+        'email' => $row->email,
+        'no_hp' => $row->no_hp,
+        'pendidikan' => $row->pendidikan,
+        'nama_lokasi' => $row->nama_lokasi,
+        'nama_divisi' => $row->nama_divisi,
+        'nama_jabatan' => $row->nama_jabatan,
+        'nama_status_karyawan' => $row->nama_status_karyawan,
+        'alamat' => $row->alamat,
+        'gaji_pokok' => $row->gaji_pokok,
+        'jenis_kelamin' => $row->jenis_kelamin,
+        'status_kawin' => $row->status_kawin,
+        'tgl_masuk' => $row->tgl_masuk,
+        'photo' => $row->photo,
+        'status_keaktifan' => $row->status_keaktifan,
+        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+        );
+
+       $this->load->view('karyawan/karyawan_pdf',$data);
+       $paper_size = 'A4';
+       $orientation = 'portrait';
+       $html = $this->output->get_output();
+       $this->dompdf->set_paper($paper_size, $orientation);
+       $this->dompdf->load_html($html);
+       $this->dompdf->render();
+       $this->dompdf->stream("laporan_data_karyawan.pdf", array('Attachment' =>0));
+   }
+
+}
 }

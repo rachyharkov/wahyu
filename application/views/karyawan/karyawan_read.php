@@ -17,6 +17,7 @@
 	    <tr><td>Email</td><td><?php echo $email; ?></td></tr>
 	    <tr><td>No Hp</td><td><?php echo $no_hp; ?></td></tr>
 	    <tr><td>Pendidikan</td><td><?php echo $pendidikan; ?></td></tr>
+	    <tr><td>Lokasi Kerja</td><td><?php echo $nama_lokasi; ?></td></tr>
 	    <tr><td>Divisi</td><td><?php echo $nama_divisi; ?></td></tr>
 	    <tr><td>Jabatan</td><td><?php echo $nama_jabatan; ?></td></tr>
 	    <tr><td>Status Karyawan</td><td><?php echo $nama_status_karyawan; ?></td></tr>
@@ -26,6 +27,7 @@
 	    <tr><td>Tgl Masuk</td><td><?php echo $tgl_masuk; ?></td></tr>
 	    <tr><td>Photo</td><td>
 	    	<a href="#modal-dialog" data-bs-toggle="modal"><img style="width: 150px;height: 150px;border-radius: 50%;" src="<?php echo base_url().'/assets/assets/img/karyawan/'.$photo ?>" /></a></td></tr>
+	    	<tr><td>Status Keaktifan</td><td><?php echo $status_keaktifan; ?></td></tr>
 	    <tr>
 	    	<td>Berkas Karyawan</td>
 	    	<td>
@@ -48,7 +50,14 @@
 	    	
 	    	</td>
 	    </tr>
-	    <tr><td></td><td><a href="<?php echo site_url('karyawan') ?>" class="btn btn-default">Cancel</a></td></tr>
+
+	    <tr>
+	    	<td></td>
+	    	<td>
+	    		<a href="<?php echo site_url('karyawan/pdf/'.encrypt_url($karyawan_id)) ?>" class="btn btn-warning" target="_blank"><i class="fas fa-print" aria-hidden="true"></i> Print</a>
+	    		<a href="<?php echo site_url('karyawan') ?>" class="btn btn-default">Cancel</a>
+	    	</td>
+	    </tr>
 	</table>
 			</div>
         </div>

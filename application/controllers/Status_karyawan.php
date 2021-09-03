@@ -37,7 +37,7 @@ class Status_karyawan extends CI_Controller
 	    );
             $this->template->load('template','status_karyawan/status_karyawan_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('status_karyawan'));
         }
     }
@@ -88,7 +88,7 @@ class Status_karyawan extends CI_Controller
 	    );
             $this->template->load('template','status_karyawan/status_karyawan_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('status_karyawan'));
         }
     }
@@ -121,7 +121,7 @@ class Status_karyawan extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('status_karyawan'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('status_karyawan'));
         }
     }

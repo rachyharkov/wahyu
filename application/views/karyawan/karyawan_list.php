@@ -34,13 +34,17 @@
 		<th>Email</th>
 		<th>No Hp</th>
 		<th>Pendidikan</th>
+        <th>Lokasi Kerja</th>
         <th>Divisi</th>
 		<th>Jabatan</th>
 		<th>Status Karyawan</th>
+        <th>Gaji Pokok</th>
 		<th>Alamat</th>
 		<th>Jenis Kelamin</th>
 		<th>Status Kawin</th>
 		<th>Tgl Masuk</th>
+        
+        <th>Status Keaktifan</th>
 		<th>Action</th>
             </tr></thead><tbody><?php $no = 1;
             foreach ($karyawan_data as $karyawan)
@@ -62,13 +66,23 @@
 			<td><?php echo $karyawan->email ?></td>
 			<td><?php echo $karyawan->no_hp ?></td>
 			<td><?php echo $karyawan->pendidikan ?></td>
+            <td><?php echo $karyawan->nama_lokasi ?></td>
             <td><?php echo $karyawan->nama_divisi ?></td>
 			<td><?php echo $karyawan->nama_jabatan ?></td>
 			<td><?php echo $karyawan->nama_status_karyawan ?></td>
+            <td><?php echo rupiah($karyawan->gaji_pokok)  ?></td>
 			<td><?php echo $karyawan->alamat ?></td>
 			<td><?php echo $karyawan->jenis_kelamin ?></td>
 			<td><?php echo $karyawan->status_kawin ?></td>
-			<td><?php echo $karyawan->tgl_masuk ?></td>
+			<td><?php echo $karyawan->tgl_masuk ?></td>           
+
+            <?php if ($karyawan->status_keaktifan=='Aktif Bekerja') { ?>
+                <td><span class="badge bg-success">Aktif Bekerja</span></td>                
+            <?php }else{ ?>
+                <td><span class="badge bg-danger">Sudah tidak bekerja</span></td>     
+            <?php } ?>
+
+
 			<td style="text-align:center" width="200px">
 				<?php
                 echo anchor(site_url('karyawan/upload/'.encrypt_url($karyawan->karyawan_id)),'<i class="fas fa-upload" aria-hidden="true"></i>','class="btn btn-warning btn-sm read_data"'); 

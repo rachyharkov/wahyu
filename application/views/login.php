@@ -71,6 +71,9 @@ Show Password
 </div>
 <div class="mb-20px">
 <button type="submit" name="login" class="btn btn-success d-block w-100 h-45px btn-lg">Sign me in</button>
+<div class="text-gray-500">
+Forgot password? Click <a href="<?php echo base_url() ?>auth/lupa_password" class="text-white">here</a> to reset password.
+</div>
 
 
 
@@ -88,9 +91,13 @@ Show Password
 <div class="login-bg-list-item active"><a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="assets/assets/img/login-bg/login-bg-17.jpg" style="background-image: url(assets/assets/img/login-bg/login-bg-17.jpg)"></a></div>
 
 <div class="login-bg-list-item"><a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="assets/assets/img/login-bg/login-bg-16.jpg" style="background-image: url(assets/assets/img/login-bg/login-bg-16.jpg)"></a></div>
+
 <div class="login-bg-list-item"><a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="assets/assets/img/login-bg/login-bg-15.jpg" style="background-image: url(assets/assets/img/login-bg/login-bg-15.jpg)"></a></div>
+
 <div class="login-bg-list-item"><a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="assets/assets/img/login-bg/login-bg-14.jpg" style="background-image: url(assets/assets/img/login-bg/login-bg-14.jpg)"></a></div>
+
 <div class="login-bg-list-item"><a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="assets/assets/img/login-bg/login-bg-13.jpg" style="background-image: url(assets/assets/img/login-bg/login-bg-13.jpg)"></a></div>
+
 <div class="login-bg-list-item"><a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="assets/assets/img/login-bg/login-bg-12.jpg" style="background-image: url(assets/assets/img/login-bg/login-bg-12.jpg)"></a></div>
 </div>
 

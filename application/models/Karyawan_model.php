@@ -21,6 +21,7 @@ class Karyawan_model extends CI_Model
     function get_all()
     {
         $this->db->join('jabatan', 'jabatan.jabatan_id = karyawan.jabatan_id', 'left');
+        $this->db->join('lokasi', 'lokasi.lokasi_id = karyawan.lokasi_id', 'left');
         $this->db->join('divisi', 'divisi.divisi_id = karyawan.divisi_id', 'left');
         $this->db->join('status_karyawan', 'status_karyawan.status_karyawan_id = karyawan.status_karyawan_id', 'left');
         $this->db->order_by($this->id, $this->order);
@@ -52,6 +53,7 @@ class Karyawan_model extends CI_Model
     function get_by_id($id)
     {
         $this->db->join('divisi', 'divisi.divisi_id = karyawan.divisi_id','left');
+        $this->db->join('lokasi', 'lokasi.lokasi_id = karyawan.lokasi_id', 'left');
         $this->db->join('jabatan', 'jabatan.jabatan_id = karyawan.jabatan_id', 'left');
         $this->db->join('status_karyawan', 'status_karyawan.status_karyawan_id = karyawan.status_karyawan_id', 'left');
         $this->db->where($this->id, $id);

@@ -59,7 +59,7 @@ foreach ($all as $row) {
 $string .= "\n\t    );
             \$this->template->load('template','$c_url/$v_read', \$data);
         } else {
-            \$this->session->set_flashdata('message', 'Record Not Found');
+            \$this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('$c_url'));
         }
     }
@@ -113,7 +113,7 @@ foreach ($all as $row) {
 $string .= "\n\t    );
             \$this->template->load('template','$c_url/$v_form', \$data);
         } else {
-            \$this->session->set_flashdata('message', 'Record Not Found');
+            \$this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('$c_url'));
         }
     }
@@ -148,7 +148,7 @@ $string .= "\n\t    );
             \$this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('$c_url'));
         } else {
-            \$this->session->set_flashdata('message', 'Record Not Found');
+            \$this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('$c_url'));
         }
     }

@@ -38,7 +38,7 @@ class History_login extends CI_Controller
 	    );
             $this->template->load('template','history_login/history_login_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('history_login'));
         }
     }
@@ -93,7 +93,7 @@ class History_login extends CI_Controller
 	    );
             $this->template->load('template','history_login/history_login_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('history_login'));
         }
     }
@@ -127,7 +127,7 @@ class History_login extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('history_login'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('history_login'));
         }
     }

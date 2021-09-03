@@ -37,7 +37,7 @@ class Kategori extends CI_Controller
 	    );
             $this->template->load('template','kategori/kategori_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('kategori'));
         }
     }
@@ -88,7 +88,7 @@ class Kategori extends CI_Controller
 	    );
             $this->template->load('template','kategori/kategori_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('kategori'));
         }
     }
@@ -121,7 +121,7 @@ class Kategori extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('kategori'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('kategori'));
         }
     }

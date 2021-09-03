@@ -82,4 +82,104 @@ class Auth extends CI_Controller {
     }
 
 
+  public function lupa_password(){
+    $this->form_validation->set_rules('email','Email', 'required');
+
+    if($this->form_validation->run() == false){
+      $data = array(
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+        );
+      $this->load->view('lupa_password',$data);
+    }else{
+      $email = $this->input->post('email');
+      $user = $this->db->get_where('user',['email' =>$email])->row_array();
+
+      if ($user) {
+          $token = base64_encode(openssl_random_pseudo_bytes(32));
+        //   $token = n2hex(openssl_random_pseudo_bytes(32));
+        // $token = base64_encode(random_bytes(32));
+        $user_token =[
+            'email' =>$this->input->post('email',true),
+            'token' =>$token,
+            'create_date' =>time()
+          ];
+          $this->user_m->user_token($user_token);
+          $this->_send_email($token,'forgot');
+          echo "<script>
+        alert('Silahkan cek email untuk reset password');
+        window.location='".site_url('auth/lupa_password')."'</script>";
+      }else{
+        echo "<script>
+        alert('Email tidak terdaftar atau user belum aktive');
+        window.location='".site_url('auth/lupa_password')."'</script>";
+      }
+    }  
+  }
+
+  private function _send_email($token, $type){
+    $config = [
+      'protocol'   =>'smtp',
+      'smtp_host'  =>'ssl://smtp.googlemail.com',
+      'smtp_user'  =>'mansiswad@gmail.com',
+      'smtp_pass'  =>'ramdan9090',
+      'smtp_port'  => 465,
+      'mailtype'   =>'html',
+      'charset'    =>'iso-8859-1',
+      'newline'    =>"\r\n"
+
+    ];
+
+    $this->load->library('email',$config);
+    $this->email->from('mansiswad@gmail.com','Admin MJS System');
+    $this->email->to($this->input->post('email'));
+
+    if($type =='verify'){
+      $this->email->subject('Aktivasi Akun');
+      $this->email->message('Click this link to verify your account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '&username='. $this->input->post('username') . '">Activate</a>');
+    }else if ($type == 'forgot'){
+      $this->email->subject('Reset Password');
+      $this->email->message('Click this link to reset your password : <a href="' . base_url() . 'auth/reset_password?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
+
+    }
+    
+    if($this->email->send()){
+      return true;
+    }else{
+      echo $this->email->print_debugger();
+      die;
+    }
+
+  }
+
+   public function reset_password(){
+    $email = $this->input->get('email');
+    $token = $this->input->get('token');
+    $user = $this->db->get_where('user', ['email' =>$email])->row_array();
+    if($user){
+      $user_token = $this->db->get_where('user_token', ['token' =>$token])->row_array();
+      if ($user_token){
+        if (time() - $user_token['create_date'] < (60 * 60 * 24)){
+          $this->session->set_userdata('reset_email', $email);
+          $this->rubah_password();
+        }else{
+        $this->db->delete('user_token', ['email' => $email]);
+        echo "<script>
+        alert('Reset password gagal, Token Kadaluarsa');
+        window.location='".site_url('auth/login')."'</script>";
+        }
+      }else{
+        echo "<script>
+        alert('Reset Password gagal, Token salah');
+        window.location='".site_url('auth/login')."'</script>";
+      }
+
+    }else{
+      echo "<script>
+        alert('Reset Password gagal, Email salah');
+        window.location='".site_url('auth/login')."'</script>";
+    }
+
+  }
+
+
 }

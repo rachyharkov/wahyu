@@ -38,7 +38,7 @@ class Sub_menu extends CI_Controller
 	    );
             $this->template->load('template','sub_menu/sub_menu_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('sub_menu'));
         }
     }
@@ -94,7 +94,7 @@ class Sub_menu extends CI_Controller
 	    );
             $this->template->load('template','sub_menu/sub_menu_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('menu'));
         }
     }
@@ -127,7 +127,7 @@ class Sub_menu extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('menu'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('menu'));
         }
     }

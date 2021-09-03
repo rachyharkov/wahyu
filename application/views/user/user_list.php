@@ -56,7 +56,7 @@
 			<td><?php echo $user->nama_level ?></td>
 			<td><?php echo $user->email ?></td>
 			<td><?php echo $user->no_hp_user ?></td>
-			<td style="text-align:center" width="200px">
+			<td>
 				<?php 
 				echo anchor(site_url('user/read/'.$user->user_id),'<i class="fas fa-eye" aria-hidden="true"></i>','class="btn btn-success btn-sm read_data"'); 
 				echo '  '; 
@@ -96,7 +96,7 @@
         </div>
       </div>
     </div>
-        <script type="text/javascript">
+    <script type="text/javascript">
         $(document).on('click','#view_gambar',function(){
           var nama_user = $(this).data('nama_user');
           var photo = $(this).data('photo');
@@ -105,7 +105,6 @@
           $('#modal-dialog #download').attr("href", "user/download/"+photo);
         })
     </script>
-
 
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>

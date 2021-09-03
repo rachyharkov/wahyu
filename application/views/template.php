@@ -23,7 +23,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <script src="<?= base_url() ?>assets/assets/ckeditor/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url() ?>assets/assets/js/jquery.idle.js"></script>
+<script src="<?= base_url() ?>assets/assets/js/jquery.idle.min.js"></script>
 <script src="<?= base_url() ?>assets/assets/plugins/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js"></script>
+  <script>
+    $(document).idle({
+      onIdle: function() {
+        window.location = "<?php echo base_url(); ?>auth/logout";
+      },
+      idle: 3000000
+    });
+  </script>
 
 </head>
 <body>
@@ -216,7 +226,11 @@
 <div class="app-sidebar-mobile-backdrop"><a href="#" data-dismiss="app-sidebar-mobile" class="stretched-link"></a></div>
 <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
     <?php if ($this->session->flashdata('message') ) : ?>
+    <?php endif; ?>
 
+
+<div class="flash-data2" data-flashdata2="<?= $this->session->flashdata('error'); ?>"></div>
+    <?php if ($this->session->flashdata('error') ) : ?>
     <?php endif; ?>
 
 <!-- isi -->
@@ -308,6 +322,7 @@
 <script type="text/javascript" src="<?php echo base_url();?>assets/assets/js/sweetalert.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> <!-- untuk sweet alret -->
 <script src="<?php echo base_url();?>assets/assets/js/dataflash.js"></script>
+<script src="<?= base_url() ?>assets/assets/js/number_format.js"></script>
 </body>
 </html>
 

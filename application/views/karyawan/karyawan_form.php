@@ -33,6 +33,20 @@
               </select>
             </td>
           </tr>
+          <tr>
+            <td >Lokasi Kerja <?php echo form_error('lokasi_id') ?></td>
+            <td><select name="lokasi_id" class="form-control">
+                <option value="">-- Pilih -- </option>
+                <?php foreach ($lokasi as $key => $data) { ?>
+                  <?php if ($lokasi_id == $data->lokasi_id) { ?>
+                    <option value="<?php echo $data->lokasi_id ?>" selected><?php echo $data->nama_lokasi ?></option>
+                  <?php } else { ?>
+                    <option value="<?php echo $data->lokasi_id ?>"><?php echo $data->nama_lokasi ?></option>
+                  <?php } ?>
+                <?php } ?>
+              </select>
+          </td>
+          </tr>
 
           <tr>
             <td >Divisi <?php echo form_error('divisi_id') ?></td>
@@ -77,9 +91,12 @@
                   <?php } ?>
                 <?php } ?>
               </select></td>
-          </tr>	    
-        <tr><td >Alamat <?php echo form_error('alamat') ?></td><td> <textarea class="form-control" rows="3" name="alamat" id="alamat" placeholder="Alamat"><?php echo $alamat; ?></textarea></td></tr>
+          </tr>
 
+        <tr><td >Gaji Pokok <?php echo form_error('gaji_pokok') ?></td><td><input type="hidden" class="form-control" name="gaji_pokok" id="gaji_pokok" placeholder="Gaji Pokok" value="<?php echo $gaji_pokok; ?>" />
+          <input type="text" class="form-control" name="gaji_pokok_txt" id="gaji_pokok_txt" placeholder="Gaji Pokok" value="<?php echo $gaji_pokok; ?>" /></td></tr>
+
+        <tr><td >Alamat <?php echo form_error('alamat') ?></td><td> <textarea class="form-control" rows="3" name="alamat" id="alamat" placeholder="Alamat"><?php echo $alamat; ?></textarea></td></tr>
       <tr>
             <td >Jenis Kelamin <?php echo form_error('jenis_kelamin') ?></td>
             <td>
@@ -140,6 +157,15 @@
                     
                   </div>
                   <?php } ?>
+      <tr>
+            <td >Status Keaktifan <?php echo form_error('status_keaktifan') ?></td>
+            <td><select name="status_keaktifan" class="form-control" value="<?= $status_keaktifan ?>">
+                <option value="">- Pilih -</option>
+                <option value="Aktif Bekerja" <?php echo $status_keaktifan == 'Aktif Bekerja' ? 'selected' : 'null' ?>>Aktif Bekerja</option>
+                <option value="Sudah Tidak Bekerja" <?php echo $status_keaktifan == 'Sudah Tidak Bekerja' ? 'selected' : 'null' ?>>Sudah Tidak Bekerja</option>
+              </select>
+            </td>
+          </tr>
 
 
 	    <tr><td></td><td><input type="hidden" name="karyawan_id" value="<?php echo $karyawan_id; ?>" /> 
@@ -172,4 +198,18 @@
         }
     }
 }
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    
+    // konversi real-time ke number_format dan regex
+    $('#gaji_pokok_txt').keyup(function() {
+      var jumlah = $(this).val();
+      
+      $('#gaji_pokok').val(jumlah.replace(/\,/g, '', ));
+      $('#gaji_pokok_txt').val(number_format(jumlah));
+    });
+  });
 </script>

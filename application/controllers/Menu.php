@@ -41,7 +41,7 @@ class Menu extends CI_Controller
 	    );
             $this->template->load('template','menu/menu_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('menu'));
         }
     }
@@ -95,7 +95,7 @@ class Menu extends CI_Controller
 	    );
             $this->template->load('template','menu/menu_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('menu'));
         }
     }
@@ -128,7 +128,7 @@ class Menu extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('menu'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('menu'));
         }
     }

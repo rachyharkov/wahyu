@@ -44,7 +44,7 @@ class User extends CI_Controller
             );
             $this->template->load('template','user/edit_profile', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('dashboard'));
         }
     }
@@ -67,7 +67,7 @@ class User extends CI_Controller
 	    );
             $this->template->load('template','user/user_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('user'));
         }
     }
@@ -151,7 +151,7 @@ class User extends CI_Controller
 	    );
             $this->template->load('template','user/user_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('user'));
         }
     }
@@ -232,7 +232,7 @@ class User extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('user'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('user'));
         }
     }

@@ -41,7 +41,7 @@ class Supplier extends CI_Controller
 	    );
             $this->template->load('template','supplier/supplier_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('supplier'));
         }
     }
@@ -104,7 +104,7 @@ class Supplier extends CI_Controller
 	    );
             $this->template->load('template','supplier/supplier_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('supplier'));
         }
     }
@@ -141,7 +141,7 @@ class Supplier extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('supplier'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('supplier'));
         }
     }

@@ -37,7 +37,7 @@ class Unit extends CI_Controller
 	    );
             $this->template->load('template','unit/unit_read', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('unit'));
         }
     }
@@ -88,7 +88,7 @@ class Unit extends CI_Controller
 	    );
             $this->template->load('template','unit/unit_form', $data);
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('unit'));
         }
     }
@@ -121,7 +121,7 @@ class Unit extends CI_Controller
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('unit'));
         } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
+            $this->session->set_flashdata('error', 'Record Not Found');
             redirect(site_url('unit'));
         }
     }
