@@ -50,7 +50,7 @@
 <div class="login-content">
  <?php $this->view('messages') ?>
 
-<form action="<?=site_url('auth/process')?>" method="post">
+<form action="<?=site_url('auth/lupa_password')?>" method="post">
 <div class="form-floating mb-20px">
 <input type="email" required="" class="form-control fs-13px h-45px border-0" placeholder="Masukan Email" id="email" autocomplete="off" name="email" />
 <label for="email" class="d-flex align-items-center text-gray-300 fs-13px">Masukan Email</label>

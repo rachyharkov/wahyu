@@ -27,6 +27,7 @@
 	    <tr><td>Tgl Masuk</td><td><?php echo $tgl_masuk; ?></td></tr>
 	    <tr><td>Photo</td><td>
 	    	<a href="#modal-dialog" data-bs-toggle="modal"><img style="width: 150px;height: 150px;border-radius: 50%;" src="<?php echo base_url().'/assets/assets/img/karyawan/'.$photo ?>" /></a></td></tr>
+	    	
 	    	<tr><td>Status Keaktifan</td><td><?php echo $status_keaktifan; ?></td></tr>
 	    <tr>
 	    	<td>Berkas Karyawan</td>

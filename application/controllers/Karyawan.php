@@ -115,6 +115,8 @@ class Karyawan extends CI_Controller
         $this->upload->do_upload("photo");
         $data = $this->upload->data();
         $photo =$data['file_name'];
+
+        
             $data = array(
 		'nama_karyawan' => $this->input->post('nama_karyawan',TRUE),
 		'nik' => $this->input->post('nik',TRUE),
@@ -131,7 +133,7 @@ class Karyawan extends CI_Controller
 		'status_kawin' => $this->input->post('status_kawin',TRUE),
 		'tgl_masuk' => $this->input->post('tgl_masuk',TRUE),
 		'photo' => $photo,
-        'status_keaktifan' => $status_keaktifan,
+        'status_keaktifan' => $this->input->post('status_keaktifan',TRUE),
 	    );
 
             $this->Karyawan_model->insert($data);

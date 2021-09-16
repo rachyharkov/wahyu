@@ -104,6 +104,7 @@ class Auth extends CI_Controller {
             'create_date' =>time()
           ];
           $this->user_m->user_token($user_token);
+
           $this->_send_email($token,'forgot');
           echo "<script>
         alert('Silahkan cek email untuk reset password');
@@ -120,7 +121,7 @@ class Auth extends CI_Controller {
     $config = [
       'protocol'   =>'smtp',
       'smtp_host'  =>'ssl://smtp.googlemail.com',
-      'smtp_user'  =>'mansiswad@gmail.com',
+      'smtp_user'  =>'systemmjs3@gmail.com',
       'smtp_pass'  =>'ramdan9090',
       'smtp_port'  => 465,
       'mailtype'   =>'html',
@@ -130,7 +131,7 @@ class Auth extends CI_Controller {
     ];
 
     $this->load->library('email',$config);
-    $this->email->from('mansiswad@gmail.com','Admin MJS System');
+    $this->email->from('systemmjs3@gmail.com','Admin MJS System');
     $this->email->to($this->input->post('email'));
 
     if($type =='verify'){
@@ -180,6 +181,32 @@ class Auth extends CI_Controller {
     }
 
   }
+
+
+  public function rubah_password(){
+  if(!$this->session->userdata('reset_email')){
+    redirect('login');
+  }
+  $this->form_validation->set_rules('password','password', 'required');
+  $this->form_validation->set_rules('passcon','passcon', 'required');
+  if($this->form_validation->run() == false){
+    $data = array(
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+        );
+      $this->load->view('rubah_password',$data);
+  }else{
+    $password = sha1($this->input->post('password',true));
+    $email    = $this->session->userdata('reset_email');
+    $this->db->set('password',$password);
+    $this->db->where('email', $email);
+    $this->db->update('user');
+    $this->db->delete('user_token',['email' =>$email]);
+    $this->session->unset_userdata('reset_email');
+    echo "<script>
+        alert('Password berhasil di rubah, Silahkan Login');
+        window.location='".site_url('auth')."'</script>";
+  }
+}
 
 
 }

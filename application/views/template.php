@@ -14,6 +14,7 @@
 <link href="<?= base_url() ?>assets/assets/plugins/jvectormap-next/jquery-jvectormap.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/nvd3/build/nv.d3.css" rel="stylesheet" />
+<link href="<?= base_url() ?>assets/assets/plugins/select-picker/dist/picker.min.css" rel="stylesheet" />
 
 <!-- data table -->
 <link href="<?= base_url() ?>assets/assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -26,6 +27,7 @@
 <script src="<?= base_url() ?>assets/assets/js/jquery.idle.js"></script>
 <script src="<?= base_url() ?>assets/assets/js/jquery.idle.min.js"></script>
 <script src="<?= base_url() ?>assets/assets/plugins/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js"></script>
+
   <script>
     $(document).idle({
       onIdle: function() {
@@ -323,6 +325,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> <!-- untuk sweet alret -->
 <script src="<?php echo base_url();?>assets/assets/js/dataflash.js"></script>
 <script src="<?= base_url() ?>assets/assets/js/number_format.js"></script>
+<script src="<?= base_url() ?>assets/assets/plugins/select-picker/dist/picker.min.js"></script>
 </body>
 </html>
 
