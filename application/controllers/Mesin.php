@@ -3,44 +3,44 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Karyawan extends CI_Controller
+class Mesin extends CI_Controller
 {
     function __construct()
     {
         parent::__construct();
         is_login();
+        $this->load->model('Mesin_model');
         $this->load->model('Setting_app_model');
-        $this->load->model('Karyawan_model');
         $this->load->library('form_validation');
     }
 
     public function index()
     {
         is_allowed($this->uri->segment(1),null);
-        $karyawan = $this->Karyawan_model->get_all();
+        $mesin = $this->Mesin_model->get_all();
         $data = array(
-            'karyawan_data' => $karyawan,
+            'mesin_data' => $mesin,
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
         );
-        $this->template->load('template','karyawan/karyawan_list', $data);
+        $this->template->load('template','mesin/mesin_list', $data);
     }
 
     public function read($id) 
     {
         is_allowed($this->uri->segment(1),'read');
-        $row = $this->Karyawan_model->get_by_id(decrypt_url($id));
+        $row = $this->Mesin_model->get_by_id(decrypt_url($id));
         if ($row) {
             $data = array(
-        'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-		'karyawan_id' => $row->karyawan_id,
-		'npk' => $row->npk,
-		'nama_karyawan' => $row->nama_karyawan,
-		'status_karyawan' => $row->status_karyawan,
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+		'mesin_id' => $row->mesin_id,
+		'kd_mesin' => $row->kd_mesin,
+		'nama_mesin' => $row->nama_mesin,
+		'Keterangan' => $row->Keterangan,
 	    );
-            $this->template->load('template','karyawan/karyawan_read', $data);
+            $this->template->load('template','mesin/mesin_read', $data);
         } else {
             $this->session->set_flashdata('error', 'Record Not Found');
-            redirect(site_url('karyawan'));
+            redirect(site_url('mesin'));
         }
     }
 
@@ -50,13 +50,13 @@ class Karyawan extends CI_Controller
         $data = array(
             'button' => 'Create',
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-            'action' => site_url('karyawan/create_action'),
-	    'karyawan_id' => set_value('karyawan_id'),
-	    'npk' => set_value('npk'),
-	    'nama_karyawan' => set_value('nama_karyawan'),
-	    'status_karyawan' => set_value('status_karyawan'),
+            'action' => site_url('mesin/create_action'),
+	    'mesin_id' => set_value('mesin_id'),
+	    'kd_mesin' => set_value('kd_mesin'),
+	    'nama_mesin' => set_value('nama_mesin'),
+	    'Keterangan' => set_value('Keterangan'),
 	);
-        $this->template->load('template','karyawan/karyawan_form', $data);
+        $this->template->load('template','mesin/mesin_form', $data);
     }
     
     public function create_action() 
@@ -68,36 +68,36 @@ class Karyawan extends CI_Controller
             $this->create();
         } else {
             $data = array(
-		'npk' => $this->input->post('npk',TRUE),
-		'nama_karyawan' => $this->input->post('nama_karyawan',TRUE),
-		'status_karyawan' => $this->input->post('status_karyawan',TRUE),
+		'kd_mesin' => $this->input->post('kd_mesin',TRUE),
+		'nama_mesin' => $this->input->post('nama_mesin',TRUE),
+		'Keterangan' => $this->input->post('Keterangan',TRUE),
 	    );
 
-            $this->Karyawan_model->insert($data);
+            $this->Mesin_model->insert($data);
             $this->session->set_flashdata('message', 'Create Record Success');
-            redirect(site_url('karyawan'));
+            redirect(site_url('mesin'));
         }
     }
     
     public function update($id) 
     {
         is_allowed($this->uri->segment(1),'update');
-        $row = $this->Karyawan_model->get_by_id(decrypt_url($id));
+        $row = $this->Mesin_model->get_by_id(decrypt_url($id));
 
         if ($row) {
             $data = array(
                 'button' => 'Update',
                 'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-                'action' => site_url('karyawan/update_action'),
-		'karyawan_id' => set_value('karyawan_id', $row->karyawan_id),
-		'npk' => set_value('npk', $row->npk),
-		'nama_karyawan' => set_value('nama_karyawan', $row->nama_karyawan),
-		'status_karyawan' => set_value('status_karyawan', $row->status_karyawan),
+                'action' => site_url('mesin/update_action'),
+		'mesin_id' => set_value('mesin_id', $row->mesin_id),
+		'kd_mesin' => set_value('kd_mesin', $row->kd_mesin),
+		'nama_mesin' => set_value('nama_mesin', $row->nama_mesin),
+		'Keterangan' => set_value('Keterangan', $row->Keterangan),
 	    );
-            $this->template->load('template','karyawan/karyawan_form', $data);
+            $this->template->load('template','mesin/mesin_form', $data);
         } else {
             $this->session->set_flashdata('error', 'Record Not Found');
-            redirect(site_url('karyawan'));
+            redirect(site_url('mesin'));
         }
     }
     
@@ -107,42 +107,42 @@ class Karyawan extends CI_Controller
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
-            $this->update($this->input->post('karyawan_id', TRUE));
+            $this->update($this->input->post('mesin_id', TRUE));
         } else {
             $data = array(
-		'npk' => $this->input->post('npk',TRUE),
-		'nama_karyawan' => $this->input->post('nama_karyawan',TRUE),
-		'status_karyawan' => $this->input->post('status_karyawan',TRUE),
+		'kd_mesin' => $this->input->post('kd_mesin',TRUE),
+		'nama_mesin' => $this->input->post('nama_mesin',TRUE),
+		'Keterangan' => $this->input->post('Keterangan',TRUE),
 	    );
 
-            $this->Karyawan_model->update($this->input->post('karyawan_id', TRUE), $data);
+            $this->Mesin_model->update($this->input->post('mesin_id', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
-            redirect(site_url('karyawan'));
+            redirect(site_url('mesin'));
         }
     }
     
     public function delete($id) 
     {
         is_allowed($this->uri->segment(1),'delete');
-        $row = $this->Karyawan_model->get_by_id(decrypt_url($id));
+        $row = $this->Mesin_model->get_by_id(decrypt_url($id));
 
         if ($row) {
-            $this->Karyawan_model->delete(decrypt_url($id));
+            $this->Mesin_model->delete(decrypt_url($id));
             $this->session->set_flashdata('message', 'Delete Record Success');
-            redirect(site_url('karyawan'));
+            redirect(site_url('mesin'));
         } else {
             $this->session->set_flashdata('error', 'Record Not Found');
-            redirect(site_url('karyawan'));
+            redirect(site_url('mesin'));
         }
     }
 
     public function _rules() 
     {
-	$this->form_validation->set_rules('npk', 'npk', 'trim|required');
-	$this->form_validation->set_rules('nama_karyawan', 'nama karyawan', 'trim|required');
-	$this->form_validation->set_rules('status_karyawan', 'status karyawan', 'trim|required');
+	$this->form_validation->set_rules('kd_mesin', 'kd mesin', 'trim|required');
+	$this->form_validation->set_rules('nama_mesin', 'nama mesin', 'trim|required');
+	$this->form_validation->set_rules('Keterangan', 'keterangan', 'trim|required');
 
-	$this->form_validation->set_rules('karyawan_id', 'karyawan_id', 'trim');
+	$this->form_validation->set_rules('mesin_id', 'mesin_id', 'trim');
 	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 
@@ -150,8 +150,8 @@ class Karyawan extends CI_Controller
     {
         is_allowed($this->uri->segment(1),'read');
         $this->load->helper('exportexcel');
-        $namaFile = "karyawan.xls";
-        $judul = "karyawan";
+        $namaFile = "mesin.xls";
+        $judul = "mesin";
         $tablehead = 0;
         $tablebody = 1;
         $nourut = 1;
@@ -169,18 +169,18 @@ class Karyawan extends CI_Controller
 
         $kolomhead = 0;
         xlsWriteLabel($tablehead, $kolomhead++, "No");
-	xlsWriteLabel($tablehead, $kolomhead++, "Npk");
-	xlsWriteLabel($tablehead, $kolomhead++, "Nama Karyawan");
-	xlsWriteLabel($tablehead, $kolomhead++, "Status Karyawan");
+	xlsWriteLabel($tablehead, $kolomhead++, "Kd Mesin");
+	xlsWriteLabel($tablehead, $kolomhead++, "Nama Mesin");
+	xlsWriteLabel($tablehead, $kolomhead++, "Keterangan");
 
-	foreach ($this->Karyawan_model->get_all() as $data) {
+	foreach ($this->Mesin_model->get_all() as $data) {
             $kolombody = 0;
 
             //ubah xlsWriteLabel menjadi xlsWriteNumber untuk kolom numeric
             xlsWriteNumber($tablebody, $kolombody++, $nourut);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->npk);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->nama_karyawan);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->status_karyawan);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->kd_mesin);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->nama_mesin);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->Keterangan);
 
 	    $tablebody++;
             $nourut++;
@@ -192,8 +192,8 @@ class Karyawan extends CI_Controller
 
 }
 
-/* End of file Karyawan.php */
-/* Location: ./application/controllers/Karyawan.php */
+/* End of file Mesin.php */
+/* Location: ./application/controllers/Mesin.php */
 /* Please DO NOT modify this information : */
-/* Generated by Harviacode Codeigniter CRUD Generator 2021-09-27 15:34:45 */
+/* Generated by Harviacode Codeigniter CRUD Generator 2021-09-27 15:51:44 */
 /* http://harviacode.com */

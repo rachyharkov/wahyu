@@ -27,7 +27,6 @@ class Setting_app extends CI_Controller
 		'company' => set_value('company', $row->company),
 		'alamat' => set_value('alamat', $row->alamat),
         'author' => set_value('author', $row->author),
-		'photo' => set_value('favicon', $row->photo),
 		'favicon' => set_value('favicon', $row->favicon),
 	    );
             $this->template->load('template','setting_app/setting_app_form', $data);

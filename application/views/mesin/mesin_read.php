@@ -2,7 +2,7 @@
 <div class="col-xl-12 ui-sortable">
 <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
 <div class="panel-heading ui-sortable-handle">
-<h4 class="panel-title">Karyawan Read</h4>
+<h4 class="panel-title">Mesin Read</h4>
 <div class="panel-heading-btn">
 <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand" data-bs-original-title="" title="" data-tooltip-init="true"><i class="fa fa-expand"></i></a>
 <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -12,10 +12,10 @@
 </div>
 <div class="panel-body">
 <table id="data-table-default" class="table table-hover table-bordered table-td-valign-middle">
-	    <tr><td>Npk</td><td><?php echo $npk; ?></td></tr>
-	    <tr><td>Nama Karyawan</td><td><?php echo $nama_karyawan; ?></td></tr>
-	    <tr><td>Status Karyawan</td><td><?php echo $status_karyawan; ?></td></tr>
-	    <tr><td></td><td><a href="<?php echo site_url('karyawan') ?>" class="btn btn-default">Cancel</a></td></tr>
+	    <tr><td>Kd Mesin</td><td><?php echo $kd_mesin; ?></td></tr>
+	    <tr><td>Nama Mesin</td><td><?php echo $nama_mesin; ?></td></tr>
+	    <tr><td>Keterangan</td><td><?php echo $Keterangan; ?></td></tr>
+	    <tr><td></td><td><a href="<?php echo site_url('mesin') ?>" class="btn btn-default">Cancel</a></td></tr>
 	</table>
 			</div>
         </div>

@@ -22,15 +22,7 @@
 
 
 	    <tr><td >Author <?php echo form_error('author') ?></td><td><input type="text" class="form-control" name="author" id="author" placeholder="Author" value="<?php echo $author; ?>" /></td></tr>  
-        <tr>
-                        <td >Logo Company <?php echo form_error('photo') ?></td>
-                        <td>
-                            <a href="#modal-dialog" data-bs-toggle="modal"><img  src="<?php echo base_url();?>assets/assets/img/logo/<?=$photo?>" style="width: 200px;height: 120px;border-radius: 10%;"></img></a>
-                            <input type="hidden" name="photo_lama" value="<?=$photo?>">
-                            <p style="color: red">Note : Pilih logo perusahaan Jika Ingin Merubah</p>
-                            <input type="file" class="form-control" name="photo" id="photo" placeholder="photo" value="" onchange="return validasiEkstensi_fav()" />
-                        </td>
-                    </tr>
+
 
 
                     <tr>
