@@ -17,20 +17,10 @@
             
             <table class="table  table-bordered table-hover table-td-valign-middle">
             <thead>
-	    <tr><td >NPK <?php echo form_error('npk') ?></td><td><input type="text" class="form-control" name="npk" id="npk" placeholder="NPK" value="<?php echo $npk; ?>" /></td></tr>
+	    <tr><td >Npk <?php echo form_error('npk') ?></td><td><input type="text" class="form-control" name="npk" id="npk" placeholder="Npk" value="<?php echo $npk; ?>" /></td></tr>
 	    <tr><td >Nama Karyawan <?php echo form_error('nama_karyawan') ?></td><td><input type="text" class="form-control" name="nama_karyawan" id="nama_karyawan" placeholder="Nama Karyawan" value="<?php echo $nama_karyawan; ?>" /></td></tr>
-	    <tr>
-            <td >Status Karyawan <?php echo form_error('status_karyawan') ?></td>
-            <td><select name="status_karyawan" class="form-control" value="<?= $status_karyawan ?>">
-                <option value="" style="color: black">- Pilih -</option>
-                <option style="color: black" value="Karyawan Tetap" <?php echo $status_karyawan == 'Karyawan Tetap' ? 'selected' : 'null' ?>>Karyawan Tetap</option>
-                <option style="color: black" value="Karyawan Kontrak" <?php echo $status_karyawan == 'Karyawan Kontrak' ? 'selected' : 'null' ?>>Karyawan Kontrak</option>
-              </select>
-            </td>
-          </tr>
-
-
-
+	    <tr><td >Status Karyawan <?php echo form_error('status_karyawan') ?></td><td><input type="text" class="form-control" name="status_karyawan" id="status_karyawan" placeholder="Status Karyawan" value="<?php echo $status_karyawan; ?>" /></td></tr>
+	    <tr><td >Skill Level <?php echo form_error('skill_level') ?></td><td><input type="text" class="form-control" name="skill_level" id="skill_level" placeholder="Skill Level" value="<?php echo $skill_level; ?>" /></td></tr>
 	    <tr><td></td><td><input type="hidden" name="karyawan_id" value="<?php echo $karyawan_id; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fas fa-save"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('karyawan') ?>" class="btn btn-info"><i class="fas fa-undo"></i> Kembali</a></td></tr>

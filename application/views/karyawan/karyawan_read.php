@@ -15,6 +15,7 @@
 	    <tr><td>Npk</td><td><?php echo $npk; ?></td></tr>
 	    <tr><td>Nama Karyawan</td><td><?php echo $nama_karyawan; ?></td></tr>
 	    <tr><td>Status Karyawan</td><td><?php echo $status_karyawan; ?></td></tr>
+	    <tr><td>Skill Level</td><td><?php echo $skill_level; ?></td></tr>
 	    <tr><td></td><td><a href="<?php echo site_url('karyawan') ?>" class="btn btn-default">Cancel</a></td></tr>
 	</table>
 			</div>

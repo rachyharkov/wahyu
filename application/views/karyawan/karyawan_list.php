@@ -31,6 +31,7 @@
 		<th>Npk</th>
 		<th>Nama Karyawan</th>
 		<th>Status Karyawan</th>
+		<th>Skill Level</th>
 		<th>Action</th>
             </tr></thead><tbody><?php $no = 1;
             foreach ($karyawan_data as $karyawan)
@@ -41,6 +42,7 @@
 			<td><?php echo $karyawan->npk ?></td>
 			<td><?php echo $karyawan->nama_karyawan ?></td>
 			<td><?php echo $karyawan->status_karyawan ?></td>
+			<td><?php echo $karyawan->skill_level ?></td>
 			<td style="text-align:center" width="200px">
 				<?php 
 				echo anchor(site_url('karyawan/read/'.encrypt_url($karyawan->karyawan_id)),'<i class="fas fa-eye" aria-hidden="true"></i>','class="btn btn-success btn-sm read_data"'); 

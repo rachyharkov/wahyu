@@ -207,7 +207,7 @@
           <?php endforeach ?>
 
 <div class="menu-item">
-	<a href="https://localhost/mjs_system/harviacode" class="menu-link">
+	<a href="https://localhost/wahyu/harviacode" class="menu-link">
 	<div class="menu-icon">
 	<i class="fa fa-cogs"></i>
 	</div>
