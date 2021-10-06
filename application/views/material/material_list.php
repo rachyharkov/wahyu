@@ -1,4 +1,5 @@
-<div class="row">
+
+<div class="row" id="isitabel" style="display:none;">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">        
                                 <div class="box-body">
@@ -44,13 +45,9 @@
                     <td><?php echo $material->masa_jenis_material ?></td>
                     <td><?php echo $material->volume ?></td>
                     <td style="text-align:center" width="200px">
-                        <?php 
-                        echo anchor(site_url('material/read/'.encrypt_url($material->id)),'<i class="fas fa-eye" aria-hidden="true"></i>','class="btn btn-success btn-sm read_data"'); 
-                        echo '  '; 
-                        echo anchor(site_url('material/update/'.encrypt_url($material->id)),'<i class="fas fa-pencil-alt" aria-hidden="true"></i>','class="btn btn-primary btn-sm update_data"'); 
-                        echo '  '; 
-                        echo anchor(site_url('material/delete/'.encrypt_url($material->id)),'<i class="fas fa-trash-alt" aria-hidden="true"></i>','class="btn btn-danger btn-sm delete_data" Delete','onclick="javasciprt: return confirm(\'Are You Sure ?\')"'); 
-                        ?>
+                        <button type="button" class="btn btn-success btn-sm read_data" id="<?php echo encrypt_url($material->id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-primary btn-sm update_data" id="<?php echo encrypt_url($material->id) ?>"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-danger btn-sm delete_data" id="<?php echo encrypt_url($material->id) ?>"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
                     </td>
                 </tr>
                 <?php } ?>
@@ -67,7 +64,13 @@
 <script src="<?= base_url() ?>assets/assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="<?= base_url() ?>assets/assets/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 <script type="text/javascript">
-      $('#data-table-default').DataTable({
-        responsive: true
-      });
+
+      $(document).ready(function() {
+
+        $('#isitabel').css('display','block')
+
+        $('#data-table-default').DataTable({
+            responsive: true
+        })
+      })
 </script>

@@ -24,7 +24,7 @@
     			<?php
     			foreach ($list_bentuk as $key => $value) {
     				?>
-    					<option value="<?php echo $value->kode_bentuk ?>" <?php $id_bentuk == $value->kode_bentuk ? 'selected' : '' ?>><?php echo $value->nama_bentuk ?></option>
+    					<option value="<?php echo $value->kode_bentuk ?>" <?php if($id_bentuk == $value->kode_bentuk){echo 'selected';} ?>><?php echo $value->nama_bentuk ?></option>
     				<?php
     			}
     			?>
@@ -39,7 +39,7 @@
     			<?php
     			foreach ($list_jenis_material as $key => $value) {
     				?>
-    					<option value="<?php echo $value->id ?>" <?php $id_jenis_material == $value->id ? 'selected' : '' ?>><?php echo $value->nama_jenis_material ?></option>
+    					<option value="<?php echo $value->id ?>" <?php if($id_jenis_material == $value->id){echo 'selected';} ?>><?php echo $value->nama_jenis_material ?></option>
     				<?php
     			}
     			?>
@@ -54,21 +54,21 @@
 				<div class="col-md-4">
 					<label>Diameter/Tebal</label>
 					<div class="input-group">
-						<input required type="number" class="form-control" name="diameter-tebal" id="diameter-tebal"  />
+						<input required type="number" class="form-control" value="<?php echo $diametertebal ?>" name="diametertebal" id="diametertebal"  />
 						<span class="input-group-text">mm</span>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<label>Panjang</label>
 					<div class="input-group">
-						<input required type="number" class="form-control" name="panjang" id="panjang"  />
+						<input required type="number" class="form-control" value="<?php echo $panjang ?>" name="panjang" id="panjang"  />
 						<span class="input-group-text">mm</span>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<label>Lebar</label>
 					<div class="input-group">
-						<input type="number" class="form-control" name="lebar" id="lebar"  />
+						<input type="number" class="form-control" value="<?php echo $lebar ?>" name="lebar" id="lebar"  />
 						<span class="input-group-text">mm</span>
 					</div>
 				</div>
@@ -157,10 +157,12 @@
 
 			                thisel.addClass(dt.class)
 			                thisel.after(dt.appendedelement)
+			                $('.btn-danger').css('display',dt.a)
 			            },
 			            error: function(e){
 			              	thisel.addClass('is-invalid')
 			                thisel.after(`<div class="invalid-feedback">Jaringan mengalami masalah</div>`)
+			                $('.btn-danger').css('display','none')
 			            }
 			        });
 				}
@@ -173,15 +175,14 @@
 			}, 500)
 		})
 
-		let qty = 0
-		let beratperpcs = 0
-		let totalberat = 0
-		let volume = 0
-		let masajenis = 0
-
-		let diametertebal = 0
-		let panjang = 0
-		let lebar = 0
+		let qty = $('#qty').val()
+		let beratperpcs = $('#berat_per_pcs').val()
+		let totalberat = $('#berat_total').val()
+		let volume = $('#volume').val()
+		let masajenis = $('#masajenis').val()
+		let diametertebal = $('#diametertebal').val()
+		let panjang = $('#panjang').val()
+		let lebar = $('#lebar').val()
 
 		function hitung_volume(diametertebal,panjang,lebar) {
 			if (lebar) {
@@ -212,7 +213,7 @@
 			hitung_berat_per_pcs($(this).val())
 		})
 
-		$('#diameter-tebal').keyup(function() {
+		$('#diametertebal').keyup(function() {
 			diametertebal = $(this).val()
 			hitung_volume(diametertebal,panjang,lebar)
 		})

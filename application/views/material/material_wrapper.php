@@ -89,6 +89,91 @@
                 });
             })
 
+            $(document).on('click','.read_data', function() {
+
+                const id = $(this).attr('id')
+                $('.btn-loading').click()
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() ?>Material/read",
+                    data: {
+                        id:id,
+                    },
+                    success: function(data){
+                        $('#panel-body').html(data);
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
+            $(document).on('click','.update_data', function() {
+
+                const id = $(this).attr('id')
+                $('.btn-loading').click()
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() ?>Material/update",
+                    data: {
+                        id:id,
+                    },
+                    success: function(data){
+                        $('#panel-body').html(data);
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
+            $(document).on('click','.delete_data', function() {
+                Swal.fire({
+                  title: 'Yakin dihapus?',
+                  text: "Data tidak dapat dikembalikan jika terhapus",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    const id = $(this).attr('id')
+                    $('.btn-loading').click()
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url() ?>Material/delete",
+                        data: {
+                            id:id,
+                        },
+                        success: function(data){
+                            Swal.fire({
+                              icon: 'success',
+                              title: "Sukses",
+                              text: 'Data material berhasil dihapus'
+                            })
+                            $('#panel-body').html(data);
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                              icon: 'error',
+                              title: "Oops!",
+                              text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                            })
+                        }
+                    });
+                  }
+                })
+            })
+
             $(document).on('submit','#form_create_action', function(e) {
 
                 e.preventDefault()
@@ -115,6 +200,49 @@
                               icon: 'success',
                               title: "Sukses",
                               text: 'Data material berhasil tercatat'
+                            })
+                            $('#panel-body').html(data);
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                              icon: 'error',
+                              title: "Oops!",
+                              text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                            })
+                        }
+                    });
+
+                  }
+                })
+
+            })
+
+            $(document).on('submit','#form_update_action', function(e) {
+
+                e.preventDefault()
+                
+                if ($(this).valid) return false;
+
+                Swal.fire({
+                  title: 'Konfirmasi Tindakan',
+                  text: "Yakin diupdate?",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    dataString = $("#form_update_action").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url() ?>Material/update_action",
+                        data: dataString,
+                        success: function(data){
+                            Swal.fire({
+                              icon: 'success',
+                              title: "Sukses",
+                              text: 'Data material berhasil diupdate'
                             })
                             $('#panel-body').html(data);
                         },

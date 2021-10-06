@@ -38,9 +38,10 @@ class Material extends CI_Controller
         $this->load->view('material/material_list', $data);
     }
 
-    public function read($id) 
+    public function read() 
     {
         is_allowed($this->uri->segment(1),'read');
+        $id = $this->input->post('id');
         $row = $this->Material_model->get_by_id(decrypt_url($id));
         if ($row) {
             $data = array(
@@ -57,8 +58,7 @@ class Material extends CI_Controller
     	    );
             $this->load->view('material/material_read', $data);
         } else {
-            $this->session->set_flashdata('error', 'Record Not Found');
-            redirect(site_url('material'));
+            echo "no data";
         }
     }
 
@@ -76,12 +76,14 @@ class Material extends CI_Controller
     	    'kd_material' => set_value('kd_material'),
     	    'id_bentuk' => set_value('id_bentuk'),
     	    'id_jenis_material' => set_value('id_jenis_material'),
-    	    'dimensi' => set_value('dimensi'),
-    	    'berat_per_pcs' => set_value('berat_per_pcs'),
-    	    'berat_total' => set_value('berat_total'),
-    	    'qty' => set_value('qty'),
-    	    'masa_jenis_material' => set_value('masa_jenis_material'),
-    	    'volume' => set_value('volume'),
+    	    'diametertebal' => set_value('diametertebal', 0),
+            'panjang' => set_value('panjang', 0),
+            'lebar' => set_value('lebar', 0),
+    	    'berat_per_pcs' => set_value('berat_per_pcs',0),
+    	    'berat_total' => set_value('berat_total',0),
+    	    'qty' => set_value('qty',0),
+    	    'masa_jenis_material' => set_value('masa_jenis_material',0),
+    	    'volume' => set_value('volume',0),
             'list_bentuk' => $list_bentuk,
             'list_jenis_material' => $list_jenis_material,
             'sett_apps' => $this->Setting_app_model->get_by_id(1),
@@ -92,16 +94,18 @@ class Material extends CI_Controller
     public function create_action() 
     {
         is_allowed($this->uri->segment(1),'create');
+
+        $arr = array(
+            'diametertebal' => $this->input->post('diametertebal',TRUE),
+            'panjang' => $this->input->post('panjang',TRUE),
+            'lebar' => $this->input->post('lebar',TRUE)
+        );
+
         $data = array(
     		'kd_material' => $this->input->post('kd_material',TRUE),
     		'id_bentuk' => $this->input->post('id_bentuk',TRUE),
     		'id_jenis_material' => $this->input->post('id_jenis_material',TRUE),
-    		'dimensi' => 
-            "{
-                diameter-tebal:\"".$this->input->post('diameter-tebal',TRUE)."\",
-                panjang:\"".$this->input->post('panjang',TRUE)."\",
-                lebar:\"".$this->input->post('panjang',TRUE)."\"
-            }",
+    		'dimensi' => json_encode($arr),
     		'berat_per_pcs' => $this->input->post('berat_per_pcs',TRUE),
     		'berat_total' => $this->input->post('berat_total',TRUE),
     		'qty' => $this->input->post('qty',TRUE),
@@ -113,72 +117,78 @@ class Material extends CI_Controller
         $this->list();
     }
     
-    public function update($id) 
+    public function update() 
     {
         is_allowed($this->uri->segment(1),'update');
+
+        $id = $this->input->post('id');
+
         $row = $this->Material_model->get_by_id(decrypt_url($id));
 
         if ($row) {
+            $list_bentuk = $this->Bentuk_model->get_all();
+            $list_jenis_material = $this->Jenis_material_model->get_all();
+            $pecah = json_decode($row->dimensi, TRUE);
             $data = array(
                 'button' => 'Update',
-                'action' => site_url('form_update_action'),
-		'id' => set_value('id', $row->id),
-		'kd_material' => set_value('kd_material', $row->kd_material),
-		'id_bentuk' => set_value('id_bentuk', $row->id_bentuk),
-		'id_jenis_material' => set_value('id_jenis_material', $row->id_jenis_material),
-		'dimensi' => set_value('dimensi', $row->dimensi),
-		'berat_per_pcs' => set_value('berat_per_pcs', $row->berat_per_pcs),
-		'berat_total' => set_value('berat_total', $row->berat_total),
-		'qty' => set_value('qty', $row->qty),
-		'masa_jenis_material' => set_value('masa_jenis_material', $row->masa_jenis_material),
-		'volume' => set_value('volume', $row->volume),
-	    );
-            $this->template->load('template','material/material_form', $data);
+                'action' => 'form_update_action',
+        		'id' => $row->id,
+        		'kd_material' => set_value('kd_material', $row->kd_material),
+        		'id_bentuk' => set_value('id_bentuk', $row->id_bentuk),
+        		'id_jenis_material' => set_value('id_jenis_material', $row->id_jenis_material),
+        		'diametertebal' => set_value('diametertebal', $pecah['diametertebal']),
+                'panjang' => set_value('panjang', $pecah['panjang']),
+                'lebar' => set_value('lebar', $pecah['lebar']),
+        		'berat_per_pcs' => set_value('berat_per_pcs', $row->berat_per_pcs),
+        		'berat_total' => set_value('berat_total', $row->berat_total),
+        		'qty' => set_value('qty', $row->qty),
+                'list_bentuk' => $list_bentuk,
+                'list_jenis_material' => $list_jenis_material,
+        		'masa_jenis_material' => set_value('masa_jenis_material', $row->masa_jenis_material),
+        		'volume' => set_value('volume', $row->volume),
+    	    );
+            $this->load->view('material/material_form', $data);
         } else {
-            $this->session->set_flashdata('error', 'Record Not Found');
-            redirect(site_url('material'));
+            echo 'not found';
         }
     }
     
     public function update_action() 
     {
         is_allowed($this->uri->segment(1),'update');
-        $this->_rules();
+        $arr = array(
+            'diametertebal' => $this->input->post('diametertebal'),
+            'panjang' => $this->input->post('panjang'),
+            'lebar' => $this->input->post('lebar')
+        );
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->update($this->input->post('id', TRUE));
-        } else {
-            $data = array(
-		'kd_material' => $this->input->post('kd_material',TRUE),
-		'id_bentuk' => $this->input->post('id_bentuk',TRUE),
-		'id_jenis_material' => $this->input->post('id_jenis_material',TRUE),
-		'dimensi' => $this->input->post('dimensi',TRUE),
-		'berat_per_pcs' => $this->input->post('berat_per_pcs',TRUE),
-		'berat_total' => $this->input->post('berat_total',TRUE),
-		'qty' => $this->input->post('qty',TRUE),
-		'masa_jenis_material' => $this->input->post('masa_jenis_material',TRUE),
-		'volume' => $this->input->post('volume',TRUE),
-	    );
+        $data = array(
+            'kd_material' => $this->input->post('kd_material',TRUE),
+            'id_bentuk' => $this->input->post('id_bentuk',TRUE),
+            'id_jenis_material' => $this->input->post('id_jenis_material',TRUE),
+            'dimensi' => json_encode($arr),
+            'berat_per_pcs' => $this->input->post('berat_per_pcs',TRUE),
+            'berat_total' => $this->input->post('berat_total',TRUE),
+            'qty' => $this->input->post('qty',TRUE),
+            'masa_jenis_material' => $this->input->post('masa_jenis_material',TRUE),
+            'volume' => $this->input->post('volume',TRUE),
+        );
 
-            $this->Material_model->update($this->input->post('id', TRUE), $data);
-            $this->session->set_flashdata('message', 'Update Record Success');
-            redirect(site_url('material'));
-        }
+        $this->Material_model->update($this->input->post('id', TRUE), $data);
+        $this->list();
     }
     
-    public function delete($id) 
+    public function delete() 
     {
         is_allowed($this->uri->segment(1),'delete');
+        $id = $this->input->post('id');
         $row = $this->Material_model->get_by_id(decrypt_url($id));
-
         if ($row) {
             $this->Material_model->delete(decrypt_url($id));
-            $this->session->set_flashdata('message', 'Delete Record Success');
-            redirect(site_url('material'));
         } else {
-            $this->session->set_flashdata('error', 'Record Not Found');
-            redirect(site_url('material'));
+            echo 'tidak ada';
         }
+        $this->list();
     }
 
     public function _rules() 
@@ -262,12 +272,14 @@ class Material extends CI_Controller
         if ($data > 0) {
             $arr = array(
                 'class' => 'is-invalid',
-                'appendedelement' => '<div class="invalid-feedback">Kode sudah digunakan oleh material lain</div>'
+                'appendedelement' => '<div class="invalid-feedback">Kode sudah digunakan oleh material lain</div>',
+                'a' => 'none'
             );
         } else {
             $arr = array(
                 'class' => 'is-valid',
-                'appendedelement' => '<div class="valid-feedback">Kode Bisa Digunakan</div>'
+                'appendedelement' => '<div class="valid-feedback">Kode Bisa Digunakan</div>',
+                'a'=>'inline'
             );
         }
 
