@@ -76,6 +76,7 @@ class Mesin extends CI_Controller
     		'kd_mesin' => $this->input->post('kd_mesin',TRUE),
     		'nama_mesin' => $this->input->post('nama_mesin',TRUE),
     		'Keterangan' => $this->input->post('Keterangan',TRUE),
+            'status' => 0,
 	    );
 
         $this->Mesin_model->insert($data);
