@@ -50,6 +50,7 @@ class Produksi extends CI_Controller
         		'tanggal_produksi' => $row->tanggal_produksi,
         		'total_barang_jadi' => $row->total_barang_jadi,
         		'priority' => $row->priority,
+                'materialsdata' => $this->Material_model->get_material_for($row->id),
         		'user_id' => $row->user_id,
     	    );
             $this->load->view('produksi/produksi_read', $data);
@@ -121,7 +122,7 @@ class Produksi extends CI_Controller
         		'tanggal_produksi' => set_value('tanggal_produksi', $row->tanggal_produksi),
         		'total_barang_jadi' => set_value('total_barang_jadi', $row->total_barang_jadi),
                 'material' => $this->Material_model->get_all(),
-                'material_needs' => $this->Material_model->get_material_for($row->priority),
+                'material_needs' => $this->Material_model->get_material_for($row->id),
                 'user_id' => set_value('user_id', $row->user_id),
 	        );
             $this->load->view('produksi/produksi_form', $data);
