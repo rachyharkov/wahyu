@@ -66,7 +66,7 @@ class Produksi extends CI_Controller
             'action' => 'form_create_action',
             'material' => $this->Material_model->get_all(),
     	    'id' => set_value('id'),
-    	    'tanggal_produksi' => set_value('tanggal_produksi'),
+    	    'tanggal_produksi' => set_value('tanggal_produksi',date('Y-m-d')),
     	    'total_barang_jadi' => set_value('total_barang_jadi'),
     	    'material_needs' => null,
     	    'user_id' => set_value('user_id'),
