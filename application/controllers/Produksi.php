@@ -130,7 +130,7 @@ class Produksi extends CI_Controller
                 'button' => 'Update',
                 'action' => 'form_update_action',
         		'id' => $row->id,
-        		'tanggal_produksi' => set_value('tanggal_produksi', $row->tanggal_produksi),
+        		'tanggal_produksi' => set_value('tanggal_produksi', date('Y-m-d',strtotime($row->tanggal_produksi))),
         		'total_barang_jadi' => set_value('total_barang_jadi', $row->total_barang_jadi),
                 'material' => $this->Material_model->get_all(),
                 'material_needs' => $this->Material_model->get_material_for($row->id),
