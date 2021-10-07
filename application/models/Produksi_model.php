@@ -16,8 +16,9 @@ class Produksi_model extends CI_Model
     }
 
     // get all
-    function get_all()
+    function get_all($status = '')
     {
+        $this->db->like('status',$status);
         $this->db->order_by($this->id, $this->order);
         $this->db->limit(100);
         return $this->db->get($this->table)->result();

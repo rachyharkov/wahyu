@@ -110,6 +110,7 @@ class Produksi extends CI_Controller
     		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.date('h:m:s'),
     		'total_barang_jadi' => $this->input->post('total_barang_jadi',TRUE),
     		'priority' => 'HIGH',
+            'status' => 'READY',
     		'user_id' => $this->session->userdata('userid'),
 	    );
 
