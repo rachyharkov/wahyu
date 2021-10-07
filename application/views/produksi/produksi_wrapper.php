@@ -16,7 +16,7 @@
         </div>
         </div>
     </div>
-    
+
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
@@ -53,6 +53,10 @@
         <?php } ?>
 
         <script type="text/javascript">
+
+            function changewindowtitle(text) {
+                $('.panel-title').text(text);
+            }
             
             $(document).on('click','.tambah_data', function() {
                 $('.btn-loading').click()
@@ -61,6 +65,7 @@
                     url: "<?php echo base_url() ?>produksi/create",
                     success: function(data){
                         $('#panel-body').html(data);
+                        changewindowtitle('Tambah Data Produksi')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -80,6 +85,7 @@
                     url: "<?php echo base_url() ?>produksi/list",
                     success: function(data){
                         $('#panel-body').html(data);
+                        changewindowtitle('List Produksi')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -103,6 +109,7 @@
                     },
                     success: function(data){
                         $('#panel-body').html(data);
+                        changewindowtitle('Detail Produksi')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -126,6 +133,7 @@
                     },
                     success: function(data){
                         $('#panel-body').html(data);
+                        changewindowtitle('Edit Data Produksi')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -163,6 +171,7 @@
                               text: 'Data produksi berhasil dihapus'
                             })
                             $('#panel-body').html(data);
+                            changewindowtitle('List Produksi')
                         },
                         error: function(error) {
                             Swal.fire({
@@ -203,6 +212,7 @@
                               title: "Sukses",
                               text: 'Data produksi berhasil tercatat'
                             })
+                            changewindowtitle('List Produksi')
                             $('#panel-body').html(data);
                         },
                         error: function(error) {
@@ -246,6 +256,7 @@
                               title: "Sukses",
                               text: 'Data produksi berhasil diupdate'
                             })
+                            changewindowtitle('List Produksi')
                             $('#panel-body').html(data);
                         },
                         error: function(error) {
