@@ -5,6 +5,18 @@
 		width: 100%;
 	}
 
+	table.tabel-material-ready-to-use {
+    	counter-reset: rowNumber;
+	}
+
+	table.tabel-material-ready-to-use tbody tr {
+	    counter-increment: rowNumber;
+	}
+
+	table.tabel-material-ready-to-use tbody tr td:first-child::before {
+	    content: counter(rowNumber);
+	}
+
 </style>
 
 <form id="<?php echo $action; ?>" method="post">
@@ -59,7 +71,7 @@
 							$o = 1;
 							foreach ($material as $key => $value) {
 								?>
-								<tr class="material-available">
+								<tr class="material-available material-available-<?php echo $value->kd_material ?>">
 									<td><span class="txtkdmaterial"><?php echo $value->kd_material ?></span><input type="hidden" class="material_available" value="<?php echo $value->kd_material ?>"></td>
 									<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
 									<td><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->qty ?>"/></td>
@@ -138,7 +150,8 @@
 		})
 
 		let urutan = 1;
-	    $('.btn-add-material').on('click', function() {
+
+	    $('.tabel-material-yang-ada').on('click','.btn-add-material', function() {
 	        const nama_material = $(this).attr('id')
 	        const thisel = $(this)
 		    let stockvalue = thisel.parents('tr.material-available').find('td').eq(2).find('input')
@@ -149,11 +162,11 @@
 			    	$('.ready-to-use-' + nama_material + '-qty').get(0).value++
 			    } else {
 			        $('#materials_ready_to_use').append(`
-			        	<tr id=${nama_material}>
-			        		<td>${urutan++}</td>
+			        	<tr id="${nama_material}">
+			        		<td></td>
 			        		<td>${nama_material}</td>
-			        		<td><input type="text" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-qty" value="1" /></td>
-			        		<td><button type="button" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
+			        		<td><input type="text" id="${nama_material}" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-qty" value="1" /></td>
+			        		<td><button type="button" id="${nama_material}" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
 			        	</tr>`);
 			    }
 			    stockvalue.get(0).value--
@@ -164,6 +177,22 @@
                   text: 'Silahkan tambah pada menu material'
                 })
 		    }
+	    });
+
+	    $('.tabel-material-ready-to-use').on('click','.btn-kurangi-material', function() {
+	        const nama_material = $(this).attr('id')
+	        const thisel = $(this)
+	        let thisrow = thisel.parents('tr')
+		    let stockvalue = thisel.parents('tr').find('td').eq(2).find('input')
+
+		    if (stockvalue.val() > 1) {
+		    	stockvalue.get(0).value--
+		    } else {
+		        thisrow.remove()
+		        urutan--    	
+		    }
+
+		    $('.material-available-' + nama_material + '').find('td').eq(2).find('input').get(0).value++
 	    });
 	})
 </script>
