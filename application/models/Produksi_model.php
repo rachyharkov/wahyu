@@ -48,6 +48,11 @@ class Produksi_model extends CI_Model
         $this->db->insert($this->table, $data);
     }
 
+    function insert_detailproduksi($data)
+    {
+        $this->db->insert('detail_produksi',$data);
+    }
+
     // update data
     function update($id, $data)
     {
@@ -60,6 +65,21 @@ class Produksi_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
+    }
+
+    function buat_kode(){
+        $q = $this->db->query("SELECT MAX(RIGHT(id,4)) AS kd_max FROM produksi WHERE DATE(tanggal_produksi)=CURDATE()");
+        $kd = "";
+        if($q->num_rows()>0){
+            foreach($q->result() as $k){
+                $tmp = ((int)$k->kd_max)+1;
+                $kd = sprintf("%04s", $tmp);
+            }
+        }else{
+            $kd = "0001";
+        }
+        date_default_timezone_set('Asia/Jakarta');
+        return 'P'.date('dmy').$kd;
     }
 
 }

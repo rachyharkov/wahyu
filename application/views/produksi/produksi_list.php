@@ -18,7 +18,7 @@
         <th>Id</th>
         <th>Tanggal Produksi</th>
         <th>Total Barang Jadi</th>
-        <th>Id Detail Material</th>
+        <th>Priority</th>
         <th>User Id</th>
         <th>Action</th>
             </tr></thead><tbody><?php $no = 1;
@@ -27,14 +27,17 @@
                 ?>
                 <tr>
             <td><?= $no++?></td>
+            <td><?php echo $produksi->id ?></td>
             <td><?php echo $produksi->tanggal_produksi ?></td>
             <td><?php echo $produksi->total_barang_jadi ?></td>
-            <td><?php echo $produksi->id_detail_material ?></td>
+            <td><?php echo $produksi->priority ?></td>
             <td><?php echo $produksi->user_id ?></td>
             <td style="text-align:center" width="200px">
-                <button type="button" class="btn btn-success btn-sm read_data" id="<?php echo encrypt_url($produksi->id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-primary btn-sm update_data" id="<?php echo encrypt_url($produksi->id) ?>"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-danger btn-sm delete_data" id="<?php echo encrypt_url($produksi->id) ?>"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+                <div class="input-group">
+                    <button type="button" class="btn btn-success btn-sm read_data" id="<?php echo encrypt_url($produksi->id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-primary btn-sm update_data" id="<?php echo encrypt_url($produksi->id) ?>"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm delete_data" id="<?php echo encrypt_url($produksi->id) ?>"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+                </div>
             </td>
         </tr>
                 <?php } ?>

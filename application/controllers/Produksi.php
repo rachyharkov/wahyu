@@ -49,7 +49,7 @@ class Produksi extends CI_Controller
         		'id' => $row->id,
         		'tanggal_produksi' => $row->tanggal_produksi,
         		'total_barang_jadi' => $row->total_barang_jadi,
-        		'id_detail_material' => $row->id_detail_material,
+        		'priority' => $row->priority,
         		'user_id' => $row->user_id,
     	    );
             $this->load->view('produksi/produksi_read', $data);
@@ -78,13 +78,29 @@ class Produksi extends CI_Controller
     {
         is_allowed($this->uri->segment(1),'create');
 
+        $material_dibutuhkan = $this->input->post('material_dibutuhkan');
+        $stok_dibutuhkan = $this->input->post('stok_dibutuhkan');
+
+        $kode = $this->Produksi_model->buat_kode();
+
+        for ($i = 0; $i < count($material_dibutuhkan); $i++) { 
+            $arr = array(
+                'kode_produksi' => $kode,
+                'kd_material' => $material_dibutuhkan[$i],
+                'jumlah_bahan' => $stok_dibutuhkan[$i]
+            );
+            $this->Produksi_model->insert_detailproduksi($arr);
+            // print_r($arr);
+        }
+
         $data = array(
-    		'id' => $this->input->post('id',TRUE),
-    		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE),
+    		'id' => $kode,
+    		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.date('h:m:s'),
     		'total_barang_jadi' => $this->input->post('total_barang_jadi',TRUE),
-    		'id_detail_material' => $this->input->post('id_detail_material',TRUE),
-    		'user_id' => $this->input->post('user_id',TRUE),
+    		'priority' => 'HIGH',
+    		'user_id' => $this->session->userdata('userid'),
 	    );
+
         $this->Produksi_model->insert($data);
         $this->list();
     }
@@ -105,7 +121,7 @@ class Produksi extends CI_Controller
         		'tanggal_produksi' => set_value('tanggal_produksi', $row->tanggal_produksi),
         		'total_barang_jadi' => set_value('total_barang_jadi', $row->total_barang_jadi),
                 'material' => $this->Material_model->get_all(),
-                'material_needs' => $this->Material_model->get_material_for($row->id_detail_material),
+                'material_needs' => $this->Material_model->get_material_for($row->priority),
                 'user_id' => set_value('user_id', $row->user_id),
 	        );
             $this->load->view('produksi/produksi_form', $data);
@@ -121,7 +137,7 @@ class Produksi extends CI_Controller
         $data = array(
     		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE),
     		'total_barang_jadi' => $this->input->post('total_barang_jadi',TRUE),
-    		'id_detail_material' => $this->input->post('id_detail_material',TRUE),
+    		'priority' => $this->input->post('priority',TRUE),
     		'user_id' => $this->input->post('user_id',TRUE),
 	    );
 
@@ -151,7 +167,7 @@ class Produksi extends CI_Controller
 	$this->form_validation->set_rules('id', 'id', 'trim|required');
 	$this->form_validation->set_rules('tanggal_produksi', 'tanggal produksi', 'trim|required');
 	$this->form_validation->set_rules('total_barang_jadi', 'total barang jadi', 'trim|required');
-	$this->form_validation->set_rules('id_detail_material', 'id detail material', 'trim|required');
+	$this->form_validation->set_rules('priority', 'id detail material', 'trim|required');
 	$this->form_validation->set_rules('user_id', 'user id', 'trim|required');
 
 	$this->form_validation->set_rules('', '', 'trim');
@@ -195,7 +211,7 @@ class Produksi extends CI_Controller
 	    xlsWriteNumber($tablebody, $kolombody++, $data->id);
 	    xlsWriteLabel($tablebody, $kolombody++, $data->tanggal_produksi);
 	    xlsWriteNumber($tablebody, $kolombody++, $data->total_barang_jadi);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->id_detail_material);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->priority);
 	    xlsWriteNumber($tablebody, $kolombody++, $data->user_id);
 
 	    $tablebody++;
