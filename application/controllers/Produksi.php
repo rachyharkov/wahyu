@@ -82,16 +82,27 @@ class Produksi extends CI_Controller
         $material_dibutuhkan = $this->input->post('material_dibutuhkan');
         $stok_dibutuhkan = $this->input->post('stok_dibutuhkan');
 
+        $id_material_stock = $this->input->post('id_material_in_stock');
+        $qty_material_stock = $this->input->post('qty_material_in_stock');
+
         $kode = $this->Produksi_model->buat_kode();
 
         for ($i = 0; $i < count($material_dibutuhkan); $i++) { 
-            $arr = array(
+            $readytouse = array(
                 'kode_produksi' => $kode,
                 'kd_material' => $material_dibutuhkan[$i],
                 'jumlah_bahan' => $stok_dibutuhkan[$i]
             );
-            $this->Produksi_model->insert_detailproduksi($arr);
+            $this->Produksi_model->insert_detailproduksi($readytouse);
             // print_r($arr);
+        }
+
+        for ($x=0; $x < count($id_material_stock); $x++) { 
+            $datastok = array(
+                'qty' => $qty_material_stock[$x]
+            );
+
+            $this->Material_model->update($id_material_stock[$x], $datastok);
         }
 
         $data = array(

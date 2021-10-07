@@ -60,6 +60,21 @@
 						</tr>
 					</thead>
 					<tbody id="materials_ready_to_use">
+						<?php
+						if ($material_needs) {
+							?>
+							<tr id="<?php echo $material_needs->kd_material ?>">
+				        		<td></td>
+				        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $material_needs->kd_material ?>-material" value="<?php echo $material_needs->kd_material ?>" /></td>
+				        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $material_needs->kd_material ?>-qty" value="<?php echo $material_needs->jumlah_bahan ?>" /></td>
+				        		<td style="width: 80px;">
+				        			<div class="input-group">
+				        			<button type="button" id="<?php echo $material_needs->kd_material ?>" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="<?php echo $material_needs->kd_material ?>" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
+				        			</div>
+				        	</tr>
+							<?php
+						}
+						?>
 						
 					</tbody>
 				</table>
@@ -81,9 +96,9 @@
 							foreach ($material as $key => $value) {
 								?>
 								<tr class="material-available material-available-<?php echo $value->kd_material ?>">
-									<td><span class="txtkdmaterial"><?php echo $value->kd_material ?></span><input type="hidden" class="material_available" value="<?php echo $value->kd_material ?>"></td>
+									<td><input type="hidden" name="id_material_in_stock[]" value="<?php echo $value->id ?>"><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->kd_material ?>"/></td>
 									<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
-									<td><input type="text" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
+									<td><input type="text" name="qty_material_in_stock[]" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
 									<td style="width: 80px;">
 										<div class="input-group">
 											<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-success btn-detail-material"><i class="fas fa-eye"></i></button>
