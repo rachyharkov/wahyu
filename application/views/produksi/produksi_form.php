@@ -74,7 +74,7 @@
 								<tr class="material-available material-available-<?php echo $value->kd_material ?>">
 									<td><span class="txtkdmaterial"><?php echo $value->kd_material ?></span><input type="hidden" class="material_available" value="<?php echo $value->kd_material ?>"></td>
 									<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
-									<td><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->qty ?>"/></td>
+									<td><input type="text" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
 									<td>
 										<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-success btn-detail-material"><i class="fas fa-eye"></i></button>
 										<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-primary btn-add-material"><i class="fas fa-plus-square"></i></button>
@@ -154,7 +154,7 @@
 	    $('.tabel-material-yang-ada').on('click','.btn-add-material', function() {
 	        const nama_material = $(this).attr('id')
 	        const thisel = $(this)
-		    let stockvalue = thisel.parents('tr.material-available').find('td').eq(2).find('input')
+		    let stockvalue = $('.stock' + nama_material)
 
 		    if (stockvalue.val() > 0) {
 		    	if ($('.tabel-material-ready-to-use tbody tr#' + nama_material).length > 0) {
@@ -166,7 +166,7 @@
 			        		<td></td>
 			        		<td>${nama_material}</td>
 			        		<td><input type="text" id="${nama_material}" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-qty" value="1" /></td>
-			        		<td><button type="button" id="${nama_material}" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
+			        		<td><button type="button" id="${nama_material}" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="${nama_material}" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
 			        	</tr>`);
 			    }
 			    stockvalue.get(0).value--
@@ -183,7 +183,7 @@
 	        const nama_material = $(this).attr('id')
 	        const thisel = $(this)
 	        let thisrow = thisel.parents('tr')
-		    let stockvalue = thisel.parents('tr').find('td').eq(2).find('input')
+		    let stockvalue = $('.ready-to-use-' + nama_material + '-qty')
 
 		    if (stockvalue.val() > 1) {
 		    	stockvalue.get(0).value--
@@ -192,7 +192,21 @@
 		        urutan--    	
 		    }
 
-		    $('.material-available-' + nama_material + '').find('td').eq(2).find('input').get(0).value++
+		    $('.stock' + nama_material).get(0).value++
+	    });
+
+	    $('.tabel-material-ready-to-use').on('click','.btn-hapus-material', function() {
+	        const nama_material = $(this).attr('id')
+	        const thisel = $(this)
+	        let thisrow = thisel.parents('tr')
+		    let stockvalue = $('.ready-to-use-' + nama_material + '-qty')
+
+		    let a = parseInt($('.stock' + nama_material).get(0).value)
+		    let b = parseInt(stockvalue.val())
+
+		   	$('.stock' + nama_material).get(0).value = a + b
+			thisrow.remove()
+
 	    });
 	})
 </script>
