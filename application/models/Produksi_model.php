@@ -67,6 +67,12 @@ class Produksi_model extends CI_Model
         $this->db->delete($this->table);
     }
 
+    function delete_detailproduksi($idproduksi)
+    {
+        $this->db->where('kode_produksi', $idproduksi);
+        $this->db->delete('detail_produksi');   
+    }
+
     function buat_kode(){
         $q = $this->db->query("SELECT MAX(RIGHT(id,4)) AS kd_max FROM produksi WHERE DATE(tanggal_produksi)=CURDATE()");
         $kd = "";

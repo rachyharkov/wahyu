@@ -145,15 +145,43 @@ class Produksi extends CI_Controller
     public function update_action() 
     {
         is_allowed($this->uri->segment(1),'update');
-       
-        $data = array(
-    		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE),
-    		'total_barang_jadi' => $this->input->post('total_barang_jadi',TRUE),
-    		'priority' => $this->input->post('priority',TRUE),
-    		'user_id' => $this->input->post('user_id',TRUE),
-	    );
 
-        $this->Produksi_model->update($this->input->post('id', TRUE), $data);
+        $idproduksi = $this->input->post('id', TRUE);
+
+        $material_dibutuhkan = $this->input->post('material_dibutuhkan');
+        $stok_dibutuhkan = $this->input->post('stok_dibutuhkan');
+
+        $id_material_stock = $this->input->post('id_material_in_stock');
+        $qty_material_stock = $this->input->post('qty_material_in_stock');
+
+        $this->Produksi_model->delete_detailproduksi($idproduksi);
+
+        for ($i = 0; $i < count($material_dibutuhkan); $i++) { 
+
+            $readytouse = array(
+                'kode_produksi' => $idproduksi,
+                'kd_material' => $material_dibutuhkan[$i],
+                'jumlah_bahan' => $stok_dibutuhkan[$i]
+            );
+            $this->Produksi_model->insert_detailproduksi($readytouse);
+        }
+
+        for ($x=0; $x < count($id_material_stock); $x++) { 
+            $datastok = array(
+                'qty' => $qty_material_stock[$x]
+            );
+
+            $this->Material_model->update($id_material_stock[$x], $datastok);
+        }
+
+        $data = array(
+            'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.date('h:m:s'),
+            'total_barang_jadi' => $this->input->post('total_barang_jadi',TRUE),
+            'priority' => 'HIGH',
+            'user_id' => $this->session->userdata('userid'),
+        );
+
+        $this->Produksi_model->update($idproduksi, $data);
         $this->list();
     }
     
