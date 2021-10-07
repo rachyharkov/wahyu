@@ -25,14 +25,25 @@ class Schedule extends CI_Controller {
 	function machine_list()
 	{
 		$getallmachine = $this->Mesin_model->get_all();
-		$getalloperator = $this->Karyawan_model->get_all();
-		$getallproduksi = $this->Produksi_model->get_all('READY');
 		$data = array(
             'machine_list' => $getallmachine,
-			'getalloperator' => $getalloperator,
-			'getallproduksi' => $getallproduksi,
+			'classnyak' => $this
         );
 		$this->load->view('schedule/machine_lists',$data);
+	}
+
+	function show_machine($mesin_id)
+	{
+		$getalloperator = $this->Karyawan_model->get_all();
+		$getallproduksi = $this->Produksi_model->get_all('READY');
+		$datamesin = $this->Mesin_model->get_by_id($mesin_id);
+
+		$data = array(
+			'getalloperator' => $getalloperator,
+			'getallproduksi' => $getallproduksi,
+			'datamesin' => $datamesin
+		);
+		$this->load->view('schedule/machine_data',$data);
 	}
 
 	function update_machine()
@@ -70,4 +81,8 @@ class Schedule extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	function getdataoperator($id)
+	{
+		return $this->Karyawan_model->get_by_id($id);
+	}
 }

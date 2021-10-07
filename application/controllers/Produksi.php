@@ -111,6 +111,8 @@ class Produksi extends CI_Controller
     		'total_barang_jadi' => $this->input->post('total_barang_jadi',TRUE),
     		'priority' => 'HIGH',
             'status' => 'READY',
+            'operator' => 'N/A',
+            'kd_produksi' => 'N/A',
     		'user_id' => $this->session->userdata('userid'),
 	    );
 
