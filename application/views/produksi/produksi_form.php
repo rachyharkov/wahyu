@@ -82,7 +82,7 @@
 				</table>
 			</div>
 			<div class="col-md-5">
-				<table class="table table-bordered table-hover table-td-valign-middle tabel-material-yang-ada">
+				<table class="table table-hover table-sm tabel-material-yang-ada">
 					<thead>
 						<tr>
 							<th>Kode Material</th>

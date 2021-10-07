@@ -194,6 +194,7 @@ class Produksi extends CI_Controller
         $row = $this->Produksi_model->get_by_id(decrypt_url($id));
 
         if ($row) {
+            $this->Produksi_model->delete_detailproduksi(decrypt_url($id));
             $this->Produksi_model->delete(decrypt_url($id));
         } else {
             echo 'not found';

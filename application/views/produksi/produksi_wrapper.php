@@ -16,6 +16,7 @@
         </div>
         </div>
     </div>
+    
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
