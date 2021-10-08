@@ -1,87 +1,86 @@
 <div id="content" class="app-content">
 	<?php $classnyak->machine_list() ?>
     <h1 class="page-header"></h1>  
-    <div class="panel panel-inverse">
-      <div class="panel-heading">
-        <h4 class="panel-title">Schedule</h4>
-            <div class="panel-heading-btn">
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
-        <a href="javascript:;" class="btn btn-xs btn-icon btn-success btn-loading" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
-        <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
-        <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
-            </div>
-            </div>
-        <div class="panel-body" id="panel-body">
-            <div data-scrollbar="true" data-height="280px">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="card text-center border-0">
-                            <div class="card-header fw-bold">
-                                READY
-                            </div>
-                            <div class="card-body">
-                                <div class="card border-0 mb-2" style="text-align: left;">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Special title treatment</h4>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    </div>
-                                    <div class="card-footer fw-bold">
-                                        2 days ago
-                                    </div>
+    
+    <div class="accordion" id="accordiontwo">
+      <div class="accordion-item border-0">
+        <div class="accordion-header" id="headingOne">
+          <button class="accordion-button bg-gray-900 text-white px-3 py-10px pointer-cursor" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            <i class="fa fa-circle fa-fw text-blue me-2 fs-8px"></i> Schedule
+          </button>
+        </div>
+        <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordiontwo">
+          <div class="accordion-body bg-gray-800 text-white">
+            <div class="row">
+                <div class="col-4">
+                    <div class="card text-center border-0">
+                        <div class="card-header fw-bold">
+                            READY
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll;height: 55vh;">
+                            <div class="card border-0 mb-2" style="text-align: left;">
+                                <div class="card-body">
+                                    <h4 class="card-title">Special title treatment</h4>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                </div>
+                                <div class="card-footer fw-bold">
+                                    2 days ago
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="card text-center border-0">
-                            <div class="card-header fw-bold">
-                                ON GOING
-                            </div>
-                            <div class="card-body">
-                                <div class="card border-0 mb-2" style="text-align: left;">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Special title treatment</h4>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    </div>
-                                    <div class="card-footer fw-bold">
-                                        2 days ago
-                                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card text-center border-0">
+                        <div class="card-header fw-bold">
+                            ON GOING
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll;height: 55vh;">
+                            <div class="card border-0 mb-2" style="text-align: left;">
+                                <div class="card-body">
+                                    <h4 class="card-title">Special title treatment</h4>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                </div>
+                                <div class="card-footer fw-bold">
+                                    2 days ago
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-4">
-                        <div class="card text-center border-0">
-                            <div class="card-header fw-bold">
-                                READY
-                            </div>
-                            <div class="card-body">
-                                <div class="card border-0 mb-2" style="text-align: left;">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Special title treatment</h4>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    </div>
-                                    <div class="card-footer fw-bold">
-                                        2 days ago
-                                    </div>
+                <div class="col-4">
+                    <div class="card text-center border-0">
+                        <div class="card-header fw-bold">
+                            DONE
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll;height: 55vh;">
+                            <div class="card border-0 mb-2" style="text-align: left;">
+                                <div class="card-body">
+                                    <h4 class="card-title">Special title treatment</h4>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                                 </div>
-                                <div class="card border-0 mb-2" style="text-align: left;">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Special title treatment</h4>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    </div>
-                                    <div class="card-footer fw-bold">
-                                        2 days ago
-                                    </div>
+                                <div class="card-footer fw-bold">
+                                    2 days ago
+                                </div>
+                            </div>
+                            <div class="card border-0 mb-2" style="text-align: left;">
+                                <div class="card-body">
+                                    <h4 class="card-title">Special title treatment</h4>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                </div>
+                                <div class="card-footer fw-bold">
+                                    2 days ago
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-		</div>
-	</div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 
         <?php

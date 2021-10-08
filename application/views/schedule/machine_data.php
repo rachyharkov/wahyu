@@ -50,7 +50,7 @@
 								<div class="option">
 									<div class="option-label">Produksi</div>
 									<div class="option-input">
-										<select class="form-control" name="kode_produksi" required>
+										<select class="default-select2 form-control" name="kode_produksi" required>
 											<option value="">-</option>
 											<?php
 											foreach($getallproduksi as $v)
@@ -171,3 +171,8 @@
 			</div>
 		</div>
 	</form>
+
+	<script src="<?php echo base_url() ?>assets/assets/plugins/select2/dist/js/select2.min.js"></script>
+	<script type="text/javascript">
+		$(".default-select2").select2();
+	</script>
