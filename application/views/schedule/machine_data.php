@@ -94,7 +94,8 @@
 								<div class="option">
 									<div class="option-label">Used by:</div>
 									<div class="option-input">
-										<input type="text" class="form-control-plaintext" name="operator_name" value="<?php echo $datamesin->operator ?>">
+										<input type="text" class="form-control-plaintext" value="<?php echo $classnyak->getdataoperator($datamesin->operator)->nama_karyawan.'('.$classnyak->getdataoperator($datamesin->operator)->npk.')' ?>">
+										<input type="hidden" class="form-control-plaintext" name="operator_name" value="<?php echo $datamesin->operator ?>">
 									</div>
 								</div>
 								<div class="option">
