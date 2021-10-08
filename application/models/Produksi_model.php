@@ -90,6 +90,16 @@ class Produksi_model extends CI_Model
         return 'P'.date('dmy').$kd;
     }
 
+    function cek_karyawan_bekerja($karyawan_id)
+    {
+        $this->db->where('operator', $karyawan_id);
+        $this->db->group_start()
+            ->where('status', 'IN USE')
+            ->or_where('status', 'PAUSED')
+        ->group_end();
+        return $this->db->get('mesin')->num_rows();
+    }
+
 }
 
 /* End of file Produksi_model.php */
