@@ -149,4 +149,22 @@ class Schedule extends CI_Controller {
 	{
 		return $this->Karyawan_model->get_by_id($id);
 	}
+	function get_production_ready_schedule()
+	{
+		$data = array(
+			'listofready' => $this->Produksi_model->get_production_ready()
+		); 
+		$this->load->view('schedule/produksi_ready',$data);
+	}
+	function get_production_ongoing_schedule()
+	{
+		$data = array(
+			'listofongoing' => $this->Produksi_model->get_production_ongoing()
+		);
+		$this->load->view('schedule/produksi_ongoing',$data);
+	}
+	function get_production_done_schedule()
+	{
+		$this->load->view('schedule/produksi_done');
+	}
 }

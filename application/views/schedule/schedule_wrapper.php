@@ -1,3 +1,20 @@
+<style>
+.recommended {
+    animation: owoglow 800ms infinite alternate;
+}
+
+@keyframes owoglow {
+  from {
+    box-shadow: 1px 1px 5px -5px #fff;
+  }
+  to {
+    box-shadow: 1px 1px 5px 5px #fff;
+  }
+}
+
+</style>
+
+
 <div id="content" class="app-content">
 	<?php $classnyak->machine_list() ?>
     <h1 class="page-header"></h1>  
@@ -18,15 +35,7 @@
                             READY
                         </div>
                         <div class="card-body" style="overflow-y: scroll;height: 55vh;">
-                            <div class="card border-0 mb-2" style="text-align: left;">
-                                <div class="card-body">
-                                    <h4 class="card-title">Special title treatment</h4>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                </div>
-                                <div class="card-footer fw-bold">
-                                    2 days ago
-                                </div>
-                            </div>
+                            <?php $classnyak->get_production_ready_schedule()?>
                         </div>
                     </div>
                 </div>
@@ -36,15 +45,7 @@
                             ON GOING
                         </div>
                         <div class="card-body" style="overflow-y: scroll;height: 55vh;">
-                            <div class="card border-0 mb-2" style="text-align: left;">
-                                <div class="card-body">
-                                    <h4 class="card-title">Special title treatment</h4>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                </div>
-                                <div class="card-footer fw-bold">
-                                    2 days ago
-                                </div>
-                            </div>
+                            <?php $classnyak->get_production_ongoing_schedule()?>
                         </div>
                     </div>
                 </div>
@@ -55,24 +56,7 @@
                             DONE
                         </div>
                         <div class="card-body" style="overflow-y: scroll;height: 55vh;">
-                            <div class="card border-0 mb-2" style="text-align: left;">
-                                <div class="card-body">
-                                    <h4 class="card-title">Special title treatment</h4>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                </div>
-                                <div class="card-footer fw-bold">
-                                    2 days ago
-                                </div>
-                            </div>
-                            <div class="card border-0 mb-2" style="text-align: left;">
-                                <div class="card-body">
-                                    <h4 class="card-title">Special title treatment</h4>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                </div>
-                                <div class="card-footer fw-bold">
-                                    2 days ago
-                                </div>
-                            </div>
+                            <?php $classnyak->get_production_done_schedule()?>
                         </div>
                     </div>
                 </div>

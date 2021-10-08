@@ -100,6 +100,27 @@ class Produksi_model extends CI_Model
         return $this->db->get('mesin')->num_rows();
     }
 
+    function get_production_ready()
+    {
+        return $this->db->query("
+            SELECT *, datediff(produksi.rencana_selesai,produksi.tanggal_produksi) as 'DIFF'
+            FROM produksi
+            WHERE status = 'READY'
+            ORDER BY DIFF ASC;
+            ")->result();
+    }
+
+    function get_production_ongoing()
+    {
+        return $this->db->query("
+            SELECT *, datediff(produksi.rencana_selesai,produksi.tanggal_produksi) as 'DIFF'
+            FROM produksi
+            JOIN mesin ON mesin.kd_produksi = produksi.id
+            WHERE produksi.status = 'ON GOING'
+            ORDER BY DIFF ASC;
+            ")->result();   
+    }
+
 }
 
 /* End of file Produksi_model.php */
