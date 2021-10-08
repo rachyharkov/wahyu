@@ -46,36 +46,87 @@ class Schedule extends CI_Controller {
 		$this->load->view('schedule/machine_data',$data);
 	}
 
+	function show_machineJSON($mesin_id)
+	{
+		$getalloperator = $this->Karyawan_model->get_all();
+		$getallproduksi = $this->Produksi_model->get_all('READY');
+		$datamesin = $this->Mesin_model->get_by_id($mesin_id);
+
+		$data = array(
+			'getalloperator' => $getalloperator,
+			'getallproduksi' => $getallproduksi,
+			'datamesin' => $datamesin,
+			'classnyak' => $this
+		);
+		return $this->load->view('schedule/machine_data',$data, true);
+	}
+
 	function update_machine()
 	{
 		$id_mesin = $this->input->post('id_mesin');
 		$operator = $this->input->post('operator_name');
 		$kode_produksi = $this->input->post('kode_produksi');
-		$status_mesin = $this->input->post('status_mesin');
+		// $status_mesin = $this->input->post('status_mesin');
+		$action = $this->input->post('action');
 
 		$arrayName = array(
 			'mesinid' => $id_mesin,
 			'operator' => $operator,
 			'kd_produksi' => $kode_produksi,
-			'statusmesin' => $status_mesin
+			// 'statusmesin' => $status_mesin,
+			'action' => $action
 		);
 
 		$status = '';
 		$msg = '';
 
-		if ($status_mesin) {
+		if ($action == 'activate') {
 			$status = 'ok';
 			$msg = 'Mesin ditandai sebagai sedang digunakan';
+
+			$dataaa = array(
+				'operator' => $operator,
+				'kd_produksi' => $kode_produksi,
+				'status' => 'IN USE',
+				'tindakan_terakhir' => date('Y-m-d h:m:s')
+			);
+
+			$this->Mesin_model->update($id_mesin, $dataaa);
 		}
 
-		if(!$status_mesin) {
+		if ($action == 'pause') {
+			$status = 'ok';
+			$msg = 'Mesin ditandai sebagai sedang digunakan';
+
+			$dataaa = array(
+				'operator' => $operator,
+				'kd_produksi' => $kode_produksi,
+				'status' => 'PAUSED',
+				'tindakan_terakhir' => date('Y-m-d h:m:s')
+			);
+
+			$this->Mesin_model->update($id_mesin, $dataaa);
+		}
+
+		if($action == 'stop') {
 			$status = 'ok';
 			$msg = 'Mesin ditandai sebagai sedang tidak digunakan';
+
+			$dataaa = array(
+				'operator' => 'N/A',
+				'kd_produksi' => 'N/A',
+				'status' => 'READY',
+				'tindakan_terakhir' => date('Y-m-d h:m:s')
+			);
+
+			$this->Mesin_model->update($id_mesin, $dataaa);
 		}
+
 
 		$data = array(
 			'status' => $status,
-			'msg' => $msg
+			'msg' => $msg,
+			'page' => $this->show_machineJSON($id_mesin)
 		);
 
 		echo json_encode($data);

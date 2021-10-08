@@ -98,14 +98,11 @@
 
 
 	.animation-wrapper{
-		height: 100px;
-		width: 100px;
-		padding: 20px;
 		margin: auto;
 		text-align: center;
 		text-transform: uppercase;
 		font-weight: 500;
-		transform: scale(1.5);
+		transform: scale(1.4);
 	}
 
 	.fa-animation{
@@ -162,7 +159,13 @@
 			<?php 
 			if ($machine_list) {
 				foreach ($machine_list as $key => $value) {
-					$classnyak->show_machine($value->mesin_id);
+					?>
+						<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 wrapper_info_mesin">
+							<?php
+								$classnyak->show_machine($value->mesin_id);
+							?>
+						</div>
+					<?php
 					?>
 
 					
@@ -204,10 +207,13 @@ if ($machine_list) {
 		        e.preventDefault()
 		        
 		        if ($(this).valid) return false;
+		        var thisel = $(this)
+
+		        var action = $(document.activeElement).attr('action')
 
 		        Swal.fire({
 		          title: 'Konfirmasi Tindakan',
-		          text: "Yakin menjalankan mesin ini?",
+		          text: "Yakin menjalankan tindakan " + action + "?",
 		          icon: 'warning',
 		          showCancelButton: true,
 		          confirmButtonColor: '#3085d6',
@@ -215,7 +221,16 @@ if ($machine_list) {
 		          confirmButtonText: 'Yes'
 		        }).then((result) => {
 		          if (result.isConfirmed) {
-		            dataString = $("#form_mesin_<?php echo $value->mesin_id ?>").serialize();
+
+		          	 Swal.fire({
+				          title: 'Sedang memproses',
+				          text: "Harap Tunggu",
+				          icon: 'warning',
+				          showCancelButton: false,
+  								showConfirmButton: false
+				        })
+
+		            dataString = $("#form_mesin_<?php echo $value->mesin_id ?>").serialize()  + "&action=" + action
 		            $.ajax({
 		                type: "POST",
 		                url: "<?php echo base_url() ?>schedule/update_machine",
@@ -229,6 +244,8 @@ if ($machine_list) {
 			                      title: "Sukses",
 			                      text: dt.msg
 			                    })
+
+			                   thisel.parents('.wrapper_info_mesin').html(dt.page)
 		                    }
 
 		                    if (dt.status == 'error') {
