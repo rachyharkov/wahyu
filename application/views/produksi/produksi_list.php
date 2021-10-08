@@ -19,6 +19,7 @@
         <th>Tanggal Produksi</th>
         <th>Total Barang Jadi</th>
         <th>Priority</th>
+        <th>Status</th>
         <th>User Id</th>
         <th>Action</th>
             </tr></thead><tbody><?php $no = 1;
@@ -31,6 +32,7 @@
             <td><?php echo $produksi->tanggal_produksi ?></td>
             <td><?php echo $produksi->total_barang_jadi ?></td>
             <td><?php echo $produksi->priority ?></td>
+            <td><?php echo $produksi->status ?></td>
             <td><?php echo $produksi->user_id ?></td>
             <td style="text-align:center" width="200px">
                 <div class="input-group">

@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+date_default_timezone_set('Asia/Jakarta');
 
 class Schedule extends CI_Controller {
 
@@ -92,11 +93,17 @@ class Schedule extends CI_Controller {
 			);
 
 			$this->Mesin_model->update($id_mesin, $dataaa);
+
+			$dataproduksi = array(
+				'status' => 'ON GOING'
+			);
+
+			$this->Produksi_model->update($kode_produksi,$dataproduksi);
 		}
 
 		if ($action == 'pause') {
 			$status = 'ok';
-			$msg = 'Mesin ditandai sebagai sedang digunakan';
+			$msg = 'Mesin ditandai sebagai ditahan penggunaannya';
 
 			$dataaa = array(
 				'operator' => $operator,
@@ -120,6 +127,12 @@ class Schedule extends CI_Controller {
 			);
 
 			$this->Mesin_model->update($id_mesin, $dataaa);
+
+			$dataproduksi = array(
+				'status' => 'DONE',
+				'aktual_selesai' => date('Y-m-d h:m:s')
+			);
+			$this->Produksi_model->update($kode_produksi,$dataproduksi);
 		}
 
 
