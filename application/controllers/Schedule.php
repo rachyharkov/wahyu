@@ -57,8 +57,8 @@ class Schedule extends CI_Controller {
 	function machine_listJSON()
 	{
 		$getalloperator = $this->Karyawan_model->get_all();
-		$getallreadyproduksi = $this->Produksi_model->get_all('READY');
-		$getallreadyfinishingproduksi = $this->Produksi_model->get_all('READY FINISHING');
+		$getallreadyproduksi = $this->Produksi_model->get_all_ready();
+		$getallreadyfinishingproduksi = $this->Produksi_model->get_all_ready_finishing();
 
 		$getallmachineproduction = $this->Mesin_model->get_all('PRODUCTION');
 		$getallmachinefinishing = $this->Mesin_model->get_all('FINISHING');
