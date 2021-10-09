@@ -126,6 +126,14 @@
 		animation: spin-reverse 3s infinite linear;
 	}
 
+	.spin-forward-slow {
+		animation: spin-forwrd 10s infinite linear;
+	}
+
+	.spin-revers-slow {
+		animation: spin-reverse 10s infinite linear;
+	}
+
 	@keyframes spin-reverse {
 		0% {
 			transform: rotate(-360deg);
@@ -149,7 +157,7 @@
   <div class="accordion-item border-0">
     <div class="accordion-header" id="headingOne">
       <button class="accordion-button bg-gray-900 text-white px-3 py-10px pointer-cursor" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-        <i class="fa fa-circle fa-fw text-blue me-2 fs-8px"></i> Machine List
+        <i class="fa fa-circle fa-fw text-blue me-2 fs-8px"></i> Machine-use Management
       </button>
     </div>
     <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordion">

@@ -165,6 +165,9 @@ class Schedule extends CI_Controller {
 	}
 	function get_production_done_schedule()
 	{
-		$this->load->view('schedule/produksi_done');
+		$data = array(
+			'listofdone' => $this->Produksi_model->get_production_done()
+		);
+		$this->load->view('schedule/produksi_done',$data);
 	}
 }

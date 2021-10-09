@@ -14,7 +14,7 @@
 
 </style>
 
-
+<script src="<?php echo base_url() ?>assets/assets/plugins/select2/dist/js/select2.min.js"></script>
 <div id="content" class="app-content">
 	<?php $classnyak->machine_list() ?>
     <h1 class="page-header"></h1>  

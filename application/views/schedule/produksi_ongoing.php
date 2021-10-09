@@ -5,7 +5,7 @@
     if ($listofongoing) {
         foreach ($listofongoing as $key => $value) {
             ?>
-            <div class="card border-0 mb-2 <?php if($value->DIFF <= 10){ echo 'recommended'; } ?>" style="text-align: left;">
+            <div class="card border-0 mb-2" style="text-align: left;">
                 <div class="card-body">
                     <h4 class="card-title"><?php echo $value->id ?></h4>
                     <p class="card-text">Target <?php echo $value->total_barang_jadi ?> pcs yang direncanakan selesai <b><?php echo $value->rencana_selesai ?></b> (<?php echo $value->DIFF ?> Hari done).</p>
@@ -29,7 +29,11 @@
                         <?php
                     }
 
-                     ?></i> <span class="badge <?php echo $randcolor[array_rand($randcolor, 1)] ?>" style="transform: scale(1.4);
+                     ?></i><?php if ($value->status == 'PAUSED') {
+                         ?>
+                         <span class="badge bg-warning">break</span>
+                         <?php
+                     } ?> <span class="badge <?php echo $randcolor[array_rand($randcolor, 1)] ?>" style="transform: scale(1.4);
 float: right;
 border-radius: 50%;
 height: 18px;

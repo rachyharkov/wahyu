@@ -121,6 +121,17 @@ class Produksi_model extends CI_Model
             ")->result();   
     }
 
+    function get_production_done()
+    {
+        return $this->db->query("
+            SELECT *, datediff(produksi.rencana_selesai,produksi.tanggal_produksi) as 'DIFF'
+            FROM produksi
+            WHERE produksi.status = 'DONE'
+            ORDER BY aktual_selesai ASC
+            LIMIT 10;
+            ")->result();
+    }
+
 }
 
 /* End of file Produksi_model.php */

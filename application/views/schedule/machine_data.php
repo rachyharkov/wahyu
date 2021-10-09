@@ -6,11 +6,23 @@
 				<div class="product">
 					<div class="product-img" style="text-align: center;">
 						<?php 
-						if ($datamesin->status == 'READY' || $datamesin->status == 'PAUSED') {
+						if ($datamesin->status == 'READY') {
 							?>
 								<i class="fas fa-cogs fa-fw fa-6x"></i>
 							<?php
-						} else {
+						}
+						if($datamesin->status == 'PAUSED') {
+							?>
+							<div class="animation-wrapper">
+						      <div class="fa-animation">
+						        <i class="fa fa-cog fa-lg spin-forward-slow"></i>
+						        <i class="fa fa-cog fa-md spin-revers-slow"></i>
+						        <i class="fa fa-cog fa-sm spin-revers-slow"></i>
+						      </div>
+						    </div>
+							<?php
+						}
+						if($datamesin->status == 'IN USE') {
 							?>
 							<div class="animation-wrapper">
 						      <div class="fa-animation">
@@ -80,8 +92,7 @@
 							<input type="hidden" name="id_mesin" value="<?php echo $datamesin->mesin_id ?>">
 							<button type="reset" class="btn btn-default"><i class="fa fa-times fa-fw"></i> Batal</button>
 							<button type="submit" action="activate" class="btn btn-success"><i class="fa fa-check fa-fw"></i> Update</button>
-						</div>
-							<script src="<?php echo base_url() ?>assets/assets/plugins/select2/dist/js/select2.min.js"></script>
+						</div>							
 							<script type="text/javascript">
 								$(".default-select2-<?php echo $datamesin->mesin_id ?>").select2();
 							</script>
