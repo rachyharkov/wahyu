@@ -14,9 +14,22 @@
                     <i style="font-size: 0.6rem;color: gray;"><?php 
                     $date1 = new DateTime(date('Y-m-d'));
                     $date2 = new DateTime(date('Y-m-d',strtotime($value->rencana_selesai)));
-                    echo $date2->diff($date1)->format('%a');
+                    
                     $a = $classnyak->getdataoperator($value->operator)->nama_karyawan;
-                     ?>Day(s) remaining</i> <span class="badge <?php echo $randcolor[array_rand($randcolor, 1)] ?>" style="transform: scale(1.4);
+
+                    if ($a < 0) {
+                        
+                        echo $date2->diff($date1)->format('%a'); ?> Day(s) late
+                        <?php
+
+                    } else {
+                        echo $date2->diff($date1)->format('%a');
+                        ?>
+                         Day(s) remaining
+                        <?php
+                    }
+
+                     ?></i> <span class="badge <?php echo $randcolor[array_rand($randcolor, 1)] ?>" style="transform: scale(1.4);
 float: right;
 border-radius: 50%;
 height: 18px;

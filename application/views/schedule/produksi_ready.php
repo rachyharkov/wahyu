@@ -4,7 +4,10 @@
             ?>
             <div class="card border-0 mb-2 <?php if($value->DIFF <= 10){ echo 'recommended'; } ?>" style="text-align: left;">
                 <div class="card-body">
-                    <h4 class="card-title"><?php echo $value->id ?></h4>
+                    <div class="input-group">
+                        <input id="clipboard-default<?php echo $value->id ?>" type="text" class="form-control-plaintext" readonly value="<?php echo $value->id ?>" style="font-size: 1rem;flex: 1 0;" />    
+                        <button class="btn btn-inverse" type="button" data-toggle="clipboard" data-clipboard-target="#clipboard-default<?php echo $value->id ?>"><i class="fa fa-clipboard"></i></button>
+                    </div>
                     <p class="card-text">Target <?php echo $value->total_barang_jadi ?> pcs yang direncanakan selesai <b><?php echo $value->rencana_selesai ?></b> (<?php echo $value->DIFF ?> Hari done).</p>
                 </div>
                 <div class="card-footer fw-bold">

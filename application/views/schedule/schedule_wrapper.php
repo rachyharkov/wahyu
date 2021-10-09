@@ -66,7 +66,7 @@
       </div>
     </div>
 </div>
-
+<script src="<?php echo base_url() ?>assets/assets/plugins/clipboard/dist/clipboard.min.js"></script>
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
@@ -107,6 +107,21 @@
             function changewindowtitle(text) {
                 $('.panel-title').text(text);
             }
+
+            $(document).ready(function() {
+                var clipboard = new ClipboardJS("[data-toggle='clipboard']");
+  
+              clipboard.on("success", function(e) {
+                $(e.trigger).tooltip({
+                  title: "Copied",
+                  placement: "top"
+                });
+                $(e.trigger).tooltip("show");
+                setTimeout(function() {
+                  $(e.trigger).tooltip("dispose");
+                }, 500);
+              });
+            })
             
             $(document).on('click','.tambah_data', function() {
                 $('.btn-loading').click()

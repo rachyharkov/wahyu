@@ -50,7 +50,7 @@
 								<div class="option">
 									<div class="option-label">Produksi</div>
 									<div class="option-input">
-										<select class="default-select2 form-control" name="kode_produksi" required>
+										<select class="default-select2-<?php echo $datamesin->mesin_id ?> form-control" name="kode_produksi" required>
 											<?php
 											foreach($getallproduksi as $v)
 											{
@@ -81,6 +81,10 @@
 							<button type="reset" class="btn btn-default"><i class="fa fa-times fa-fw"></i> Batal</button>
 							<button type="submit" action="activate" class="btn btn-success"><i class="fa fa-check fa-fw"></i> Update</button>
 						</div>
+							<script src="<?php echo base_url() ?>assets/assets/plugins/select2/dist/js/select2.min.js"></script>
+							<script type="text/javascript">
+								$(".default-select2-<?php echo $datamesin->mesin_id ?>").select2();
+							</script>
 						<?php
 					}
 
@@ -170,10 +174,3 @@
 			</div>
 		</div>
 	</form>
-
-	<script src="<?php echo base_url() ?>assets/assets/plugins/select2/dist/js/select2.min.js"></script>
-	<script type="text/javascript">
-		$(".default-select2").select2({
-			placeholder: 'pilih produksi'
-		});
-	</script>
