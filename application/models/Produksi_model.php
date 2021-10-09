@@ -16,9 +16,24 @@ class Produksi_model extends CI_Model
     }
 
     // get all
-    function get_all($status = '')
+    function get_all()
     {
-        $this->db->like('status',$status);
+        $this->db->order_by($this->id, $this->order);
+        $this->db->limit(100);
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_ready()
+    {
+        $this->db->where('status', 'READY');
+        $this->db->order_by($this->id, $this->order);
+        $this->db->limit(100);
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_ready_finishing()
+    {
+        $this->db->where('status', 'READY FINISHING');
         $this->db->order_by($this->id, $this->order);
         $this->db->limit(100);
         return $this->db->get($this->table)->result();
@@ -113,20 +128,17 @@ class Produksi_model extends CI_Model
     function get_production_ongoing()
     {
         return $this->db->query("
-            SELECT *, datediff(produksi.rencana_selesai,produksi.tanggal_produksi) as 'DIFF'
-            FROM produksi
-            JOIN mesin ON mesin.kd_produksi = produksi.id
-            WHERE produksi.status = 'ON GOING'
-            ORDER BY DIFF ASC;
-            ")->result();   
+            SELECT *, datediff(produksi.rencana_selesai,produksi.tanggal_produksi) as 'DIFF',produksi.status AS 'status_produksi' 
+            FROM produksi 
+            WHERE produksi.status IN ('ON GOING','READY FINISHING', 'FINISHING');")->result();   
     }
 
-    function get_production_done()
+    function get_production_done($tanggal)
     {
         return $this->db->query("
             SELECT *, datediff(produksi.rencana_selesai,produksi.tanggal_produksi) as 'DIFF'
             FROM produksi
-            WHERE produksi.status = 'DONE'
+            WHERE produksi.status = 'DONE' AND day(produksi.aktual_selesai) = ".$tanggal."
             ORDER BY aktual_selesai ASC
             LIMIT 10;
             ")->result();

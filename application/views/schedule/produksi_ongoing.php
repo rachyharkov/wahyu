@@ -12,10 +12,13 @@
                 </div>
                 <div class="card-footer fw-bold">
                     <i style="font-size: 0.6rem;color: gray;"><?php 
+                    $cekapakahmegangmesin = $classnyak->cekkodeproduksipadamesin($value->id);
+
+                    $a = null;
+
                     $date1 = new DateTime(date('Y-m-d'));
                     $date2 = new DateTime(date('Y-m-d',strtotime($value->rencana_selesai)));
                     
-                    $a = $classnyak->getdataoperator($value->operator)->nama_karyawan;
 
                     if ($a < 0) {
                         
@@ -28,16 +31,38 @@
                          Day(s) remaining
                         <?php
                     }
+                    if ($cekapakahmegangmesin) {
+                        $a = $classnyak->getdataoperator($cekapakahmegangmesin->operator)->nama_karyawan;
+                        if ($cekapakahmegangmesin->status == 'PAUSED') {
+                             ?>
+                             <span class="badge bg-warning">break</span>
+                             <?php
+                         }
+                    }
 
-                     ?></i><?php if ($value->status == 'PAUSED') {
+                     ?></i><?php
+                     if ($value->status_produksi == 'FINISHING') {
                          ?>
-                         <span class="badge bg-warning">break</span>
+                         <span class="badge bg-purple">finishing</span>
                          <?php
-                     } ?> <span class="badge <?php echo $randcolor[array_rand($randcolor, 1)] ?>" style="transform: scale(1.4);
-float: right;
-border-radius: 50%;
-height: 18px;
-width: 18px;"><?php echo $a[0] ?></span>
+                     }
+                     if ($value->status_produksi == 'READY FINISHING') {
+                         ?>
+                         <span class="badge bg-primary">ready finishing</span>
+                         <?php
+                     }
+
+                     if ($a) {
+                         ?>
+                         <span class="badge <?php echo $randcolor[array_rand($randcolor, 1)] ?>" style="transform: scale(1.4);
+                            float: right;
+                            border-radius: 50%;
+                            height: 18px;
+                            width: 18px;"><?php echo $a[0] ?></span>
+                         <?php
+                     }
+
+                     ?>
 
                 </div>
             </div>
@@ -46,7 +71,10 @@ width: 18px;"><?php echo $a[0] ?></span>
     } else {
         ?>
         <div style="width: 100%; height: 200px; text-align: center; padding: 40px 0;">
-            Belum ada jadwal produksi
+            <div style="margin: 14px;">
+                <i class="fas fa-thumbs-up fa-3x" style="color: gray;"></i>
+            </div>
+            <p>Belum ada produksi yang berjalan</p>
         </div>
         <?php
     }

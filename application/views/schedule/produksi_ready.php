@@ -23,7 +23,10 @@
     } else {
         ?>
         <div style="width: 100%; height: 200px; text-align: center; padding: 40px 0;">
-            Belum ada jadwal produksi
+            <div style="margin: 14px;">
+                <i class="fas fa-thumbs-up fa-3x" style="color: gray;"></i>
+            </div>
+            <p>Belum ada jadwal produksi</p>
         </div>
         <?php
     }
