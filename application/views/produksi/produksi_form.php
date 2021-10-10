@@ -36,6 +36,20 @@
 	</div>
 
 	<div class="row mb-15px">
+		<label class="form-label col-form-label col-md-3">Material Treshold</label>
+		<div class="col-md-9">
+			<input required type="number" class="form-control" name="material_treshold" id="material_treshold" placeholder="Tanggal Produksi" value="" />
+		</div>
+	</div>
+
+	<div class="row mb-15px">
+		<label class="form-label col-form-label col-md-3">Material's Machine Treshold</label>
+		<div class="col-md-9">
+			<input required type="number" class="form-control" name="material_treshold" id="material_treshold" placeholder="Tanggal Produksi" value="" />
+		</div>
+	</div>
+
+	<div class="row mb-15px">
 		<label class="form-label col-form-label col-md-3">Total Barang Jadi <?php echo form_error('total_barang_jadi') ?></label>
 		<div class="col-md-4">
 			<div class="input-group" style="width: 150px;">
@@ -55,6 +69,9 @@
 
 	<div class="container">
 		<h4>Kebutuhan Material</h4>
+		<div class="alertdiv">
+			
+		</div>
 		<div class="row">
 			<div class="col-md-7">
 				<table class="table table-bordered table-hover table-td-valign-middle tabel-material-ready-to-use">
@@ -63,6 +80,7 @@
 							<th>No</th>
 							<th>Nama Material</th>
 							<th>Qty</th>
+							<th>Treshold</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -75,6 +93,7 @@
 					        		<td></td>
 					        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-material" value="<?php echo $value->kd_material ?>" /></td>
 					        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-qty" value="<?php echo $value->jumlah_bahan ?>" /></td>
+					        		<td><input type="number" id="<?php echo $value->kd_material ?>" name="treshold" class="form-control treshold-material" /></td>
 					        		<td style="width: 80px;">
 					        			<div class="input-group">
 					        			<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
@@ -205,6 +224,7 @@
 			        		<td></td>
 			        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-material" value="${nama_material}" /></td>
 			        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-qty" value="1" /></td>
+			        		<td><input type="number" id="${nama_material}" name="treshold" class="form-control treshold-material" /></td>
 			        		<td style="width: 80px;">
 			        			<div class="input-group">
 			        			<button type="button" id="${nama_material}" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="${nama_material}" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
@@ -237,6 +257,83 @@
 
 		    $('.stock' + nama_material).get(0).value++
 		    checkdisablecreateproductionbutton()
+	    });
+
+    	let sumtreshold = 0;
+    	
+    	function rumus_treshold_dummy() {
+		    
+    		let sumtresholddummy = 0;
+    		var totalbarangjadi = $('#total_barang_jadi').val()
+
+		    $(".treshold-material").each(function(){
+		    	var nama_material = $(this).attr('id')
+
+		    	var qtymaterial = $('.ready-to-use-' + nama_material + '-qty').val()
+		    	var treshold_qty = $(this).val()
+
+		    	var anu = treshold_qty * qtymaterial
+		        // sumtresholddummy += +$(this).val();
+		        sumtresholddummy += anu
+		    });
+
+		    sumtreshold = sumtresholddummy
+
+		    $('.treshold-material').removeClass('is-invalid')
+			$('.treshold-material').next().remove()
+
+	    	$('.alertdiv').html('')
+		    if (sumtreshold > totalbarangjadi) {
+		    	$('.alertdiv').html('<div class="alert alert-danger"><b>Perhatian!</b> Melebihi batas penggunaan bahan target barang jadi</div>')
+		    }
+		    console.log(sumtreshold)
+    	}
+
+    	$('#total_barang_jadi').on('input', function() {
+    		rumus_treshold_dummy()
+    	})
+
+	    function rumus_treshold(total_barang_jadi, treshold_qty, qty, id_material, elem = null) {
+
+	    	sumtreshold = 0
+	    	var totalbarangjadi = $('#total_barang_jadi').val()
+
+		    $(".treshold-material").each(function(){
+		    	var anu = treshold_qty * qty
+		        // sumtreshold += +$(this).val();
+		        sumtreshold += anu
+		    });
+
+		    var thisel = $('#' + id_material + '.treshold-material')
+
+		    console.log(sumtreshold)
+	    	thisel.removeClass('is-invalid')
+			thisel.next().remove()
+		    if (sumtreshold > totalbarangjadi) {
+		    	thisel.addClass('is-invalid')
+				thisel.after(`<div class="invalid-feedback">Melebihi batas penggunaan bahan target barang jadi</div>`)
+		    }
+	    }
+
+
+	    $('.tabel-material-ready-to-use').on('input','.treshold-material', function() {
+
+	    	const nama_material = $(this).attr('id')
+
+	    	var totalbarangjadi = $('#total_barang_jadi').val()
+	    	var treshold_qty = $(this).val()
+	    	var qtymaterial = $('.ready-to-use-' + nama_material + '-qty').val()
+	    	const id_material = $(this).attr('id')
+
+	    	var thisel = $('#' + id_material + '.treshold-material')
+
+	    	// rumus_treshold(total_barang_jadi, treshold_qty, qtymaterial, id_material)
+	    	rumus_treshold_dummy()
+
+	    	if(thisel.val() < sumtreshold) {
+	    		thisel.removeClass('is-invalid')
+				thisel.next().remove()
+	    	}
 	    });
 
 	    $('.tabel-material-ready-to-use').on('click','.btn-hapus-material', function() {
