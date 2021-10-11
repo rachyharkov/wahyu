@@ -36,16 +36,83 @@
 	</div>
 
 	<div class="row mb-15px">
-		<label class="form-label col-form-label col-md-3">Material Treshold</label>
+		<label class="form-label col-form-label col-md-3">Machine Use</label>
 		<div class="col-md-9">
-			<input required type="number" class="form-control" name="material_treshold" id="material_treshold" placeholder="Tanggal Produksi" value="" />
-		</div>
-	</div>
+			<div class="row">
+				<div class="col-4">
+					<div class="input-group">
+						<span class="input-group-text">Total Material</span>
+						<input type="text" name="totalmaterial" class="form-control">
+					</div>
+				</div>
+				<div class="col-4" style="padding-top: 1vh;">
+					<div class="form-check form-switch">
+						<input class="form-check-input" type="checkbox" id="optionone" data-bs-toggle="collapse" data-bs-target="#collapseOne"/>
+		  				<label class="form-check-label text-white" for="optionone">Smart Allocate</label>
+					</div>
+				</div>
+			</div>
 
-	<div class="row mb-15px">
-		<label class="form-label col-form-label col-md-3">Material's Machine Treshold</label>
-		<div class="col-md-9">
-			<input required type="number" class="form-control" name="material_treshold" id="material_treshold" placeholder="Tanggal Produksi" value="" />
+			
+			<table class="table table-hover table-sm">
+				<thead>
+					<tr>
+						<th>Machine Name</th>
+						<th>Used For</th>
+						<th>Estimated done time per-goods (in minute)</th>
+						<th>Material allocated</th>
+						<th>Time spent</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+
+					$arrbarangdoneperminuteonsinglemachine = [15, 25, 27 ,28 ,21];
+
+					if ($machine_list) {
+						foreach ($machine_list as $key => $value) {
+							?>
+							<tr>
+								<td>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>">
+										<label class="form-check-label" for="checkbox<?php echo $value->mesin_id ?>"><?php echo $value->kd_mesin.' ('.$value->jenis_mesin.')' ?></label>
+									</div>
+								</td>
+								<td>
+									<input type="text" name="machineusedfor[]" class="form-control-plaintext" readonly value="<?php echo $value->used_for ?>">	
+								</td>
+								<td>
+									<div class="input-group">
+										<input type="text" name="estimateddonepergoodsinminute" class="form-control estimateddonepergoodsinminute">
+										<span class="input-group-text">
+											Minute(s)
+										</span>
+									</div>
+								</td>
+								<td>
+									<input type="text" name="materialallocated" class="form-control-plaintext materialallocated">
+								</td>
+								<td>
+									<div class="input-group">
+										<input type="text" name="timespentpermachine" class="form-control-plaintext">
+									</div>
+								</td>
+
+							</tr>
+							<?php
+						}
+					}
+					?>
+					<tr>
+						<td colspan="2"><b>Total</b></td>
+						<td><input type="text" name="totaldoneinminute" class="form-control-plaintext"></td>
+						<td><input type="text" name="totalmaterialused" class="form-control-plaintext"></td>
+						<td><input type="text" name="predictiondone" class="form-control-plaintext"></td>
+					</tr>
+					
+				</tbody>
+			</table>
 		</div>
 	</div>
 
@@ -68,7 +135,7 @@
 	</div>
 
 	<div class="container">
-		<h4>Kebutuhan Material</h4>
+		<h4>Kebutuhan Material per-barang</h4>
 		<div class="alertdiv">
 			
 		</div>
@@ -80,7 +147,6 @@
 							<th>No</th>
 							<th>Nama Material</th>
 							<th>Qty</th>
-							<th>Treshold</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -93,7 +159,6 @@
 					        		<td></td>
 					        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-material" value="<?php echo $value->kd_material ?>" /></td>
 					        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-qty" value="<?php echo $value->jumlah_bahan ?>" /></td>
-					        		<td><input type="number" id="<?php echo $value->kd_material ?>" name="treshold" class="form-control treshold-material" /></td>
 					        		<td style="width: 80px;">
 					        			<div class="input-group">
 					        			<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
@@ -108,13 +173,19 @@
 				</table>
 			</div>
 			<div class="col-md-5">
-				<table class="table table-hover table-sm tabel-material-yang-ada">
+				<table class="table table-hover table-sm tabel-material-yang-ada table-td-valign-middle">
 					<thead>
 						<tr>
-							<th>Kode Material</th>
-							<th>Weight/Pcs (Kg)</th>
-							<th>Stock</th>
-							<th>Action</th>
+							<th rowspan="2">Kode Material</th>
+							<th rowspan="2">Weight/Pcs (Kg)</th>
+							<th colspan="3">Dimensi</th>
+							<th rowspan="2">Stock</th>
+							<th rowspan="2">Action</th>
+						</tr>
+						<tr>
+							<th>D/T (mm)</th>
+							<th>P (mm)</th>
+							<th>L (mm)</th>
 						</tr>
 					</thead>
 					<tbody id="materials_available">
@@ -126,6 +197,21 @@
 								<tr class="material-available material-available-<?php echo $value->kd_material ?>">
 									<td><input type="hidden" name="id_material_in_stock[]" value="<?php echo $value->id ?>"><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->kd_material ?>"/></td>
 									<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
+									<?php
+
+									$jsonanu = json_decode($value->dimensi, TRUE);
+										?>
+										<td>
+											<input type="text" class="form-control-plaintext" name="dimensidiametertebal" value="<?php echo $jsonanu['diametertebal'] ?>">
+										</td>
+										<td>
+											<input type="text" class="form-control-plaintext" name="dimensipanjang" value="<?php echo $jsonanu['panjang'] ?>">
+										</td>
+										<td>
+											<input type="text" class="form-control-plaintext" name="dimensilebar" value="<?php echo $jsonanu['lebar'] ?>">
+										</td>
+										<?php
+									?>
 									<td><input type="text" name="qty_material_in_stock[]" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
 									<td style="width: 80px;">
 										<div class="input-group">
@@ -224,7 +310,6 @@
 			        		<td></td>
 			        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-material" value="${nama_material}" /></td>
 			        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-qty" value="1" /></td>
-			        		<td><input type="number" id="${nama_material}" name="treshold" class="form-control treshold-material" /></td>
 			        		<td style="width: 80px;">
 			        			<div class="input-group">
 			        			<button type="button" id="${nama_material}" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="${nama_material}" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
@@ -259,82 +344,82 @@
 		    checkdisablecreateproductionbutton()
 	    });
 
-    	let sumtreshold = 0;
+    	// let sumtreshold = 0;
     	
-    	function rumus_treshold_dummy() {
+   //  	function rumus_treshold_dummy() {
 		    
-    		let sumtresholddummy = 0;
-    		var totalbarangjadi = $('#total_barang_jadi').val()
+   //  		let sumtresholddummy = 0;
+   //  		var totalbarangjadi = $('#total_barang_jadi').val()
 
-		    $(".treshold-material").each(function(){
-		    	var nama_material = $(this).attr('id')
+		 //    $(".treshold-material").each(function(){
+		 //    	var nama_material = $(this).attr('id')
 
-		    	var qtymaterial = $('.ready-to-use-' + nama_material + '-qty').val()
-		    	var treshold_qty = $(this).val()
+		 //    	var qtymaterial = $('.ready-to-use-' + nama_material + '-qty').val()
+		 //    	var treshold_qty = $(this).val()
 
-		    	var anu = treshold_qty * qtymaterial
-		        // sumtresholddummy += +$(this).val();
-		        sumtresholddummy += anu
-		    });
+		 //    	var anu = treshold_qty * qtymaterial
+		 //        // sumtresholddummy += +$(this).val();
+		 //        sumtresholddummy += anu
+		 //    });
 
-		    sumtreshold = sumtresholddummy
+		 //    sumtreshold = sumtresholddummy
 
-		    $('.treshold-material').removeClass('is-invalid')
-			$('.treshold-material').next().remove()
+		 //    $('.treshold-material').removeClass('is-invalid')
+			// $('.treshold-material').next().remove()
 
-	    	$('.alertdiv').html('')
-		    if (sumtreshold > totalbarangjadi) {
-		    	$('.alertdiv').html('<div class="alert alert-danger"><b>Perhatian!</b> Melebihi batas penggunaan bahan target barang jadi</div>')
-		    }
-		    console.log(sumtreshold)
-    	}
+	  //   	$('.alertdiv').html('')
+		 //    if (sumtreshold > totalbarangjadi) {
+		 //    	$('.alertdiv').html('<div class="alert alert-danger"><b>Perhatian!</b> Melebihi batas penggunaan bahan target barang jadi</div>')
+		 //    }
+		 //    console.log(sumtreshold)
+   //  	}
 
-    	$('#total_barang_jadi').on('input', function() {
-    		rumus_treshold_dummy()
-    	})
+   //  	$('#total_barang_jadi').on('input', function() {
+   //  		rumus_treshold_dummy()
+   //  	})
 
-	    function rumus_treshold(total_barang_jadi, treshold_qty, qty, id_material, elem = null) {
+	  //   function rumus_treshold(total_barang_jadi, treshold_qty, qty, id_material, elem = null) {
 
-	    	sumtreshold = 0
-	    	var totalbarangjadi = $('#total_barang_jadi').val()
+	  //   	sumtreshold = 0
+	  //   	var totalbarangjadi = $('#total_barang_jadi').val()
 
-		    $(".treshold-material").each(function(){
-		    	var anu = treshold_qty * qty
-		        // sumtreshold += +$(this).val();
-		        sumtreshold += anu
-		    });
+		 //    $(".treshold-material").each(function(){
+		 //    	var anu = treshold_qty * qty
+		 //        // sumtreshold += +$(this).val();
+		 //        sumtreshold += anu
+		 //    });
 
-		    var thisel = $('#' + id_material + '.treshold-material')
+		 //    var thisel = $('#' + id_material + '.treshold-material')
 
-		    console.log(sumtreshold)
-	    	thisel.removeClass('is-invalid')
-			thisel.next().remove()
-		    if (sumtreshold > totalbarangjadi) {
-		    	thisel.addClass('is-invalid')
-				thisel.after(`<div class="invalid-feedback">Melebihi batas penggunaan bahan target barang jadi</div>`)
-		    }
-	    }
+		 //    console.log(sumtreshold)
+	  //   	thisel.removeClass('is-invalid')
+			// thisel.next().remove()
+		 //    if (sumtreshold > totalbarangjadi) {
+		 //    	thisel.addClass('is-invalid')
+			// 	thisel.after(`<div class="invalid-feedback">Melebihi batas penggunaan bahan target barang jadi</div>`)
+		 //    }
+	  //   }
 
 
-	    $('.tabel-material-ready-to-use').on('input','.treshold-material', function() {
+	   //  $('.tabel-material-ready-to-use').on('input','.treshold-material', function() {
 
-	    	const nama_material = $(this).attr('id')
+	   //  	const nama_material = $(this).attr('id')
 
-	    	var totalbarangjadi = $('#total_barang_jadi').val()
-	    	var treshold_qty = $(this).val()
-	    	var qtymaterial = $('.ready-to-use-' + nama_material + '-qty').val()
-	    	const id_material = $(this).attr('id')
+	   //  	var totalbarangjadi = $('#total_barang_jadi').val()
+	   //  	var treshold_qty = $(this).val()
+	   //  	var qtymaterial = $('.ready-to-use-' + nama_material + '-qty').val()
+	   //  	const id_material = $(this).attr('id')
 
-	    	var thisel = $('#' + id_material + '.treshold-material')
+	   //  	var thisel = $('#' + id_material + '.treshold-material')
 
-	    	// rumus_treshold(total_barang_jadi, treshold_qty, qtymaterial, id_material)
-	    	rumus_treshold_dummy()
+	   //  	// rumus_treshold(total_barang_jadi, treshold_qty, qtymaterial, id_material)
+	   //  	rumus_treshold_dummy()
 
-	    	if(thisel.val() < sumtreshold) {
-	    		thisel.removeClass('is-invalid')
-				thisel.next().remove()
-	    	}
-	    });
+	   //  	if(thisel.val() < sumtreshold) {
+	   //  		thisel.removeClass('is-invalid')
+				// thisel.next().remove()
+	   //  	}
+	   //  });
 
 	    $('.tabel-material-ready-to-use').on('click','.btn-hapus-material', function() {
 	        const nama_material = $(this).attr('id')
