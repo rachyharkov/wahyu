@@ -70,7 +70,7 @@ class Produksi extends CI_Controller
             'machine_list' => $this->Mesin_model->get_all(),
     	    'id' => set_value('id'),
     	    'tanggal_produksi' => set_value('tanggal_produksi',date('Y-m-d')),
-    	    'total_barang_jadi' => set_value('total_barang_jadi'),
+    	    'total_barang_jadi' => set_value('total_barang_jadi',1),
             'rencana_selesai' => set_value('rencana_selesai',date('Y-m-d')),
     	    'material_needs' => null,
     	    'user_id' => set_value('user_id'),
