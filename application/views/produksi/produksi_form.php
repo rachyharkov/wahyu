@@ -388,6 +388,7 @@
 
 			$('.available-machine').each(function() {
 				var allocated = 0
+				var thisidmachine = $(this).attr('id')
 
 				if (totalmaterial <= tresholdmaterialspermachine) {
 					allocated = totalmaterial
@@ -397,13 +398,7 @@
 					for (var x = 0; x < tresholdmaterialspermachine; x++) {
 						allocated++
 					}
-					if (smartallocate == 1) {
-						if ($('#checkbox' + thisidmachine).is(':checked')) {
-							$('#checkbox' + thisidmachine).prop("checked", true)
-						} else {
-							$('#checkbox' + thisidmachine).prop("checked", false)
-						}
-					}
+					$('#checkbox' + thisidmachine + '').prop("checked", true).parents('tr').addClass('checked')
 				}
 
 				if(totalmaterial < 0) {
@@ -412,12 +407,7 @@
 
 				totalmaterial-=tresholdmaterialspermachine
 				$(this).find('td').eq(3).find('input').val(allocated)
-
-				var thisidmachine = $(this).parents('tr').attr('id')
 			})
-
-
-			
 
 			$('.available-machine').each(function() {
 				var allocated = 0
@@ -436,6 +426,7 @@
 				$(this).find('td').eq(4).find('input').val(allocated)
 			})
 
+			sumETA()
 		}
 
 
@@ -448,6 +439,7 @@
 		}
 
 		let urutan = 1;
+
 		$('#total_barang_jadi').on('input',function() {
 			countTotalMaterial()
 		})
