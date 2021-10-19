@@ -40,20 +40,6 @@
 	</div>
 
 	<div class="row mb-15px">
-		<label class="form-label col-form-label col-md-3">Machine Use</label>
-		<div class="col-md-9">
-			<div class="row">
-				<div class="col-4">
-					<div class="input-group">
-						<span class="input-group-text">Total Material</span>
-						<input type="number" readonly name="totalmaterial" class="form-control total-material" value="0">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="row mb-15px">
 		<div class="accordion" id="accordion" style="margin: 10px 0;">
 			  <div class="accordion-item border-0">
 			    <div class="accordion-header" id="headingOne">
@@ -92,11 +78,11 @@
 					<tr>
 						<th>Machine Name</th>
 						<th>Used For</th>
-						<th>Estimated done time per-goods (in minute)</th>
-						<th>Material allocated</th>
-						<th>Goods Allocated</th>
+						<th>Throughput</th>
 						<th>Shift</th>
-						<th>ETA</th>
+						<th>Material Processed</th>
+						<th>Products</th>
+						<th>Time</th>
 						<th hidden="hidden">T. Minutes</th>
 					</tr>
 				</thead>
@@ -111,7 +97,7 @@
 							<tr class="available-machine" id="<?php echo $value->mesin_id ?>">
 								<td>
 									<div class="form-check">
-										<input class="form-check-input checkboxmachine" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>">
+										<input class="form-check-input checkboxmachine" name="machine_use[]" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>" value="<?php echo $value->mesin_id ?>">
 										<label class="form-check-label" for="checkbox<?php echo $value->mesin_id ?>"><?php echo $value->kd_mesin.' ('.$value->jenis_mesin.')' ?></label>
 									</div>
 								</td>
@@ -120,34 +106,34 @@
 								</td>
 								<td>
 									<div class="input-group">
-										<input type="text" name="estimateddonepergoodsinminute" class="form-control estimateddonepergoodsinminute" value="0" min="0">
+										<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct" value="0" min="0">
 										<span class="input-group-text">
-											Minute(s)
+											Minute(s)/Pd.
 										</span>
 									</div>
 								</td>
 								<td>
-									<input type="text" name="materialallocated" class="form-control materialallocated" value="0">
-								</td>
-								<td>
-									<input type="text" name="goodsallocated" class="form-control goodsallocated" value="0">
-								</td>
-								<td>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift[]" type="checkbox" id="shift1machine<?php echo $value->mesin_id ?>" checked />
+										<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift1machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift1machine<?php echo $value->mesin_id ?>" checked value="1" />
 										<label class="form-check-label" for="shift1machine<?php echo $value->mesin_id ?>">1</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift[]" type="checkbox" id="shift2machine<?php echo $value->mesin_id ?>"/>
+										<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift2machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift2machine<?php echo $value->mesin_id ?>" value="0"/>
 										<label class="form-check-label" for="shift2machine<?php echo $value->mesin_id ?>">2</label>
 									</div>
 								</td>
 								<td>
+									<input type="number" name="materialallocated[]" class="form-control materialallocated" value="0">
+								</td>
+								<td>
+									<input type="text" name="goodsallocated[]" readonly class="form-control-plaintext goodsallocated" value="0">
+								</td>
+								<td>
 									<div class="input-group">
-										<input type="text" name="timespentpermachine" class="form-control-plaintext">
+										<input type="text" name="timespentpermachine[]" class="form-control-plaintext" readonly>
 									</div>
 								</td>
-								<td hidden="hidden">
+								<td hidden>
 									<input type="number" name="totalminutes" class="totalminutespermachine" value="0">
 								</td>
 
@@ -157,11 +143,11 @@
 					}
 					?>
 					<tr>
-						<td colspan="4" style="text-align: center;"><b>Total</b></td>
-						<td><input type="text" name="totaldoneinminute" class="form-control-plaintext totaldoneinminute"></td>
+						<td colspan="4" style="text-align: right; font-size: 14px;"><b>Total</b></td>
 						<td><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
+						<td><input type="text" name="totalproductions" class="form-control-plaintext totalproductions"></td>
 						<td><input type="text" name="predictiondone" class="form-control-plaintext predictiondone"></td>
-						<td hidden=""><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
+						<td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
 					</tr>
 					
 				</tbody>
@@ -169,12 +155,8 @@
 	</div>
 
 	<div class="row m-15px">
-		<label class="form-label col-form-label col-md-3">Total Barang Jadi <?php echo form_error('total_barang_jadi') ?></label>
-		<div class="col-md-4">
-			<div class="input-group" style="width: 150px;">
-				<input type="number" min="1" class="form-control" name="total_barang_jadi" id="total_barang_jadi" placeholder="Total Barang Jadi" value="<?php echo $total_barang_jadi; ?>" required/>
-				<span class="input-group-text">Pcs</span>
-			</div>
+		<div class="col-md-3">
+			
 		</div>
 		<div class="col-md-5">
 			<input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -304,38 +286,115 @@
 			}
 		})
 
+		function sumthismachineETA(thisel) {
+
+	    	var getrow = thisel
+    		var idmesin = getrow.attr('id')
+	    	var minutesperproduction = getrow.find('td').eq(2).find('input').val()
+    		var productionpermachine = 0
+
+    		//tetapkan jam kerja
+    		var jamkerja = 0
+
+    		var jamkerjashift1 = 480 //menit
+    		var jamkerjashift2 = 420 //menit
+
+    		var checkboxshift1 = $('#shift1machine' + idmesin).val()
+    		var checkboxshift2 = $('#shift2machine' + idmesin).val()
+	    	//bagi 2 shift
+		    
+	    	if (checkboxshift1 == 1) {
+		    	jamkerja += jamkerjashift1
+		    }
+
+		    if (checkboxshift2 == 1) {
+		    	jamkerja += jamkerjashift2
+		    }
+	    	
+	    	productionpermachine = jamkerja/minutesperproduction
+			
+			console.log(productionpermachine)
+
+			if (productionpermachine == null || productionpermachine == Infinity ) {
+				productionpermachine = 0
+			}
+
+	    	getrow.find('td').eq(5).find('input').val(parseInt(productionpermachine))
+
+	    	var o = 0
+
+	    	if (productionpermachine > 0) {
+    			o = parseInt(minutesperproduction) * parseInt(productionpermachine)
+	    	} else {
+	    		o = parseInt(productionpermachine) * 1
+	    	}
+
+
+
+    		getrow.find('td').eq(7).find('input').val(o)
+
+    		var duration = moment.duration(o, 'minutes');
+
+			var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
+	    	var eta = timeString
+	    	getrow.find('td').eq(6).find('input').val(eta)
+	    }
+
 		function sumETA() {
-	    	let arr = []
-			let summinutes = 0;
+	    	var arrminutes = []
+			var summinutes = 0;
+
+			var sumproduction = 0;
 
     		$('.available-machine.checked').each(function() {
-    			var getminutestotal = $(this).find('td').eq(7).find('input').val()
-    			summinutes += parseInt(getminutestotal)
-    			arr.push(getminutestotal)
     			var thisel = $(this)
-				sumthismachineETA(thisel,'imanrow')
+    			sumthismachineETA(thisel)
+    			//kumpulin menit dulu terus jumlah
+    			var getminutestotal = thisel.find('td').eq(7).find('input').val()
+
+    			if (!getminutestotal) {
+    				getminutestotal = 0
+    			}
+
+    			summinutes += parseInt(getminutestotal)
+    			arrminutes.push(getminutestotal)
+
+				//umpulin produksi yang dihasilan dulu, terus jumlah
+				var getproductiontotaal = thisel.find('td').eq(5).find('input').val()
+				sumproduction += parseInt(getproductiontotaal)
     		})
+
+    		console.log(arrminutes)
 
 			//nyoba seting durasi ke 0 dah
 			var tot = moment.duration(0);
-			for (i = 0; i < arr.length; i++) {                  
-				var durasimasingmasingmesin = arr[i].toString();
+
+			for (i = 0; i < arrminutes.length; i++) {                  
+				var durasimasingmasingmesin = arrminutes[i].toString();
 				tot.add(durasimasingmasingmesin, 'minutes');
 			}
+
+			//set total durasi pengerjaan
 			$('.predictiondone').val(tot.days() + ':' + tot.hours() + ':' + tot.minutes() + ':' + tot.seconds())
 
+			//it really not useful at all but it may be lmao
 			$('.totalminuteseverymachine').val(summinutes)
 
 			var date = moment($('#tanggal_produksi').val(), 'YYYY-MM-DD');
 			date.add(summinutes, 'minutes');
+
+			//set rencana selesai
 			$('#rencana_selesai').val(moment(date).format('YYYY-MM-DD'))
+
+			//set total target barang jadi
+			$('.totalproductions').val(sumproduction)
 
 	    }
 
 		function checkAlokasiMelebihiTotalMaterial() {
 			var sum = 0
 	    	$('.materialallocated').each(function() {
-	    		sum += parseInt($(this).val())	
+	    		sum += parseInt($(this).val())
 	    	})
 
 	    	$('.alertnya').html('')
@@ -359,29 +418,29 @@
 		}
 
 		
-		function countTotalMaterial() {
-			let sum = 0
-			$('.qty-x-used').each(function() {
-				var getqty = parseInt($(this).parents('tr').find('td').eq(2).find('input').val())
-				var totalbarangjadi = parseInt($('#total_barang_jadi').val())
+		// {
+		// 	let sum = 0
+		// 	$('.qty-x-used').each(function() {
+		// 		var getqty = parseInt($(this).parents('tr').find('td').eq(2).find('input').val())
+		// 		var totalbarangjadi = parseInt($('#total_barang_jadi').val())
 
-				var nama_material = $(this).parents('tr').attr('id')
+		// 		var nama_material = $(this).parents('tr').attr('id')
 
-				var total = getqty * totalbarangjadi
+		// 		var total = getqty * totalbarangjadi
 
 
-				$(this).parents('tr').removeClass('oops')
+		// 		$(this).parents('tr').removeClass('oops')
 
-				$(this).val(total)
+		// 		$(this).val(total)
 				
-				if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
-					$(this).parents('tr').addClass('oops')
-				}
+		// 		if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
+		// 			$(this).parents('tr').addClass('oops')
+		// 		}
 				
-				sum += parseInt(total)
-			})
-			$('.total-material').val(parseInt(sum)).change()
-		}
+		// 		sum += parseInt(total)
+		// 	})
+		// 	$('.total-material').val(parseInt(sum)).change()
+		// }
 
 		function smartAllocate() {
 
@@ -456,10 +515,6 @@
 
 		let urutan = 1;
 
-		$('#total_barang_jadi').on('input',function() {
-			countTotalMaterial()
-		})
-
 	    $('.tabel-material-yang-ada').on('click','.btn-add-material', function() {
 	        const nama_material = $(this).attr('id')
 	        const thisel = $(this)
@@ -491,7 +546,6 @@
                 })
 		    }
 		    checkdisablecreateproductionbutton()
-		    countTotalMaterial()
 	    });
 
 	    $('.tabel-material-ready-to-use').on('click','.btn-kurangi-material', function() {
@@ -509,7 +563,6 @@
 		        urutan--    	
 		    }
 		    checkdisablecreateproductionbutton()
-		    countTotalMaterial()
 	    })
 
 	    $('.tabel-material-ready-to-use').on('click','.btn-hapus-material', function() {
@@ -519,7 +572,6 @@
 
 			thisrow.remove()
 			checkdisablecreateproductionbutton()
-			countTotalMaterial()
 	    })
 
 	    $('#optionone').on('change', function() {
@@ -558,155 +610,21 @@
 	    	checkAlokasiMelebihiTotalMaterial()
 	    })
 
-	    function sumthismachineETA(thisel,type) {
+	    // $('.tabel-machine').on('input','.goodsallocated', function() {
 
-	    	if (type == 'goodsminutes') {
-	    		var getrow = thisel.parents('tr')
+	    // 	var thisel = $(this)
 
-		    	var thisinput = thisel.val()
-		    	var mesin_id = thisel.parents('tr').attr('id')
+	    // 	if (thisel.parents('tr').hasClass('checked')) {
+		   //  	sumETA()
+	    // 	}
 
-		    	if(thisel.val().length === 0 ) {
-			        thisinput = 0
-			    }
+	    // })
 
-		    	var howmuch = getrow.find('td').eq(4).find('input').val()
-
-		    	var mesin_id = thisel.parents('tr').attr('id')
-		    	var checkbox = $('.checkboxshiftformachine' + mesin_id).filter(':checked').length
-
-		    	//bagi 2 shift
-			    if (checkbox > 1) {
-			    	howmuch = howmuch/2	
-			    }
-
-		    	if(howmuch.length === 0 ) {
-			        howmuch = 0
-			    }
-
-		    	var date = new Date(0);
-				var o = parseInt(thisinput) * parseInt(howmuch)
-				
-
-				getrow.find('td').eq(7).find('input').val(o)
-
-				var duration = moment.duration(o, 'minutes');
-
-				var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-		    	var eta = timeString
-		    	getrow.find('td').eq(6).find('input').val(eta)
-	    	}
-
-	    	if (type == 'goods') {
-	    		var materialallocatedonthismachine = parseInt(thisel.val())
-		    	var treshdldpermachine = parseInt($('.tresholdgoodspermachine').val())
-
-		    	var mesin_id = thisel.parents('tr').attr('id')
-	    		
-	    		thisel.removeClass('is-invalid')
-		    	
-		    	if (materialallocatedonthismachine > treshdldpermachine) {
-		    		thisel.addClass('is-invalid')
-		    	}
-
-		    	checkAlokasiMelebihiTotalGoods()
-
-		    	var getrow = thisel.parents('tr')
-
-		    	var thisinput = thisel.val()
-
-		    	if( thisel.val().length === 0 ) {
-			        thisinput = 0
-			    }
-
-
-		    	var minutes = getrow.find('td').eq(2).find('input').val()
-
-		    	if(minutes.length === 0 ) {
-			        minutes = 0
-			    }
-
-		    	var date = new Date(0)
-
-				var o = parseInt(thisinput) * parseInt(minutes)
-
-				getrow.find('td').eq(7).find('input').val(o)
-
-				var duration = moment.duration(o, 'minutes');
-
-				var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-		    	var eta = timeString
-		    	getrow.find('td').eq(6).find('input').val(eta)
-	    	}
-
-	    	if (type == 'all') {
-	    		var getrow = thisel.parents('tr')
-	    		var idmesin = getrow.attr('id')
-		    	var minutes = getrow.find('td').eq(2).find('input').val()
-	    		var howmuch = getrow.find('td').eq(4).find('input').val()
-
-	    		var checkbox = $('.checkboxshiftformachine' + idmesin).filter(':checked').length
-
-		    	//bagi 2 shift
-			    if (checkbox > 1) {
-			    	howmuch = howmuch/2	
-			    }
-
-	    		var o = parseInt(minutes) * parseInt(howmuch)
-
-	    		getrow.find('td').eq(7).find('input').val(o)
-
-	    		var duration = moment.duration(o, 'minutes');
-
-				var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-		    	var eta = timeString
-		    	getrow.find('td').eq(6).find('input').val(eta)
-	    	}
-
-	    	if (type == 'imanrow') {
-	    		var getrow = thisel
-	    		var idmesin = getrow.attr('id')
-		    	var minutes = getrow.find('td').eq(2).find('input').val()
-	    		var howmuch = getrow.find('td').eq(4).find('input').val()
-
-	    		var checkbox = $('.checkboxshiftformachine' + idmesin).filter(':checked').length
-
-		    	//bagi 2 shift
-			    if (checkbox > 1) {
-			    	howmuch = howmuch/2	
-			    }
-
-	    		var o = parseInt(minutes) * parseInt(howmuch)
-
-	    		getrow.find('td').eq(7).find('input').val(o)
-
-	    		var duration = moment.duration(o, 'minutes');
-
-				var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-		    	var eta = timeString
-		    	getrow.find('td').eq(6).find('input').val(eta)
-	    	}
-	    }
-
-	    $('.tabel-machine').on('input','.goodsallocated', function() {
-
-	    	var thisel = $(this)
-
-	    	if (thisel.parents('tr').hasClass('checked')) {
-		    	sumthismachineETA(thisel,'goods')
-		    	
-		    	sumETA()
-	    	}
-
-	    })
-
-	    $('.estimateddonepergoodsinminute').on('input', function() {
+	    $('.troughputperproduct').on('input', function() {
 	    	
 	    	var thisel = $(this)
 
 	    	if (thisel.parents('tr').hasClass('checked')) {
-	    		sumthismachineETA(thisel, 'goodsminutes')
-	    	
 	    		sumETA()
 	    	}
 	    })
@@ -719,8 +637,6 @@
 	    	}
 
 	    	var thisel = $(this)
-
-			sumthismachineETA(thisel,'all')
 			sumETA()
 	    })
 
@@ -737,7 +653,11 @@
 				$('.checkboxshiftformachine<?php echo $value->mesin_id ?>').on('change', function() {
 					var thisel = $(this)
 
-					sumthismachineETA(thisel,'all')
+					if (this.checked) {
+						thisel.val(1)
+					} else {
+						thisel.val(0)
+					}
 					sumETA()
 				})
 
