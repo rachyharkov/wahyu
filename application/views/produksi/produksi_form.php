@@ -24,50 +24,50 @@
 </style>
 
 <form id="<?php echo $action; ?>" method="post">
-
-	<div class="row mb-15px">
-		<label class="form-label col-form-label col-md-3">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
+	<div class="row">
 		<div class="col-md-9">
-			<input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
-		</div>
-	</div>
-
-	<div class="row mb-15px">
-		<label class="form-label col-form-label col-md-3">Target Selesai</label>
-		<div class="col-md-9">
-			<input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>" />
-		</div>
-	</div>
-
-	<div class="row mb-15px">
-		<div class="accordion" id="accordion" style="margin: 10px 0;">
-			  <div class="accordion-item border-0">
-			    <div class="accordion-header" id="headingOne">
-			    	<div class="bg-gray-900 text-white px-3 py-10px">
-			    		<div class="form-check form-switch">
-							<input class="form-check-input" type="checkbox" id="optionone" data-bs-toggle="collapse" data-bs-target="#collapseOne"/>
-		  					<label class="form-check-label text-white" for="optionone">Smart Allocate</label>
-						</div>
-			    	</div>
-			    </div>
-			    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordion">
-			      <div class="accordion-body bg-gray-800 text-white">
-			        <div class="row mb-15px">
-		        		<label class="form-label col-form-label col-3">Per-machine Material Treshold</label>
-			        	<div class="col-3">
-			        		<input type="number" name="tresholdmaterialspermachine" class="form-control tresholdmaterialspermachine" min="5" value="10" required="">
-			        	</div>
-			        </div>
-			        <div class="row">
-		        		<label class="form-label col-form-label col-3">Per-machine Goods Treshold</label>
-			        	<div class="col-3">
-			        		<input type="number" name="tresholdgoodspermachine" class="form-control tresholdgoodspermachine" min="5" value="10" required="">
-			        	</div>
-			        </div>
-			      </div>
-			    </div>
-			  </div>
+			<div class="row mb-15px">
+				<label class="form-label col-form-label col-md-3">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
+				<div class="col-md-6">
+					<input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
+				</div>
+				<div class="col-md-3">
+					<div class="input-group">
+					  <input type="text" class="form-control masked-input-date jam-awal" value="08:00"/>
+					  <span class="input-group-text input-group-addon">
+					    <i class="fa fa-clock"></i>
+					  </span>
+					</div>
+				</div>
 			</div>
+
+			<div class="row mb-15px">
+				<label class="form-label col-form-label col-md-3">Target Selesai</label>
+				<div class="col-md-6">
+					<input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
+				</div>
+				<div class="col-md-3">
+					<div class="input-group">
+					  <input type="text" class="form-control masked-input-date jam-akhir" readonly value="15:00" />
+					  <span class="input-group-text input-group-addon">
+					    <i class="fa fa-clock"></i>
+					  </span>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<div class="col-md-3">
+			<input type="hidden" name="id" value="<?php echo $id; ?>" />
+			<input type="hidden" class="form-control" name="user_id" id="user_id" placeholder="User Id" value="<?php echo $user_id; ?>" />
+			<div class="input-group" style="height: 10vh;">
+			    <button style="flex: 50%;" type="submit" class="btn btn-danger btn-create-produksi disabled" disabled=""><i class="fas fa-save"></i> <?php echo $button ?></button> 
+			    <button style="flex: 50%;" type="button" class="btn btn-info list-data"><i class="fas fa-undo"></i> Kembali</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mb-15px">
+
 
 			<div class="alertnya">
 				
@@ -152,20 +152,6 @@
 					
 				</tbody>
 			</table>
-	</div>
-
-	<div class="row m-15px">
-		<div class="col-md-3">
-			
-		</div>
-		<div class="col-md-5">
-			<input type="hidden" name="id" value="<?php echo $id; ?>" />
-			<input type="hidden" class="form-control" name="user_id" id="user_id" placeholder="User Id" value="<?php echo $user_id; ?>" />
-			<div class="input-group">
-			    <button type="submit" class="btn btn-danger btn-create-produksi disabled" disabled=""><i class="fas fa-save"></i> <?php echo $button ?></button> 
-			    <button type="button" class="btn btn-info list-data"><i class="fas fa-undo"></i> Kembali</button>
-			</div>
-		</div>
 	</div>
 
 	<div class="container">
@@ -275,8 +261,11 @@
 </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="<?php echo base_url() ?>assets/assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+
+		$(".masked-input-date").mask("99:99");
 
 		let smartallocate = 0
 
@@ -310,10 +299,10 @@
 		    if (checkboxshift2 == 1) {
 		    	jamkerja += jamkerjashift2
 		    }
-	    	
+
 	    	productionpermachine = jamkerja/minutesperproduction
-			
-			console.log(productionpermachine)
+
+			// console.log(productionpermachine)
 
 			if (productionpermachine == null || productionpermachine == Infinity ) {
 				productionpermachine = 0
@@ -329,12 +318,15 @@
 	    		o = parseInt(productionpermachine) * 1
 	    	}
 
-
+	    	console.log(o)
 
     		getrow.find('td').eq(7).find('input').val(o)
 
     		var duration = moment.duration(o, 'minutes');
 
+	    	// var workhour = duration.hours()
+	    	// if (detectedhours) {}
+			
 			var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
 	    	var eta = timeString
 	    	getrow.find('td').eq(6).find('input').val(eta)
@@ -364,7 +356,7 @@
 				sumproduction += parseInt(getproductiontotaal)
     		})
 
-    		console.log(arrminutes)
+    		// console.log(arrminutes)
 
 			//nyoba seting durasi ke 0 dah
 			var tot = moment.duration(0);
@@ -380,15 +372,51 @@
 			//it really not useful at all but it may be lmao
 			$('.totalminuteseverymachine').val(summinutes)
 
-			var date = moment($('#tanggal_produksi').val(), 'YYYY-MM-DD');
-			date.add(summinutes, 'minutes');
+			console.log(summinutes)
+
+			//JIKA melebihi dari jumlah jam kerja shift 1 dan shift 2, tambah waktu durasinya hingga besok sampe jam masuk kerja (majuin 8 jem)
+
+			var date = moment($('#tanggal_produksi').val() + ' ' + $('.jam-awal').val(), 'YYYY-MM-DD HH:mm')
+			date.add(summinutes, 'minutes')
+			var test = summinutes - 900
+			console.log(test)
+			if (test > 0) {
+				date.add(540, 'minutes')
+				console.log('NEXT DAY!')
+			}
 
 			//set rencana selesai
 			$('#rencana_selesai').val(moment(date).format('YYYY-MM-DD'))
+			$('.jam-akhir').val(moment(date).format('HH:mm'))
 
 			//set total target barang jadi
 			$('.totalproductions').val(sumproduction)
 
+			checkmaterialwillbeused(sumproduction)
+
+	    }
+
+	    function checkmaterialwillbeused(sumproduction) {
+	    	$('.qty-x-used').each(function(i) {
+
+				var nama_material = $(this).parents('tr').attr('id')
+
+				var getqty = parseInt($(this).parents('tr').find('td').eq(2).find('input').val())
+
+				var total = getqty * sumproduction
+
+				if (total == 0) {
+					total = 1
+				}
+
+				$(this).parents('tr').removeClass('oops')
+
+				$(this).parents('tr').find('td').eq(3).find('input').val(total)
+				
+				if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
+					$(this).parents('tr').addClass('oops')
+				}
+			})
 	    }
 
 		function checkAlokasiMelebihiTotalMaterial() {
@@ -417,7 +445,6 @@
 	    	}
 		}
 
-		
 		// {
 		// 	let sum = 0
 		// 	$('.qty-x-used').each(function() {
@@ -524,6 +551,7 @@
 		    	if ($('.tabel-material-ready-to-use tbody tr#' + nama_material).length > 0) {
 			    	//let oldval = $('.ready-to-use-' + nama_material + '-qty').val()
 			    	$('.ready-to-use-' + nama_material + '-qty').get(0).value++
+
 			    } else {
 			        $('#materials_ready_to_use').append(`
 			        	<tr id="${nama_material}">
@@ -538,6 +566,12 @@
 			        	</tr>`);
 			    }
 			    // updateStock(nama_material, stockused, 'kurangin')
+			    var willbeused = 0
+		    	willbeused = parseInt($('.ready-to-use-' + nama_material + '-qty').val()) * parseInt($('.totalproductions').val())
+
+		    	$('.qty-x-used-' + nama_material).val(willbeused)
+
+		    	checkmaterialwillbeused(willbeused)
 		    } else {
 		    	Swal.fire({
                   icon: 'error',
@@ -562,6 +596,7 @@
 		        thisrow.remove()
 		        urutan--    	
 		    }
+		    sumETA()
 		    checkdisablecreateproductionbutton()
 	    })
 
@@ -577,21 +612,21 @@
 	    $('#optionone').on('change', function() {
 	    	if (this.checked) {
 	    		smartallocate = 1
-	    		smartAllocate()
-	    		$('.available-machine').each(function(){
-	    			$(this).find('td').eq(3).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
-	    			$(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
-	    		})
+	    		// smartAllocate()
+	    		// $('.available-machine').each(function(){
+	    		// 	$(this).find('td').eq(3).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
+	    		// 	$(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
+	    		// })
 	    	} else {
 	    		smartallocate = 0
-	    		$('.available-machine').each(function(){
-	    			$(this).find('td').eq(3).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
-	    			$(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
-	    			$(this).find('td').eq(3).find('input').val(0)
-	    			$(this).find('td').eq(4).find('input').val(0)
-	    		})
+	    		// $('.available-machine').each(function(){
+	    		// 	$(this).find('td').eq(3).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
+	    		// 	$(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
+	    		// 	$(this).find('td').eq(3).find('input').val(0)
+	    		// 	$(this).find('td').eq(4).find('input').val(0)
+	    		// })
 	    	}
-	    	checkAlokasiMelebihiTotalMaterial()
+	    	// checkAlokasiMelebihiTotalMaterial()
 	    })
 
 	    $('.tabel-machine').on('input','.materialallocated', function() {

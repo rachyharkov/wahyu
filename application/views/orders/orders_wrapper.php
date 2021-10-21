@@ -1,62 +1,20 @@
 <div id="content" class="app-content">
-    <h1 class="page-header">KELOLA DATA PRODUKSI</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-inverse">
-              <div class="panel-heading">
-                <h4 class="panel-title">Schedule</h4>
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
-                    </div>
-                    </div>
-                <div class="panel-body">
-                    <p>Showing calendar here</p>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8">
-          <div class="panel panel-inverse">
-              <div class="panel-heading">
-                <h4 class="panel-title panel-title-produksi">Produksi</h4>
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+    <h1 class="page-header">KELOLA DATA ORDERS</h1>  
+    <div class="panel panel-inverse">
+      <div class="panel-heading">
+        <h4 class="panel-title panel-title-orders">List Data orders </h4>
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-success btn-loading" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
-                    </div>
-                    </div>
-                <div class="panel-body" id="panel-body">
-                    <?php $classnyak->list() ?>
-                    
-                </div>
-            </div>  
-        </div>
-        <div class="col-md-4">
-            <div class="panel panel-inverse">
-              <div class="panel-heading">
-                <h4 class="panel-title">Sketch Preview</h4>
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
-                    </div>
-                    </div>
-                <div class="panel-body">
-                    <p>TEST</p>
-                    
-                </div>
             </div>
+            </div>
+        <div class="panel-body" id="panel-body">
+            <?php $classnyak->list() ?>
         </div>
     </div>
 </div>
-
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
@@ -94,21 +52,18 @@
 
         <script type="text/javascript">
 
-
-            //THIS IS FOR PRODUKSI
-            
             function changewindowtitle(text) {
-                $('.panel-title-produksi').text(text);
+                $('.panel-title-orders').text(text);
             }
             
             $(document).on('click','.tambah_data', function() {
                 $('.btn-loading').click()
                 $.ajax({
                     type: "GET",
-                    url: "<?php echo base_url() ?>produksi/create",
+                    url: "<?php echo base_url() ?>orders/create",
                     success: function(data){
                         $('#panel-body').html(data);
-                        changewindowtitle('Tambah Data Produksi')
+                        changewindowtitle('Tambah Order Baru - Identitas')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -125,10 +80,10 @@
                 $('.btn-loading').click()
                 $.ajax({
                     type: "GET",
-                    url: "<?php echo base_url() ?>produksi/list",
+                    url: "<?php echo base_url() ?>orders/list",
                     success: function(data){
                         $('#panel-body').html(data);
-                        changewindowtitle('List Produksi')
+                        changewindowtitle('List Data orders')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -146,13 +101,13 @@
                 $('.btn-loading').click()
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo base_url() ?>produksi/read",
+                    url: "<?php echo base_url() ?>orders/read",
                     data: {
                         id:id,
                     },
                     success: function(data){
                         $('#panel-body').html(data);
-                        changewindowtitle('Detail Produksi')
+                        changewindowtitle('Read Data orders')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -163,7 +118,31 @@
                     }
                 });
             })
-            
+
+            $(document).on('click','.update_data', function() {
+
+                const id = $(this).attr('id')
+                $('.btn-loading').click()
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() ?>orders/update",
+                    data: {
+                        id:id,
+                    },
+                    success: function(data){
+                        $('#panel-body').html(data);
+                        changewindowtitle('Edit data orders')
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
             $(document).on('click','.delete_data', function() {
                 Swal.fire({
                   title: 'Yakin dihapus?',
@@ -179,7 +158,7 @@
                     $('.btn-loading').click()
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url() ?>produksi/delete",
+                        url: "<?php echo base_url() ?>orders/delete",
                         data: {
                             id:id,
                         },
@@ -187,10 +166,9 @@
                             Swal.fire({
                               icon: 'success',
                               title: "Sukses",
-                              text: 'Data produksi berhasil dihapus'
+                              text: 'Data orders berhasil dihapus'
                             })
                             $('#panel-body').html(data);
-                            changewindowtitle('List Produksi')
                         },
                         error: function(error) {
                             Swal.fire({
@@ -210,6 +188,8 @@
                 
                 if ($(this).valid) return false;
 
+                var a = this
+
                 Swal.fire({
                   title: 'Konfirmasi Tindakan',
                   text: "Yakin disimpan?",
@@ -223,16 +203,70 @@
                     dataString = $("#form_create_action").serialize();
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url() ?>produksi/create_action",
-                        data: dataString,
+                        url: "<?php echo base_url() ?>orders/create_action",
+                        data:new FormData(a), //penggunaan FormData
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
                         success: function(data){
                             Swal.fire({
                               icon: 'success',
                               title: "Sukses",
-                              text: 'Data produksi berhasil tercatat'
+                              text: 'Data orders berhasil tercatat'
                             })
-                            changewindowtitle('List Produksi')
                             $('#panel-body').html(data);
+                            changewindowtitle('List Data orders')
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                              icon: 'error',
+                              title: "Oops!",
+                              text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                            })
+                        }
+                    });
+
+                  }
+                })
+
+            })
+
+            $(document).on('submit','#form_update_action', function(e) {
+
+                e.preventDefault()
+                
+                if ($(this).valid) return false;
+
+                 var a = this
+
+                Swal.fire({
+                  title: 'Konfirmasi Tindakan',
+                  text: "Yakin diupdate?",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    dataString = $("#form_update_action").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url() ?>orders/update_action",
+                        data:new FormData(a), //penggunaan FormData
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(data){
+                            Swal.fire({
+                              icon: 'success',
+                              title: "Sukses",
+                              text: 'Data orders berhasil diupdate'
+                            })
+                            $('#panel-body').html(data);
+                            changewindowtitle('List Data orders')
                         },
                         error: function(error) {
                             Swal.fire({
