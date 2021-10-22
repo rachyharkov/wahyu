@@ -144,6 +144,16 @@ class Produksi_model extends CI_Model
             ")->result();
     }
 
+    function deteksi_pengunaan_mesin_pada_tanggal($date_start, $date_end)
+    {
+        $where = array(
+            'date(tanggal_produksi)' => $date_start,
+            'date(rencana_selesai)' => $date_end
+        );
+        $this->db->where($where);
+        return $this->db->get('produksi')->row();
+    }
+
 }
 
 /* End of file Produksi_model.php */

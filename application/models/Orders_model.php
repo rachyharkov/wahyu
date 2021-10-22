@@ -22,6 +22,23 @@ class Orders_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_tertentu($status)
+    {
+        $this->db->where('status', $status);
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_by_kd_orders($kd_order, $status = null)
+    {
+        $where = array(
+            'kd_order' => $kd_order,
+            'status' => $status
+        );
+
+        $this->db->where($where);
+        return $this->db->get('orders')->row();
+    }
+
     // get data by id
     function get_by_id($id)
     {
@@ -61,6 +78,21 @@ class Orders_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
+    }
+
+    function buat_kode(){
+        $q = $this->db->query("SELECT MAX(RIGHT(kd_order,4)) AS kd_max FROM orders WHERE DATE(tanggal_order)=CURDATE()");
+        $kd = "";
+        if($q->num_rows()>0){
+            foreach($q->result() as $k){
+                $tmp = ((int)$k->kd_max)+1;
+                $kd = sprintf("%04s", $tmp);
+            }
+        }else{
+            $kd = "0001";
+        }
+        date_default_timezone_set('Asia/Jakarta');
+        return 'S'.date('dmy').$kd;
     }
 
 }

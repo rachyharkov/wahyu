@@ -81,7 +81,7 @@
 						    	<td>
 						    		<img id="frame" src="<?php echo base_url().'assets/internal/'.$attachment ?>" width="100%" height="200px" style="object-fit: cover;" />
 									<input class="form-control" name="attachment" id="attachment" type="file" onchange="preview()" required/>
-						    		<input type="text" class="form-control" name="attachment_old" id="attachment_old" placeholder="Attachment" value="<?php echo $attachment; ?>" />
+						    		<input type="hidden" class="form-control" name="attachment_old" id="attachment_old" placeholder="Attachment" value="<?php echo $attachment; ?>" />
 						    	</td>
 						    </tr>
 						    <tr>
@@ -151,7 +151,7 @@
 						    	<td>
 						    		<img id="frame" src="" width="100%" height="200px" style="object-fit: cover;" />
 									<input class="form-control" name="attachment" id="attachment" type="file" onchange="preview()" required/>
-						    		<input type="text" class="form-control" name="attachment_old" id="attachment_old" placeholder="Attachment" value="<?php echo $attachment; ?>" />
+						    		<input type="hidden" class="form-control" name="attachment_old" id="attachment_old" placeholder="Attachment" value="<?php echo $attachment; ?>" />
 						    	</td>
 						    </tr>
 						    <tr>

@@ -25,236 +25,175 @@
 
 <form id="<?php echo $action; ?>" method="post">
 	<div class="row">
-		<div class="col-md-9">
-			<div class="row mb-15px">
-				<label class="form-label col-form-label col-md-3">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
-				<div class="col-md-6">
-					<input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
-				</div>
-				<div class="col-md-3">
-					<div class="input-group">
-					  <input type="text" class="form-control masked-input-date jam-awal" value="08:00"/>
-					  <span class="input-group-text input-group-addon">
-					    <i class="fa fa-clock"></i>
-					  </span>
-					</div>
+		<div class="row mb-15px">
+			<label class="form-label col-form-label col-md-3">Kode Order</label>
+			<div class="col-md-9">
+				<div class="input-group">
+					<input type="text" class="form-control" name="kode_order" id="kode_order"/>
+					<button type="button" class="btn btn-warning button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-exclamation-triangle"></i></button>
 				</div>
 			</div>
-
-			<div class="row mb-15px">
-				<label class="form-label col-form-label col-md-3">Target Selesai</label>
-				<div class="col-md-6">
-					<input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
-				</div>
-				<div class="col-md-3">
-					<div class="input-group">
-					  <input type="text" class="form-control masked-input-date jam-akhir" readonly value="15:00" />
-					  <span class="input-group-text input-group-addon">
-					    <i class="fa fa-clock"></i>
-					  </span>
-					</div>
-				</div>
-			</div>	
 		</div>
-		<div class="col-md-3">
-			<input type="hidden" name="id" value="<?php echo $id; ?>" />
-			<input type="hidden" class="form-control" name="user_id" id="user_id" placeholder="User Id" value="<?php echo $user_id; ?>" />
-			<div class="input-group" style="height: 10vh;">
-			    <button style="flex: 50%;" type="submit" class="btn btn-danger btn-create-produksi disabled" disabled=""><i class="fas fa-save"></i> <?php echo $button ?></button> 
-			    <button style="flex: 50%;" type="button" class="btn btn-info list-data"><i class="fas fa-undo"></i> Kembali</button>
-			</div>
+		<div class="input-group input-group-kdorder">
+			<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button>
 		</div>
 	</div>
+	<div class="formnya container" style="display: none;">
+		<div class="row">
+			<div class="col-md-9">
 
-	<div class="row mb-15px">
+				<div class="row mb-15px">
+					<label class="form-label col-form-label col-md-3">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
+					<div class="col-md-6">
+						<input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
+					</div>
+					<div class="col-md-3">
+						<div class="input-group">
+						  <input type="text" class="form-control masked-input-date jam-awal" name="jam_awal" value="08:00"/>
+						  <span class="input-group-text input-group-addon">
+						    <i class="fa fa-clock"></i>
+						  </span>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mb-15px">
+					<label class="form-label col-form-label col-md-3">Target Selesai</label>
+					<div class="col-md-6">
+						<input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group">
+						  <input type="text" class="form-control masked-input-date jam-akhir" readonly name="jam_akhir" value="15:00" />
+						  <span class="input-group-text input-group-addon">
+						    <i class="fa fa-clock"></i>
+						  </span>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="col-md-3">
+				<input type="hidden" name="id" value="<?php echo $id; ?>" />
+				<input type="hidden" class="form-control" name="user_id" id="user_id" placeholder="User Id" value="<?php echo $user_id; ?>" />
+				<div class="input-group" style="height: 10vh;">
+				    <button style="flex: 50%;" type="submit" class="btn btn-danger btn-create-produksi disabled" disabled=""><i class="fas fa-save"></i> <?php echo $button ?></button> 
+				    <button style="flex: 50%;" type="button" class="btn btn-info list-data"><i class="fas fa-undo"></i> Kembali</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="alertnya">
+			
+		</div>
+		<div class="row mb-15px daftar_mesin">
 
 
-			<div class="alertnya">
+				
+				<?php $classnyak->machineList(date('Y-m-d'),date('Y-m-d')) ?>
+		</div>
+
+		<div class="container">
+			<h4>Kebutuhan Material per-barang</h4>
+			<div class="alertdiv">
 				
 			</div>
-			
-			<table class="table table-hover table-sm tabel-machine">
-				<thead>
-					<tr>
-						<th>Machine Name</th>
-						<th>Used For</th>
-						<th>Throughput</th>
-						<th>Shift</th>
-						<th>Material Processed</th>
-						<th>Products</th>
-						<th>Time</th>
-						<th hidden="hidden">T. Minutes</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-
-					$arrbarangdoneperminuteonsinglemachine = [15, 25, 27 ,28 ,21];
-
-					if ($machine_list) {
-						foreach ($machine_list as $key => $value) {
-							?>
-							<tr class="available-machine" id="<?php echo $value->mesin_id ?>">
-								<td>
-									<div class="form-check">
-										<input class="form-check-input checkboxmachine" name="machine_use[]" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>" value="<?php echo $value->mesin_id ?>">
-										<label class="form-check-label" for="checkbox<?php echo $value->mesin_id ?>"><?php echo $value->kd_mesin.' ('.$value->jenis_mesin.')' ?></label>
-									</div>
-								</td>
-								<td>
-									<input type="text" name="machineusedfor[]" class="form-control-plaintext" readonly value="<?php echo $value->used_for ?>">	
-								</td>
-								<td>
-									<div class="input-group">
-										<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct" value="0" min="0">
-										<span class="input-group-text">
-											Minute(s)/Pd.
-										</span>
-									</div>
-								</td>
-								<td>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift1machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift1machine<?php echo $value->mesin_id ?>" checked value="1" />
-										<label class="form-check-label" for="shift1machine<?php echo $value->mesin_id ?>">1</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift2machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift2machine<?php echo $value->mesin_id ?>" value="0"/>
-										<label class="form-check-label" for="shift2machine<?php echo $value->mesin_id ?>">2</label>
-									</div>
-								</td>
-								<td>
-									<input type="number" name="materialallocated[]" class="form-control materialallocated" value="0">
-								</td>
-								<td>
-									<input type="text" name="goodsallocated[]" readonly class="form-control-plaintext goodsallocated" value="0">
-								</td>
-								<td>
-									<div class="input-group">
-										<input type="text" name="timespentpermachine[]" class="form-control-plaintext" readonly>
-									</div>
-								</td>
-								<td hidden>
-									<input type="number" name="totalminutes" class="totalminutespermachine" value="0">
-								</td>
-
+			<div class="row">
+				<div class="col-md-6">
+					<table class="table table-bordered table-hover table-td-valign-middle tabel-material-ready-to-use">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Nama Material</th>
+								<th>Qty</th>
+								<th>will be used</th>
+								<th>Action</th>
 							</tr>
+						</thead>
+						<tbody id="materials_ready_to_use">
 							<?php
-						}
-					}
-					?>
-					<tr>
-						<td colspan="4" style="text-align: right; font-size: 14px;"><b>Total</b></td>
-						<td><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
-						<td><input type="text" name="totalproductions" class="form-control-plaintext totalproductions"></td>
-						<td><input type="text" name="predictiondone" class="form-control-plaintext predictiondone"></td>
-						<td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
-					</tr>
-					
-				</tbody>
-			</table>
-	</div>
-
-	<div class="container">
-		<h4>Kebutuhan Material per-barang</h4>
-		<div class="alertdiv">
-			
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<table class="table table-bordered table-hover table-td-valign-middle tabel-material-ready-to-use">
-					<thead>
-						<tr>
-							<th>No</th>
-							<th>Nama Material</th>
-							<th>Qty</th>
-							<th>will be used</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody id="materials_ready_to_use">
-						<?php
-						if ($material_needs) {
-							foreach ($material_needs as $key => $value) {
-								?>
-								<tr id="<?php echo $value->kd_material ?>">
-					        		<td></td>
-					        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-material" value="<?php echo $value->kd_material ?>" /></td>
-					        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-qty ready-to-use-<?php echo $value->kd_material ?>-qty" value="<?php echo $value->jumlah_bahan ?>" /></td>
-					        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext qty-x-used qty-x-used-<?php echo $value->kd_material ?>" value="69" /></td>
-					        		<td style="width: 80px;">
-					        			<div class="input-group">
-					        			<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
-					        			</div>
-					        	</tr>
-								<?php
-							}
-						}
-						?>
-						
-					</tbody>
-				</table>
-			</div>
-			<div class="col-md-6">
-				<table class="table table-hover table-sm tabel-material-yang-ada table-td-valign-middle">
-					<thead>
-						<tr>
-							<th rowspan="2">Kode Material</th>
-							<th rowspan="2">Weight/Pcs (Kg)</th>
-							<th colspan="3">Dimensi</th>
-							<th rowspan="2">Stock</th>
-							<th rowspan="2">Action</th>
-						</tr>
-						<tr>
-							<th>D/T (mm)</th>
-							<th>P (mm)</th>
-							<th>L (mm)</th>
-						</tr>
-					</thead>
-					<tbody id="materials_available">
-						<?php
-						if ($material) {
-							$o = 1;
-							foreach ($material as $key => $value) {
-								?>
-								<tr class="material-available material-available-<?php echo $value->kd_material ?>">
-									<td><input type="hidden" name="id_material_in_stock[]" value="<?php echo $value->id ?>"><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->kd_material ?>"/></td>
-									<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
-									<?php
-
-									$jsonanu = json_decode($value->dimensi, TRUE);
-										?>
-										<td>
-											<input type="text" class="form-control-plaintext" name="dimensidiametertebal" value="<?php echo $jsonanu['diametertebal'] ?>">
-										</td>
-										<td>
-											<input type="text" class="form-control-plaintext" name="dimensipanjang" value="<?php echo $jsonanu['panjang'] ?>">
-										</td>
-										<td>
-											<input type="text" class="form-control-plaintext" name="dimensilebar" value="<?php echo $jsonanu['lebar'] ?>">
-										</td>
-										<?php
+							if ($material_needs) {
+								foreach ($material_needs as $key => $value) {
 									?>
-									<td><input type="text" name="qty_material_in_stock[]" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
-									<td style="width: 80px;">
-										<div class="input-group">
-											<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-success btn-detail-material"><i class="fas fa-eye"></i></button>
-											<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-primary btn-add-material"><i class="fas fa-plus-square"></i></button>
-										</div>
-									</td>
+									<tr id="<?php echo $value->kd_material ?>">
+						        		<td></td>
+						        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-material" value="<?php echo $value->kd_material ?>" /></td>
+						        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-qty ready-to-use-<?php echo $value->kd_material ?>-qty" value="<?php echo $value->jumlah_bahan ?>" /></td>
+						        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext qty-x-used qty-x-used-<?php echo $value->kd_material ?>" value="69" /></td>
+						        		<td style="width: 80px;">
+						        			<div class="input-group">
+						        			<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
+						        			</div>
+						        	</tr>
+									<?php
+								}
+							}
+							?>
+							
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-6">
+					<table class="table table-hover table-sm tabel-material-yang-ada table-td-valign-middle">
+						<thead>
+							<tr>
+								<th rowspan="2">Kode Material</th>
+								<th rowspan="2">Weight/Pcs (Kg)</th>
+								<th colspan="3">Dimensi</th>
+								<th rowspan="2">Stock</th>
+								<th rowspan="2">Action</th>
+							</tr>
+							<tr>
+								<th>D/T (mm)</th>
+								<th>P (mm)</th>
+								<th>L (mm)</th>
+							</tr>
+						</thead>
+						<tbody id="materials_available">
+							<?php
+							if ($material) {
+								$o = 1;
+								foreach ($material as $key => $value) {
+									?>
+									<tr class="material-available material-available-<?php echo $value->kd_material ?>">
+										<td><input type="hidden" name="id_material_in_stock[]" value="<?php echo $value->id ?>"><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->kd_material ?>"/></td>
+										<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
+										<?php
+
+										$jsonanu = json_decode($value->dimensi, TRUE);
+											?>
+											<td>
+												<input type="text" class="form-control-plaintext" name="dimensidiametertebal" value="<?php echo $jsonanu['diametertebal'] ?>">
+											</td>
+											<td>
+												<input type="text" class="form-control-plaintext" name="dimensipanjang" value="<?php echo $jsonanu['panjang'] ?>">
+											</td>
+											<td>
+												<input type="text" class="form-control-plaintext" name="dimensilebar" value="<?php echo $jsonanu['lebar'] ?>">
+											</td>
+											<?php
+										?>
+										<td><input type="text" name="qty_material_in_stock[]" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
+										<td style="width: 80px;">
+											<div class="input-group">
+												<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-success btn-detail-material"><i class="fas fa-eye"></i></button>
+												<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-primary btn-add-material"><i class="fas fa-plus-square"></i></button>
+											</div>
+										</td>
+									</tr>
+									<?php
+								}
+							} else {
+								?>
+								<tr>
+									<td colspan="4">Tidak ada material tersedia</td>
 								</tr>
 								<?php
 							}
-						} else {
 							?>
-							<tr>
-								<td colspan="4">Tidak ada material tersedia</td>
-							</tr>
-							<?php
-						}
-						?>
-						
-					</tbody>
-				</table>
+							
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -274,6 +213,50 @@
 				smartAllocate()
 			}
 		})
+
+		function deteksiKetersediaanJadwal() {
+			var start_date = $('#tanggal_produksi').val()
+			var end_date = $('#rencana_selesai').val()
+
+			console.log(start_date + '/' + end_date)
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>produksi/deteksi_ketersediaan_jadwal",
+                data: {
+                    ds: start_date,
+                    de: end_date
+                },
+                success: function(data){
+                	var dt = JSON.parse(data)
+                    $('#smart_assist_title').text(dt.smart_assist_title)
+                    $('#smart_assist_message').html(dt.smart_assist_message)
+                    $('#smart_assist_recommendation').html(dt.smart_assist_recommendation_action)
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "<?php echo base_url() ?>produksi/machineList/" + start_date + "/" + end_date,
+                success: function(data){
+                    $('.daftar_mesin').html(data);
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+		}
 
 		function sumthismachineETA(thisel) {
 
@@ -372,8 +355,6 @@
 			//it really not useful at all but it may be lmao
 			$('.totalminuteseverymachine').val(summinutes)
 
-			console.log(summinutes)
-
 			//JIKA melebihi dari jumlah jam kerja shift 1 dan shift 2, tambah waktu durasinya hingga besok sampe jam masuk kerja (majuin 8 jem)
 
 			var date = moment($('#tanggal_produksi').val() + ' ' + $('.jam-awal').val(), 'YYYY-MM-DD HH:mm')
@@ -444,30 +425,6 @@
 	    		$('.alertnya').html('<div class="alert alert-danger"><b>Alokasi barang jadi Melebihi batas.</b> Kurangi target barang jadi pada sebagian mesin mesin atau alokasian target barang jadi ke mesin lain</div>')
 	    	}
 		}
-
-		// {
-		// 	let sum = 0
-		// 	$('.qty-x-used').each(function() {
-		// 		var getqty = parseInt($(this).parents('tr').find('td').eq(2).find('input').val())
-		// 		var totalbarangjadi = parseInt($('#total_barang_jadi').val())
-
-		// 		var nama_material = $(this).parents('tr').attr('id')
-
-		// 		var total = getqty * totalbarangjadi
-
-
-		// 		$(this).parents('tr').removeClass('oops')
-
-		// 		$(this).val(total)
-				
-		// 		if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
-		// 			$(this).parents('tr').addClass('oops')
-		// 		}
-				
-		// 		sum += parseInt(total)
-		// 	})
-		// 	$('.total-material').val(parseInt(sum)).change()
-		// }
 
 		function smartAllocate() {
 
@@ -629,21 +586,21 @@
 	    	// checkAlokasiMelebihiTotalMaterial()
 	    })
 
-	    $('.tabel-machine').on('input','.materialallocated', function() {
+	    // $('.tabel-machine').on('input','.materialallocated', function() {
 
-	    	var thisel = $(this)
+	    // 	var thisel = $(this)
 
-	    	var materialallocatedonthismachine = parseInt($(this).val())
-	    	var treshdldpermachine = parseInt($('.tresholdmaterialspermachine').val())
+	    // 	var materialallocatedonthismachine = parseInt($(this).val())
+	    // 	var treshdldpermachine = parseInt($('.tresholdmaterialspermachine').val())
     		
-    		thisel.removeClass('is-invalid')
+    	// 	thisel.removeClass('is-invalid')
 	    	
-	    	if (materialallocatedonthismachine > treshdldpermachine) {
-	    		thisel.addClass('is-invalid')
-	    	}
+	    // 	if (materialallocatedonthismachine > treshdldpermachine) {
+	    // 		thisel.addClass('is-invalid')
+	    // 	}
 
-	    	checkAlokasiMelebihiTotalMaterial()
-	    })
+	    // 	checkAlokasiMelebihiTotalMaterial()
+	    // })
 
 	    // $('.tabel-machine').on('input','.goodsallocated', function() {
 
@@ -655,7 +612,7 @@
 
 	    // })
 
-	    $('.troughputperproduct').on('input', function() {
+	    $('.daftar_mesin').on('input','.troughputperproduct',function() {
 	    	
 	    	var thisel = $(this)
 
@@ -664,28 +621,92 @@
 	    	}
 	    })
 
-	    $('.checkboxmachine').on('change', function() {
+	    $('.daftar_mesin').on('change','.checkboxmachine', function() {
 	    	if (this.checked) {
 	    		$(this).parents('tr').addClass('checked')
 	    	} else {
 	    		$(this).parents('tr').removeClass('checked')
 	    	}
-
-	    	var thisel = $(this)
 			sumETA()
 	    })
 
 	    $('#tanggal_produksi').on('change', function() {
 	    	sumETA()
+	    	deteksiKetersediaanJadwal()
 	    })
 
+		var typingTimer;
+		var doneTypingInterval = 3000;
+
+		//on keyup, start the countdown
+		$('#kode_order').on('input',function(){
+		    clearTimeout(typingTimer);
+
+		    $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button>')
+
+		    if ($('#kode_order').val()) {
+		    	$('.button-ceg').replaceWith('<button type="button" class="btn btn-primary button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-sync fa-spin"></i></button>')
+		    	$('#smart_assist_title').text('Sedang mencari...')
+                $('#smart_assist_message').html(`Sistem sedang mendeteksi kode order yang diinput, mohon tunggu...
+                	<div class="progress rounded-pill mb-2 mt-2">
+						<div class="progress-bar bg-indigo progress-bar-striped progress-bar-animated rounded-pill fs-10px fw-bold" style="width: 100%"></div>
+					</div>
+                	`)
+                $('#smart_assist_recommendation').html("")
+		        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+		    }
+		});
+
+		//user is "finished typing," do something
+		function doneTyping () {
+		    var id = $('#kode_order').val()
+
+	    	$.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>produksi/cek_kode_order_ready",
+                data: {
+                    id: id,
+                },
+                success: function(data){
+                	var dt = JSON.parse(data)
+
+                	if (dt.status == 'ok') {
+                		// alert('sip')
+                		$('.button-ceg').replaceWith('<button type="button" class="btn btn-success button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-check"></i></button>')
+                		$('#smart_assist_title').text('Data Order')
+		                $('#smart_assist_message').html(dt.message)
+		                $('#smart_assist_recommendation').html("")
+		                $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button><button type="button" class="btn btn-success btn-next">Konfirmasi</button>')
+                	} else {
+                		// alert('no!')
+                		$('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')
+                		$('#smart_assist_title').text('Order tidak ditemukan!')
+		                $('#smart_assist_message').html('Cek kembali inputan, pastikan semua huruf adalah besar dan angka sudah sesuai.')
+		                $('#smart_assist_recommendation').html("")
+                	}
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+		}
+
+		$('.input-group-kdorder').on('click','.btn-next',function() {
+			$('.formnya').css('display','unset')
+			$('.input-group-kdorder').remove()
+			$('#kode_order').addClass('disabled').attr('disabled','disabled')
+		})
 	    <?php 
 
 	    if ($machine_list) {
 			foreach ($machine_list as $key => $value) {
 				?>
 
-				$('.checkboxshiftformachine<?php echo $value->mesin_id ?>').on('change', function() {
+				$('.daftar_mesin').on('change','.checkboxshiftformachine<?php echo $value->mesin_id ?>', function() {
 					var thisel = $(this)
 
 					if (this.checked) {

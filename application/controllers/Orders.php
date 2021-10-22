@@ -64,14 +64,14 @@ class Orders extends CI_Controller
         $data = array(
             'button' => 'Create',
             'action' => 'form_create_action',
-	    'order_id' => set_value('order_id'),
-	    'nama_pemesan' => set_value('nama_pemesan'),
-	    'bagian' => set_value('bagian'),
-	    'keterangan' => set_value('keterangan'),
-	    'priority' => set_value('priority'),
-	    'approved_by' => set_value('approved_by'),
-	    'attachment' => set_value('attachment'),
-	);
+    	    'order_id' => set_value('order_id'),
+    	    'nama_pemesan' => set_value('nama_pemesan'),
+    	    'bagian' => set_value('bagian'),
+    	    'keterangan' => set_value('keterangan'),
+    	    'priority' => set_value('priority'),
+    	    'approved_by' => set_value('approved_by'),
+    	    'attachment' => set_value('attachment'),
+    	);
         $this->load->view('orders/orders_form', $data);
     }
     
@@ -99,11 +99,14 @@ class Orders extends CI_Controller
             $uploadData = $this->upload->data();
             $data = array(
                 'nama_pemesan' => $this->input->post('nama_pemesan',TRUE),
+                'tanggal_order' => date('Y-m-d h:m:s'),
+                'kd_order' => $this->Orders_model->buat_kode(),
                 'bagian' => $this->input->post('bagian',TRUE),
                 'keterangan' => $this->input->post('keterangan',TRUE),
                 'priority' => $this->input->post('priority',TRUE),
                 'approved_by' => $this->input->post('approved_by',TRUE),
                 'attachment' => $uploadData['file_name'],
+                'status' => 'READY'
             );
             // print_r($data);
 

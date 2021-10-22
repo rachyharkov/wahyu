@@ -1,25 +1,6 @@
 <div id="content" class="app-content">
     <h1 class="page-header">KELOLA DATA PRODUKSI</h1>
     <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-inverse">
-              <div class="panel-heading">
-                <h4 class="panel-title">Schedule</h4>
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
-                <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
-                    </div>
-                    </div>
-                <div class="panel-body">
-                    <p>Showing calendar here</p>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-8">
           <div class="panel panel-inverse">
               <div class="panel-heading">
@@ -40,7 +21,7 @@
         <div class="col-md-4">
             <div class="panel panel-inverse">
               <div class="panel-heading">
-                <h4 class="panel-title">Sketch Preview</h4>
+                <h4 class="panel-title">Smart Assist</h4>
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -49,8 +30,17 @@
                     </div>
                     </div>
                 <div class="panel-body">
-                    <p>TEST</p>
-                    
+                    <div class="row">
+                      <div class="col-4" style="text-align: center;"><i class="fab fa-github-alt fa-4x"></i></div>
+                      <div class="col-8">
+                        <h4 id="smart_assist_title" style="font-weight: bold;">Selamat Pagi!</h4>
+                        <div id="smart_assist_message">Smart Assist membantu anda untuk melakkan tindakan dengan efisien. Kelihatannya semua terkendali!</div>
+                        <div id="smart_assist_recommendation">
+                            
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <?php $classnyak->showCalendar(date('m'),date('Y')) ?> -->
                 </div>
             </div>
         </div>
@@ -108,6 +98,9 @@
                     url: "<?php echo base_url() ?>produksi/create",
                     success: function(data){
                         $('#panel-body').html(data);
+                        $('#smart_assist_title').text('Kode Order diperlukan')
+                        $('#smart_assist_message').html('Harap isi kode order sesuai dengan yang sudah diinput pada laman "Order"')
+                        $('#smart_assist_recommendation').html("")
                         changewindowtitle('Tambah Data Produksi')
                     },
                     error: function(error) {
@@ -128,6 +121,9 @@
                     url: "<?php echo base_url() ?>produksi/list",
                     success: function(data){
                         $('#panel-body').html(data);
+                        $('#smart_assist_title').text('Selamat Pagi!')
+                        $('#smart_assist_message').html('Smart Assist membantu anda untuk melakkan tindakan dengan efisien. Kelihatannya semua terkendali!')
+                        $('#smart_assist_recommendation').html("")
                         changewindowtitle('List Produksi')
                     },
                     error: function(error) {
