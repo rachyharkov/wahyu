@@ -190,14 +190,6 @@
 						</div>
 					</div>
           <?php endforeach ?>
-					<div class="menu-item">
-						<a href="https://localhost/wahyu/harviacode" class="menu-link">
-							<div class="menu-icon">
-									<i class="fa fa-cogs"></i>
-								</div>
-							<div class="menu-text">Generator</div>
-						</a>
-					</div>
 					<div class="menu-item d-flex">
 						<a href="javascript:;" class="app-sidebar-minify-btn ms-auto" data-toggle="app-sidebar-minify"><i class="fa fa-angle-double-left"></i></a>
 					</div>
@@ -207,7 +199,7 @@
 
 		<div class="app-sidebar-bg"></div>
 		<div class="app-sidebar-mobile-backdrop"><a href="#" data-dismiss="app-sidebar-mobile" class="stretched-link"></a></div>
-		
+
 	</div>
 	<div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
   <?php if ($this->session->flashdata('message') ) : ?>
