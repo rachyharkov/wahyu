@@ -94,7 +94,7 @@ class Produksi extends CI_Controller
         $id_material_stock = $this->input->post('id_material_in_stock');
         $qty_material_stock = $this->input->post('qty_material_in_stock');
 
-        $kode = $this->Produksi_model->buat_kode($this->input->post('tanggal_produksi',TRUE));
+        $kode = $this->Produksi_model->buat_kode(date('Y-m-d'));
         $kd_order = $this->input->post('kode_order', TRUE);
 
         for ($i = 0; $i < count($material_dibutuhkan); $i++) { 

@@ -76,8 +76,8 @@
 					<div class="ol-md-3"></div>
 					<div class="col-md-9">
 						<div class="form-check form-switch">
-						  	<input class="form-check-input" type="checkbox" id="checkbox1" checked />
-						  	<label class="form-check-label" for="checkbox1">Smart Allocate</label>
+						  	<input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" checked />
+						  	<label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
 						</div>
 					</div>
 				</div>	
@@ -262,22 +262,20 @@
             });
 		}
 
-		function enableDisableInputMachine() {
-			$('.available-machine').each(function() {
-				if (!$(this).hasClass('checked')) {
-					$(this).find('td').eq(2).find('input').attr('disabled','disabled').addClass('disabled')
-					$(this).find('td').eq(4).find('input').attr('disabled','disabled').addClass('disabled')
-					$(this).find('td').eq(5).find('input').attr('disabled','disabled').addClass('disabled')
-					$(this).find('td').eq(6).find('input').attr('disabled','disabled').addClass('disabled')
-					$(this).find('td').eq(7).find('input').attr('disabled','disabled').addClass('disabled')
-				} else {
-					$(this).find('td').eq(2).find('input').removeAttr('disabled').removeClass('disabled')
-					$(this).find('td').eq(4).find('input').removeAttr('disabled').removeClass('disabled')
-					$(this).find('td').eq(5).find('input').removeAttr('disabled').removeClass('disabled')
-					$(this).find('td').eq(6).find('input').removeAttr('disabled').removeClass('disabled')
-					$(this).find('td').eq(7).find('input').removeAttr('disabled').removeClass('disabled')
-				}
-			})
+		function enableDisableInputMachine(thisel) {
+			if (thisel.parents('tr').hasClass('checked')) {
+				thisel.parents('tr').find('td').eq(2).find('input').removeAttr('readonly').removeClass('readonly')
+				thisel.parents('tr').find('td').eq(4).find('input').removeAttr('readonly').removeClass('readonly')
+				thisel.parents('tr').find('td').eq(5).find('input').removeAttr('readonly').removeClass('readonly')
+				thisel.parents('tr').find('td').eq(6).find('input').removeAttr('readonly').removeClass('readonly')
+				thisel.parents('tr').find('td').eq(7).find('input').removeAttr('readonly').removeClass('readonly')
+			} else {
+				thisel.parents('tr').find('td').eq(2).find('input').attr('readonly','readonly').addClass('readonly')
+				thisel.parents('tr').find('td').eq(4).find('input').attr('readonly','readonly').addClass('readonly')
+				thisel.parents('tr').find('td').eq(5).find('input').attr('readonly','readonly').addClass('readonly')
+				thisel.parents('tr').find('td').eq(6).find('input').attr('readonly','readonly').addClass('readonly')
+				thisel.parents('tr').find('td').eq(7).find('input').attr('readonly','readonly').addClass('readonly')
+			}
 		}
 
 		function refreshMachineList() {
@@ -371,7 +369,7 @@
                     $('#smart_assist_title').text(dt.smart_assist_title)
                     $('#smart_assist_message').html(dt.smart_assist_message)
                     $('#smart_assist_recommendation').html(dt.smart_assist_recommendation_action)
-                    alert(dt.message)
+                    // alert(dt.message)
                     // $('.daftar_mesin').html(dt.machinelist)
                 },
                 error: function(error) {
@@ -769,7 +767,7 @@
 				thisel.parents('tr').find('td').eq(7).find('input').val(0)
 	    	}
 			sumETA()
-			// enableDisableInputMachine()
+			enableDisableInputMachine(thisel)
 	    })
 
 	    $('#tanggal_produksi').on('change', function() {
@@ -779,7 +777,6 @@
 	    	checkdisablecreateproductionbutton()
 	    	setTimeout(function() {
 	    		sumETA()
-	    		// enableDisableInputMachine()
 	    	},500)
 	    })
 

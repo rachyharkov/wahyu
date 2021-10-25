@@ -92,7 +92,7 @@ class Produksi_model extends CI_Model
     }
 
     function buat_kode($tanggal_produksi){
-        $q = $this->db->query("SELECT MAX(RIGHT(id,4)) AS kd_max FROM produksi WHERE DATE(tanggal_produksi)='".$tanggal_produksi."'");
+        $q = $this->db->query("SELECT MAX(RIGHT(id,4)) AS kd_max FROM produksi WHERE DATE(created_at)='".$tanggal_produksi."'");
         $kd = "";
         if($q->num_rows()>0){
             foreach($q->result() as $k){

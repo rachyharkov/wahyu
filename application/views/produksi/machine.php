@@ -11,7 +11,7 @@
 	</td>
 	<td>
 		<div class="input-group">
-			<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct" value="0" min="0">
+			<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct readonly" readonly value="0" min="0">
 			<span class="input-group-text">
 				Minute(s)/Pd.
 			</span>
@@ -19,27 +19,27 @@
 	</td>
 	<td>
 		<div class="form-check form-check-inline">
-			<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift1machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift1machine<?php echo $value->mesin_id ?>" checked value="1" />
+			<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?> readonly" readonly name="shift1machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift1machine<?php echo $value->mesin_id ?>" checked value="1" />
 			<label class="form-check-label" for="shift1machine<?php echo $value->mesin_id ?>">1</label>
 		</div>
 		<div class="form-check form-check-inline">
-			<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?>" name="shift2machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift2machine<?php echo $value->mesin_id ?>" value="0"/>
+			<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?> readonly" readonly name="shift2machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift2machine<?php echo $value->mesin_id ?>" value="0"/>
 			<label class="form-check-label" for="shift2machine<?php echo $value->mesin_id ?>">2</label>
 		</div>
 	</td>
 	<td>
-		<input type="number" name="materialallocated[]" class="form-control materialallocated" value="0">
+		<input type="number" name="materialallocated[]" class="form-control materialallocated readonly" readonly value="0">
 	</td>
 	<td>
-		<input type="text" name="goodsallocated[]" readonly class="form-control-plaintext goodsallocated" value="0">
+		<input type="text" name="goodsallocated[]" readonly class="form-control-plaintext goodsallocated readonly" readonly value="0">
 	</td>
 	<td>
 		<div class="input-group">
-			<input type="text" name="timespentpermachine[]" class="form-control-plaintext" readonly>
+			<input type="text" name="timespentpermachine[]" class="form-control-plaintext readonly" readonly>
 		</div>
 	</td>
 	<td hidden>
-		<input type="number" name="totalminutes" class="totalminutespermachine" value="0">
+		<input type="number" name="totalminutes" class="totalminutespermachine readonly" readonly value="0">
 	</td>
 
 </tr>
