@@ -94,7 +94,8 @@ class Produksi extends CI_Controller
         $id_material_stock = $this->input->post('id_material_in_stock');
         $qty_material_stock = $this->input->post('qty_material_in_stock');
 
-        $kode = $this->Produksi_model->buat_kode();
+        $kode = $this->Produksi_model->buat_kode($this->input->post('tanggal_produksi',TRUE));
+        $kd_order = $this->input->post('kode_order', TRUE);
 
         for ($i = 0; $i < count($material_dibutuhkan); $i++) { 
             $readytouse = array(
@@ -144,7 +145,7 @@ class Produksi extends CI_Controller
         $data = array(
     		'id' => $kode,
             'created_at' => date('Y-m-d h:m:s'),
-            'kd_order' => $this->input->post('kode_order', TRUE),
+            'kd_order' => $kd_order,
     		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.$this->input->post('jam_awal', TRUE).':00',
     		'total_barang_jadi' => $this->input->post('totalproductions',TRUE),
     		'priority' => 'HIGH',
@@ -156,6 +157,13 @@ class Produksi extends CI_Controller
 	    );
 
         $this->Produksi_model->insert($data);
+
+        $updatedataorder = array(
+            'status' => 'ON PROGRESS'
+        );
+
+        $this->Orders_model->update_by_kd_order($kd_order, $updatedataorder);
+
         $this->list();
     }
     
@@ -312,65 +320,138 @@ class Produksi extends CI_Controller
 
     function deteksi_ketersediaan_jadwal() {
 
-        $ds = date('Y-m-d', strtotime($this->input->post('ds')));
-        $de = date('Y-m-d', strtotime($this->input->post('de')));
+        $ds = $this->input->post('ds');
+        $de = $this->input->post('de');
 
         $data = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
 
+        $machinelist = $this->Mesin_model->get_all();
+
+        $data_penggunaan_mesin_oleh_produksi_lain = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
+
+        $datax = array(
+            'machine_list' => $machinelist,
+            'data_produksi' => $data_penggunaan_mesin_oleh_produksi_lain
+        );
+
         if ($data) {
 
-            $data_temuan = '
-            <div class="widget-list rounded mb-4">
-              <div class="widget-list-item">
-                <div class="widget-list-media">
-                  <i class="fas fa-cog fa-spin fa-3x"></i>
-                </div>
-                <div class="widget-list-content">
-                  <h4 class="widget-list-title">'.$data->id.'</h4>
-                  <p class="widget-list-desc">'.$data->tanggal_produksi.' - '.$data->rencana_selesai.' ('.$data->priority.')</p>
-                </div>
-                <div class="widget-list-action">
-                  <a href="#" data-bs-toggle="dropdown" class="text-white-transparent-7">
-                    <i class="fa fa-ellipsis-h fs-14px"></i>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>ACtion</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            ';
+            $data_temuan = '';
+            $modal = '';
+
+            foreach ($data as $key => $value) {
+                $data_temuan .= '
+                <tr>
+                    <td><i class="fas fa-cog fa-spin"></i></td>
+                    <td><a href="#modaldetailproduksi" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
+                    <td><label class="badge bg-danger">'.$value->priority.'</label></td>
+                </tr>';
+            }
+
 
             $arr = array(
-                'message' => $ds.'/'.$de.' (jadwal_tidak_tersedia)',
-                'smart_assist_title' => 'Jadwal tidak tersedia',
-                'smart_assist_message' => '<p>Ada proses produksi yang berjalan pada tanggal tersebut, untuk informasi detail mengenai masalah ini, berikut temuan data terkait...</p>'.$data_temuan,
-                'smart_assist_recommendation_action' => 'ANU ANU ANU NO RECOMMENDATION ACCTION'
+                'message' => $ds.'/'.$de.' (oops)',
+                'smart_assist_title' => 'Jadwal Ditemukan',
+                'smart_assist_message' => '<p>Ada proses produksi yang berjalan pada tanggal tersebut, untuk informasi detail mengenai masalah ini, berikut temuan data terkait...</p>
+                <table class="table table-sm table-hover">'.$data_temuan.'</table>',
+                'smart_assist_recommendation_action' => 'Anda bisa memilih mesin tertentu untuk digunakan oleh produksi saat ini',
+                // 'machinelist' => $this->load->view('produksi/machine_list', $datax, true)
             );
             echo json_encode($arr);
         } else {
+
+
             $arr = array(
                 'message' => $ds.'/'.$de.'jadwal_tersedia',
                 'smart_assist_title' => 'Jadwal tersedia',
                 'smart_assist_message' => 'Tanggal ini belum di isi oleh jadwal produksi apapun, semua aman!',
-                'smart_assist_recommendation_action' => 'ANU ANU ANU NO RECOMMENDATION ACCTION'
+                'smart_assist_recommendation_action' => 'test',
+                // 'machinelist' => $this->load->view('produksi/machine_list', $datax, true)
             );
             echo json_encode($arr);
         }
     }
 
-    public function machineList($ds, $de)
+    function get_machine_list()
     {
-        $machinelist = $this->Mesin_model->get_all();
+        $ds = $this->input->post('ds');
+        $de = $this->input->post('de');
 
-        $data_penggunaan_mesin_oleh_produksi_lain = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal(date('Y-m-d', strtotime($ds)),date('Y-m-d', strtotime($de)));
+        $machine_list = $this->Mesin_model->get_all();
 
-        $data = array(
-            'machine_list' => $machinelist,
-            'data_produksi' => $data_penggunaan_mesin_oleh_produksi_lain
-        );
-        $this->load->view('produksi/machine_list', $data);
+        $data_produksi = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
+
+        $machine_id_list = [];
+
+        if ($machine_list) {
+            
+            if ($data_produksi) {
+
+                $dataproduksi = [];
+
+                foreach ($data_produksi as $value) {
+                    array_push($dataproduksi, $value->machine_use);
+                }
+
+                // print_r($dataproduksi);
+
+                $datamesin = [];
+
+                foreach ($dataproduksi as $key => $value) {
+                    $data_mesin_produksi_aktif = json_decode($value, true);
+
+                    foreach ($data_mesin_produksi_aktif as $x) {
+
+                        if (!in_array($x['machine_id'], $datamesin)) {
+                            array_push($datamesin, $x['machine_id']);
+                        }
+                    }
+                }
+
+                foreach ($machine_list as $key => $value) {
+
+                    //deteksi penggunan mesin bila ada data produksi pada tanggal tsb
+                    if (!in_array($value->mesin_id, $datamesin)) {
+                        //ambil data mesin pada produksi
+                        array_push($machine_id_list, $value->mesin_id);
+                    }
+                }
+            } else {
+                foreach ($machine_list as $key => $value) {
+                    array_push($machine_id_list, $value->mesin_id);
+                }
+            }
+        }
+
+        echo json_encode($machine_id_list);
     }
+
+    function get_machine_data($id)
+    {
+        $data = $this->Mesin_model->get_by_id($id);
+
+        $datax = array(
+            'value' => $data
+        );
+        $this->load->view('produksi/machine', $datax);
+    }
+
+    // public function machineList()
+    // {
+
+    //     $ds = $this->input->post('ds');
+    //     $de = $this->input->post('de');
+
+    //     $machinelist = $this->Mesin_model->get_all();
+
+    //     $data_penggunaan_mesin_oleh_produksi_lain = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
+
+    //     $data = array(
+    //         'machine_list' => $machinelist,
+    //         'data_produksi' => $data_penggunaan_mesin_oleh_produksi_lain
+    //     );
+        
+    // }
 
     function cek_kode_order_ready()
     {
@@ -379,39 +460,46 @@ class Produksi extends CI_Controller
         $detect = $this->Orders_model->get_by_kd_orders($kd_order, 'READY');
 
         if ($detect) {
+            if ($detect->status != 'READY') {
+                $arr = array(
+                    'status' => 'no'
+                );
 
-            $data = '
-            <b>'.$detect->kd_order.'</b>
-            <table class="table table-sm table-hover">
-                <tr>
-                    <td>Waktu</td>
-                    <td>:</td>
-                    <td>'.$detect->tanggal_order.'</td>
-                </tr>
-                <tr>
-                    <td>Pemesan</td>
-                    <td>:</td>
-                    <td>'.$detect->nama_pemesan.' ('.$detect->bagian.')</td>
-                </tr>
-                <tr>
-                    <td>Prioritas</td>
-                    <td>:</td>
-                    <td><label class="badge bg-purple">'.$detect->priority.'</label></td>
-                </tr>
-                <tr>
-                    <td>Keterangan</td>
-                    <td>:</td>
-                    <td>'.$detect->keterangan.'</td>
-                </tr>
-            </table>
-            <a href="#" class="btn btn-green btn-sm" style="width: 100%;">Sketsa</a>
-            ';
-            $arr = array(
-                'status' => 'ok',
-                'message' => $data
-            );
+                echo json_encode($arr);
+            } else {
+                $data = '
+                    <b>'.$detect->kd_order.'</b>
+                    <table class="table table-sm table-hover">
+                        <tr>
+                            <td>Waktu</td>
+                            <td>:</td>
+                            <td>'.$detect->tanggal_order.'</td>
+                        </tr>
+                        <tr>
+                            <td>Pemesan</td>
+                            <td>:</td>
+                            <td>'.$detect->nama_pemesan.' ('.$detect->bagian.')</td>
+                        </tr>
+                        <tr>
+                            <td>Prioritas</td>
+                            <td>:</td>
+                            <td><label class="badge bg-purple">'.$detect->priority.'</label></td>
+                        </tr>
+                        <tr>
+                            <td>Keterangan</td>
+                            <td>:</td>
+                            <td>'.$detect->keterangan.'</td>
+                        </tr>
+                    </table>
+                    <a href="#" class="btn btn-green btn-sm" style="width: 100%;">Sketsa</a>
+                ';
+                $arr = array(
+                    'status' => 'ok',
+                    'message' => $data
+                );
 
-            echo json_encode($arr);
+                echo json_encode($arr);
+            }
         } else {
             $arr = array(
                 'status' => 'no'

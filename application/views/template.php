@@ -204,17 +204,19 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="app-sidebar-bg"></div>
 		<div class="app-sidebar-mobile-backdrop"><a href="#" data-dismiss="app-sidebar-mobile" class="stretched-link"></a></div>
+		
 	</div>
-		<div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
-    <?php if ($this->session->flashdata('message') ) : ?>
+	<div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+  <?php if ($this->session->flashdata('message') ) : ?>
+  <?php endif; ?>
+
+
+	<div class="flash-data2" data-flashdata2="<?= $this->session->flashdata('error'); ?>"></div>
+    <?php if ($this->session->flashdata('error') ) : ?>
     <?php endif; ?>
-
-
-		<div class="flash-data2" data-flashdata2="<?= $this->session->flashdata('error'); ?>"></div>
-	    <?php if ($this->session->flashdata('error') ) : ?>
-	    <?php endif; ?>
 
 	<!-- isi -->
 	<?php echo $contents ?>

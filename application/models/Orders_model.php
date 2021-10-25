@@ -73,6 +73,12 @@ class Orders_model extends CI_Model
         $this->db->update($this->table, $data);
     }
 
+    function update_by_kd_order($id, $data)
+    {
+        $this->db->where('kd_order', $id);
+        $this->db->update($this->table, $data);
+    }
+
     // delete data
     function delete($id)
     {
@@ -92,7 +98,7 @@ class Orders_model extends CI_Model
             $kd = "0001";
         }
         date_default_timezone_set('Asia/Jakarta');
-        return 'S'.date('dmy').$kd;
+        return 'O'.date('dmy').$kd;
     }
 
 }

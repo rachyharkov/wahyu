@@ -47,6 +47,31 @@
     </div>
 </div>
 
+<div class="modal fade" id="modaldetailproduksi">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">test</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-sm table-dark">
+            <tr><td style="width: 90px;">Tanggal Order</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Pemesan</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Bagian</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Prioritas</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Approved by</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Status</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Attachment</td><td style="width: 5px;">:</td><td>test</td></tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
@@ -229,6 +254,9 @@
                             })
                             changewindowtitle('List Produksi')
                             $('#panel-body').html(data);
+                            $('#smart_assist_title').text('Selamat Pagi!')
+                            $('#smart_assist_message').html('Smart Assist membantu anda untuk melakkan tindakan dengan efisien. Kelihatannya semua terkendali!')
+                            $('#smart_assist_recommendation').html("")
                         },
                         error: function(error) {
                             Swal.fire({

@@ -64,10 +64,20 @@
 					</div>
 					<div class="col-md-3">
 						<div class="input-group">
-						  <input type="text" class="form-control masked-input-date jam-akhir" readonly name="jam_akhir" value="15:00" />
+						  <input type="text" class="form-control masked-input-date jam-akhir" readonly name="jam_akhir" value="16:00" />
 						  <span class="input-group-text input-group-addon">
 						    <i class="fa fa-clock"></i>
 						  </span>
+						</div>
+					</div>
+				</div>	
+
+				<div class="row mb-15px">
+					<div class="ol-md-3"></div>
+					<div class="col-md-9">
+						<div class="form-check form-switch">
+						  	<input class="form-check-input" type="checkbox" id="checkbox1" checked />
+						  	<label class="form-check-label" for="checkbox1">Smart Allocate</label>
 						</div>
 					</div>
 				</div>	
@@ -85,11 +95,32 @@
 		<div class="alertnya">
 			
 		</div>
-		<div class="row mb-15px daftar_mesin">
-
-
-				
-				<?php $classnyak->machineList(date('Y-m-d'),date('Y-m-d')) ?>
+		<div class="row mb-15px">
+				<table class="table table-hover table-sm tabel-machine">
+					<thead>
+						<tr>
+							<th>Machine Name</th>
+							<th hidden>Used For</th>
+							<th>Throughput</th>
+							<th>Shift</th>
+							<th>Material Processed</th>
+							<th>Products</th>
+							<th>Time</th>
+							<th hidden="hidden">T. Minutes</th>
+						</tr>
+					</thead>
+					<tbody class="daftar_mesin">
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="3" style="text-align: right; font-size: 14px;"><b>Total</b></td>
+							<td><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
+							<td><input type="text" name="totalproductions" class="form-control-plaintext totalproductions"></td>
+							<td><input type="text" name="predictiondone" class="form-control-plaintext predictiondone"></td>
+							<td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
+						</tr>
+					</tfoot>
+				</table>
 		</div>
 
 		<div class="container">
@@ -214,9 +245,117 @@
 			}
 		})
 
+		function getMachine(machine_id) {
+			$.ajax({
+                type: "GET",
+                url: "<?php echo base_url() ?>produksi/get_machine_data/" + machine_id,
+                success: function(data){
+                	$('.daftar_mesin').append(data)
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+		}
+
+		function enableDisableInputMachine() {
+			$('.available-machine').each(function() {
+				if (!$(this).hasClass('checked')) {
+					$(this).find('td').eq(2).find('input').attr('disabled','disabled').addClass('disabled')
+					$(this).find('td').eq(4).find('input').attr('disabled','disabled').addClass('disabled')
+					$(this).find('td').eq(5).find('input').attr('disabled','disabled').addClass('disabled')
+					$(this).find('td').eq(6).find('input').attr('disabled','disabled').addClass('disabled')
+					$(this).find('td').eq(7).find('input').attr('disabled','disabled').addClass('disabled')
+				} else {
+					$(this).find('td').eq(2).find('input').removeAttr('disabled').removeClass('disabled')
+					$(this).find('td').eq(4).find('input').removeAttr('disabled').removeClass('disabled')
+					$(this).find('td').eq(5).find('input').removeAttr('disabled').removeClass('disabled')
+					$(this).find('td').eq(6).find('input').removeAttr('disabled').removeClass('disabled')
+					$(this).find('td').eq(7).find('input').removeAttr('disabled').removeClass('disabled')
+				}
+			})
+		}
+
+		function refreshMachineList() {
+			var start_date = $('#tanggal_produksi').val() + ' ' + $('.jam-awal').val() + ':00'
+			var end_date = $('#rencana_selesai').val() + ' ' + $('.jam-akhir').val() + ':00'
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>produksi/get_machine_list",
+                data: {
+                    ds: start_date,
+                    de: end_date
+                },
+                success: function(data){
+                	var dt = JSON.parse(data)
+
+                	if ($('.available-machine').length <= 0) {
+                		console.log('no machine available, generating...')
+
+                		for (let i = 0; i < dt.length; i++) {
+						  	// $('.daftar_mesin').append('<div class="available-machine" id="' + dt[i] + '"><input type="checkbox" name="cb"/>' + dt[i] + '</div>')
+						  	getMachine(dt[i])
+						}
+                	} else {
+                		console.log('machine available, detecting...')
+
+                		//buat array daftar available machine (termasuk yang sudah dicopot)
+
+                		var arravailablemachinesaatini = []
+
+	                	$('.available-machine').each(function(i) {
+
+	                		var thisel = $(this)
+
+	                		var thisid = $(this).attr('id')
+
+	                		//jika element ini sudah tidak ada di dt, hapus ae
+	                		if (!dt.includes(thisid)) {
+	                			thisel.remove()
+	                		}
+
+	                		//dorong ke arrayavailablemachinesaatini
+	                		arravailablemachinesaatini.push(thisid)
+	                	})
+
+	                	//cari data mesin baru
+
+	                	// dt di filter arraynya untuk menampilkan arraiabilablemachinesaatini tidak ada di dt
+	                	var foundnew = dt.filter( ai => !arravailablemachinesaatini.includes(ai) );
+
+	                	console.log(arravailablemachinesaatini)
+	                	console.log(foundnew)
+
+	                	//jika ada data mesin baru dari server
+	                	if (foundnew) {
+	                		for (let i = 0; i < foundnew.length; i++) {
+							  	getMachine(foundnew[i])
+							}
+	                	} else {
+	                		$('.daftar_mesin').append('<tr><td colspan="6">No Machine Available</td></tr>')
+	                	}
+                	}
+
+                    // $('.daftar_mesin').html(dt.machinelist)
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            }); 
+		}
+
 		function deteksiKetersediaanJadwal() {
-			var start_date = $('#tanggal_produksi').val()
-			var end_date = $('#rencana_selesai').val()
+			var start_date = $('#tanggal_produksi').val() + ' ' + $('.jam-awal').val() + ':00'
+			var end_date = $('#rencana_selesai').val() + ' ' + $('.jam-akhir').val() + ':00'
 
 			console.log(start_date + '/' + end_date)
 
@@ -232,21 +371,8 @@
                     $('#smart_assist_title').text(dt.smart_assist_title)
                     $('#smart_assist_message').html(dt.smart_assist_message)
                     $('#smart_assist_recommendation').html(dt.smart_assist_recommendation_action)
-                },
-                error: function(error) {
-                    Swal.fire({
-                      icon: 'error',
-                      title: "Oops!",
-                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
-                    })
-                }
-            });
-
-            $.ajax({
-                type: "GET",
-                url: "<?php echo base_url() ?>produksi/machineList/" + start_date + "/" + end_date,
-                success: function(data){
-                    $('.daftar_mesin').html(data);
+                    alert(dt.message)
+                    // $('.daftar_mesin').html(dt.machinelist)
                 },
                 error: function(error) {
                     Swal.fire({
@@ -321,22 +447,29 @@
 
 			var sumproduction = 0;
 
-    		$('.available-machine.checked').each(function() {
-    			var thisel = $(this)
-    			sumthismachineETA(thisel)
-    			//kumpulin menit dulu terus jumlah
-    			var getminutestotal = thisel.find('td').eq(7).find('input').val()
+    		$('.available-machine').each(function() {
+				var thisel = $(this)
 
-    			if (!getminutestotal) {
-    				getminutestotal = 0
+    			if (thisel.hasClass('checked')) {
+	    			sumthismachineETA(thisel)
+	    			//kumpulin menit dulu terus jumlah
+
+	    			var getminutestotal = thisel.find('td').eq(7).find('input').val()
+
+	    			if (!getminutestotal) {
+	    				getminutestotal = 0
+	    			}
+
+	    			summinutes += parseInt(getminutestotal)
+	    			arrminutes.push(getminutestotal)
+
+					//umpulin produksi yang dihasilan dulu, terus jumlah
+					var getproductiontotaal = thisel.find('td').eq(5).find('input').val()
+					sumproduction += parseInt(getproductiontotaal)
+    			} else {
+					arrminutes.push(0)
+					sumproduction += 0
     			}
-
-    			summinutes += parseInt(getminutestotal)
-    			arrminutes.push(getminutestotal)
-
-				//umpulin produksi yang dihasilan dulu, terus jumlah
-				var getproductiontotaal = thisel.find('td').eq(5).find('input').val()
-				sumproduction += parseInt(getproductiontotaal)
     		})
 
     		// console.log(arrminutes)
@@ -622,17 +755,32 @@
 	    })
 
 	    $('.daftar_mesin').on('change','.checkboxmachine', function() {
+	    	
+	    	var thisel = $(this)
+
 	    	if (this.checked) {
-	    		$(this).parents('tr').addClass('checked')
+	    		thisel.parents('tr').addClass('checked')
 	    	} else {
-	    		$(this).parents('tr').removeClass('checked')
+	    		thisel.parents('tr').removeClass('checked')
+	    		thisel.parents('tr').find('td').eq(2).find('input').val(0)
+				thisel.parents('tr').find('td').eq(4).find('input').val(0)
+				thisel.parents('tr').find('td').eq(5).find('input').val(0)
+				thisel.parents('tr').find('td').eq(6).find('input').val('')
+				thisel.parents('tr').find('td').eq(7).find('input').val(0)
 	    	}
 			sumETA()
+			// enableDisableInputMachine()
 	    })
 
 	    $('#tanggal_produksi').on('change', function() {
-	    	sumETA()
+    		sumETA()
 	    	deteksiKetersediaanJadwal()
+	    	refreshMachineList()
+	    	checkdisablecreateproductionbutton()
+	    	setTimeout(function() {
+	    		sumETA()
+	    		// enableDisableInputMachine()
+	    	},500)
 	    })
 
 		var typingTimer;
@@ -681,7 +829,7 @@
                 		// alert('no!')
                 		$('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')
                 		$('#smart_assist_title').text('Order tidak ditemukan!')
-		                $('#smart_assist_message').html('Cek kembali inputan, pastikan semua huruf adalah besar dan angka sudah sesuai.')
+		                $('#smart_assist_message').html('Cek kembali inputan, pastikan semua huruf adalah besar dan angka sudah sesuai. Jika memang sesuai, mungkin order tersebut sedang on progress atau sudah selesai produksinya')
 		                $('#smart_assist_recommendation').html("")
                 	}
                 },
@@ -698,7 +846,7 @@
 		$('.input-group-kdorder').on('click','.btn-next',function() {
 			$('.formnya').css('display','unset')
 			$('.input-group-kdorder').remove()
-			$('#kode_order').addClass('disabled').attr('disabled','disabled')
+			$('#kode_order').addClass('readonly').attr('readonly','readonly')
 		})
 	    <?php 
 
