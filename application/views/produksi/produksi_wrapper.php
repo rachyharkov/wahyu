@@ -61,7 +61,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <?php $classnyak->showCalendar(date('m'),date('Y')) ?> -->
                 </div>
             </div>
         </div>

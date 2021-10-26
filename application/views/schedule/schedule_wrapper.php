@@ -1,4 +1,8 @@
 <style>
+.today {
+    font-weight: bolder;
+}
+
 .recommended {
     animation: owoglow 800ms infinite alternate;
 }
@@ -15,11 +19,26 @@
 </style>
 
 <div id="content" class="app-content">
-    <div class="wrapper-info-mesin">
-	   <?php $classnyak->machine_list() ?> 
+
+    <div class="accordion" id="accordion-calendar">
+      <div class="accordion-item border-0">
+        <div class="accordion-header" id="headingOne">
+          <button class="accordion-button bg-gray-900 text-white px-3 py-10px pointer-cursor" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-calendar">
+            <i class="fa fa-circle fa-fw text-blue me-2 fs-8px"></i> Schedule
+          </button>
+        </div>
+        <div id="collapse-calendar" class="accordion-collapse collapse show" data-bs-parent="#accordion-calendar">
+          <div class="accordion-body bg-gray-800 text-white schedule-wrapper" style="display: flex;overflow-x: auto;">
+            <?php $classnyak->showCalendar(date('m'), date('Y')) ?>
+          </div>
+        </div>
+      </div>
     </div>
-    <h1 class="page-header"></h1>  
-    <div class="accordion" id="accordiontwo">
+    <!-- <div class="wrapper-info-mesin">
+	   <?php // $classnyak->machine_list() ?> 
+    </div>
+    <h1 class="page-header"></h1> -->  
+    <!-- <div class="accordion" id="accordiontwo">
       <div class="accordion-item border-0">
         <div class="accordion-header" id="headingOne">
           <button class="accordion-button bg-gray-900 text-white px-3 py-10px pointer-cursor" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
@@ -28,11 +47,11 @@
         </div>
         <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordiontwo">
           <div class="accordion-body bg-gray-800 text-white schedule-wrapper" style="display: flex;overflow-x: auto;">
-            <?php $classnyak->schedule_list() ?>
+            <?php // $classnyak->schedule_list() ?>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 </div>
 <script src="<?php echo base_url() ?>assets/assets/plugins/clipboard/dist/clipboard.min.js"></script>
 

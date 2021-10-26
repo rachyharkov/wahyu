@@ -58,34 +58,6 @@
 
 			<div class="navbar-nav">
 				<div class="navbar-item navbar-form">
-					<form action="#" method="POST" name="search">
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" />
-							<button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
-						</div>
-					</form>
-				</div>
-				<div class="navbar-item dropdown">
-					<a href="#" data-bs-toggle="dropdown" class="navbar-link dropdown-toggle icon">
-						<i class="fa fa-bell"></i>
-						<span class="badge">5</span>
-					</a>
-					<div class="dropdown-menu media-list dropdown-menu-end">
-						<div class="dropdown-header">NOTIFICATIONS (5)</div>
-						<a href="javascript:;" class="dropdown-item media">
-							<div class="media-left">
-								<i class="fa fa-envelope media-object bg-gray-500"></i>
-								<i class="fab fa-google text-warning media-object-icon fs-14px"></i>
-							</div>
-							<div class="media-body">
-								<h6 class="media-heading"> New Email From John</h6>
-								<div class="text-muted fs-10px">2 hour ago</div>
-							</div>
-						</a>
-						<div class="dropdown-footer text-center">
-							<a href="javascript:;" class="text-decoration-none">View more</a>
-						</div>
-					</div>
 				</div>
 				<div class="navbar-item navbar-user dropdown">
 				<a href="#" class="navbar-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
@@ -130,12 +102,6 @@
 							<a href="<?= base_url() ?>Setting_app" class="menu-link">
 								<div class="menu-icon"><i class="fa fa-cog"></i></div>
 								<div class="menu-text">Settings App</div>
-							</a>
-						</div>
-						<div class="menu-item pb-5px">
-							<a href="javascript:;" class="menu-link">
-								<div class="menu-icon"><i class="fa fa-question-circle"></i></div>
-								<div class="menu-text"> About Application</div>
 							</a>
 						</div>
 						<div class="menu-divider m-0"></div>
@@ -212,70 +178,6 @@
 
 	<!-- isi -->
 	<?php echo $contents ?>
-
-	<div class="theme-panel">
-		<a href="javascript:;" data-toggle="theme-panel-expand" class="theme-collapse-btn"><i class="fa fa-cog"></i></a>
-		<div class="theme-panel-content" data-scrollbar="true" data-height="100%">
-			<h5>App Settings</h5>
-			<div class="theme-list">
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-red" data-theme="red" data-theme-file="assets/assets/css/transparent/theme/red.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Red">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-pink" data-theme="pink" data-theme-file="assets/assets/css/transparent/theme/pink.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Pink">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-orange" data-theme="orange" data-theme-file="assets/assets/css/transparent/theme/orange.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Orange">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-yellow" data-theme="yellow" data-theme-file="assets/assets/css/transparent/theme/yellow.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Yellow">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-lime" data-theme="lime" data-theme-file="assets/assets/css/transparent/theme/lime.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Lime">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-green" data-theme="green" data-theme-file="assets/assets/css/transparent/theme/green.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Green">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-teal" data-theme="teal" data-theme-file="assets/assets/css/transparent/theme/teal.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Teal">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-cyan" data-theme="cyan" data-theme-file="assets/assets/css/transparent/theme/cyan.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Cyan">&nbsp;</a></div>
-				<div class="theme-list-item active"><a href="javascript:;" class="theme-list-link bg-blue" data-theme="default" data-theme-file="" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Default">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-purple" data-theme="purple" data-theme-file="assets/assets/css/transparent/theme/purple.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Purple">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-indigo" data-theme="indigo" data-theme-file="assets/assets/css/transparent/theme/indigo.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Indigo">&nbsp;</a></div>
-				<div class="theme-list-item"><a href="javascript:;" class="theme-list-link bg-black" data-theme="black" data-theme-file="assets/assets/css/transparent/theme/black.min.css" data-toggle="theme-selector" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-container="body" data-bs-title="Black">&nbsp;</a></div>
-			</div>
-
-			<div class="theme-panel-divider"></div>
-			<div class="row mt-10px align-items-center">
-				<div class="col-8 control-label  fw-bold">Header Fixed</div>
-				<div class="col-4 d-flex">
-					<div class="form-check form-switch ms-auto mb-0">
-						<input type="checkbox" class="form-check-input" name="app-header-fixed" id="appHeaderFixed" value="1" checked />
-						<label class="form-check-label" for="appHeaderFixed">&nbsp;</label>
-					</div>
-				</div>
-			</div>
-			<div class="row mt-10px align-items-center">
-				<div class="col-8 control-label  fw-bold">Sidebar Fixed</div>
-				<div class="col-4 d-flex">
-					<div class="form-check form-switch ms-auto mb-0">
-						<input type="checkbox" class="form-check-input" name="app-sidebar-fixed" id="appSidebarFixed" value="1" checked />
-						<label class="form-check-label" for="appSidebarFixed">&nbsp;</label>
-					</div>
-				</div>
-			</div>
-			<div class="row mt-10px align-items-center">
-				<div class="col-8 control-label  fw-bold">Sidebar Grid</div>
-				<div class="col-4 d-flex">
-					<div class="form-check form-switch ms-auto mb-0">
-						<input type="checkbox" class="form-check-input" name="app-sidebar-grid" id="appSidebarGrid" value="1" />
-						<label class="form-check-label" for="appSidebarGrid">&nbsp;</label>
-					</div>
-				</div>
-			</div>
-			<div class="row mt-10px align-items-center">
-				<div class="col-md-8 control-label  fw-bold">Gradient Enabled</div>
-				<div class="col-md-4 d-flex">
-					<div class="form-check form-switch ms-auto mb-0">
-						<input type="checkbox" class="form-check-input" name="app-gradient-enabled" id="appGradientEnabled" value="1" />
-						<label class="form-check-label" for="appGradientEnabled">&nbsp;</label>
-					</div>
-				</div>
-			</div>
-			<div class="theme-panel-divider"></div>
-
-
-			<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top" data-toggle="scroll-to-top"><i class="fa fa-angle-up"></i></a>
-
-		</div>
-	</div>
 
 
 	<script src="<?= base_url() ?>assets/assets/js/vendor.min.js" type="beba54df5f87d24c2458d535-text/javascript"></script>
