@@ -40,8 +40,7 @@
 
 <button type="button" class="btn btn-info list-data mb-15px"><i class="fas fa-undo"></i> Kembali</button>
 
-<?php 
-	
+<?php 	
 	if ($action == 'form_update_action') {
 		?>
 		<form id="<?php echo $action; ?>">
@@ -243,7 +242,8 @@
 			if (step >= 3) {
 				$('.btn-action-group').html(`
 				<button type="button" class="btn btn-action btn-warning btn-prev"><i class="fas fa-chevron-left"></i> Sebelumnya</button> 
-				<button type="submit" class="btn btn-action btn-danger btn-submit"><i class="fas fa-save"></i> Simpan</button> 
+				<button type="submit" action="save" class="btn btn-action btn-danger btn-submit"><i class="fas fa-save"></i> Simpan</button>
+				<button type="submit" action="savethenproduction" class="btn btn-action btn-danger btn-submit"><i class="fas fa-save"></i> Simpan dan Produksi</button>
 				`)
 			}
 

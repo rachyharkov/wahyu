@@ -22,9 +22,11 @@ class Produksi extends CI_Controller
     {
         is_allowed($this->uri->segment(1),null);
         $produksi = $this->Produksi_model->get_all();
+
         $data = array(
             'produksi_data' => $produksi,
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+            'kode_order' => $this->session->flashdata('kode_order'),
             'classnyak' => $this
         );
         $this->template->load('template','produksi/produksi_wrapper', $data);
@@ -148,7 +150,7 @@ class Produksi extends CI_Controller
             'kd_order' => $kd_order,
     		'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.$this->input->post('jam_awal', TRUE).':00',
     		'total_barang_jadi' => $this->input->post('totalproductions',TRUE),
-    		'priority' => 'HIGH',
+    		'priority' => $this->input->post('priority',TRUE),
             'status' => 'READY',
             'rencana_selesai' => $this->input->post('rencana_selesai',TRUE).' '.$this->input->post('jam_akhir', TRUE).':00',
             'aktual_selesai' => null,
@@ -467,6 +469,19 @@ class Produksi extends CI_Controller
 
                 echo json_encode($arr);
             } else {
+
+                $op = $detect->priority;
+                $badge = '';
+                if ($op == 0) {
+                    $badge = '<label class="badge bg-success">Biasa</label>';
+                }
+                if ($op == 1) {         
+                    $badge = '<label class="badge bg-warning">Urgent</label>';
+                }
+                if ($op == 2) {
+                    $badge = '<label class="badge bg-danger">Top Urgent</label>';
+                 
+                }
                 $data = '
                     <b>'.$detect->kd_order.'</b>
                     <table class="table table-sm table-hover">
@@ -483,7 +498,7 @@ class Produksi extends CI_Controller
                         <tr>
                             <td>Prioritas</td>
                             <td>:</td>
-                            <td><label class="badge bg-purple">'.$detect->priority.'</label></td>
+                            <td>'.$badge.'</td>
                         </tr>
                         <tr>
                             <td>Keterangan</td>
@@ -491,11 +506,12 @@ class Produksi extends CI_Controller
                             <td>'.$detect->keterangan.'</td>
                         </tr>
                     </table>
-                    <a href="#" class="btn btn-green btn-sm" style="width: 100%;">Sketsa</a>
+                    <a href="#modal-dialog-sketch-preview" picture="'.$detect->attachment.'" class="btn btn-green btn-sm sketsa_preview" style="width: 100%;" data-bs-toggle="modal">Sketsa</a>
                 ';
                 $arr = array(
                     'status' => 'ok',
-                    'message' => $data
+                    'message' => $data,
+                    'priority' => $op
                 );
 
                 echo json_encode($arr);

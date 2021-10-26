@@ -24,6 +24,7 @@
 </style>
 
 <form id="<?php echo $action; ?>" method="post">
+	<input type="hidden" class="form-control masked-input-date priority" name="priority" id="priority" />
 	<div class="row">
 		<div class="row mb-15px">
 			<label class="form-label col-form-label col-md-3">Kode Order</label>
@@ -72,7 +73,7 @@
 					</div>
 				</div>	
 
-				<div class="row mb-15px">
+				<!-- <div class="row mb-15px">
 					<div class="ol-md-3"></div>
 					<div class="col-md-9">
 						<div class="form-check form-switch">
@@ -80,7 +81,7 @@
 						  	<label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
 						</div>
 					</div>
-				</div>	
+				</div> -->	
 			</div>
 			<div class="col-md-3">
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -803,7 +804,7 @@
 		});
 
 		//user is "finished typing," do something
-		function doneTyping () {
+		function doneTyping() {
 		    var id = $('#kode_order').val()
 
 	    	$.ajax({
@@ -822,6 +823,7 @@
 		                $('#smart_assist_message').html(dt.message)
 		                $('#smart_assist_recommendation').html("")
 		                $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button><button type="button" class="btn btn-success btn-next">Konfirmasi</button>')
+		                $('#priority').val(dt.priority)
                 	} else {
                 		// alert('no!')
                 		$('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')

@@ -15,6 +15,8 @@
         </div>
     </div>
 </div>
+
+
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
@@ -189,6 +191,7 @@
                 if ($(this).valid) return false;
 
                 var a = this
+                var action = $(document.activeElement).attr('action')
 
                 Swal.fire({
                   title: 'Konfirmasi Tindakan',
@@ -200,32 +203,67 @@
                   confirmButtonText: 'Yes'
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    dataString = $("#form_create_action").serialize();
-                    $.ajax({
-                        type: "POST",
-                        url: "<?php echo base_url() ?>orders/create_action",
-                        data:new FormData(a), //penggunaan FormData
-                        processData:false,
-                        contentType:false,
-                        cache:false,
-                        async:false,
-                        success: function(data){
-                            Swal.fire({
-                              icon: 'success',
-                              title: "Sukses",
-                              text: 'Data orders berhasil tercatat'
-                            })
-                            $('#panel-body').html(data);
-                            changewindowtitle('List Data orders')
-                        },
-                        error: function(error) {
-                            Swal.fire({
-                              icon: 'error',
-                              title: "Oops!",
-                              text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
-                            })
-                        }
-                    });
+
+                    if (action == 'save') {
+                        $.ajax({
+                            type: "POST",
+                            url: "<?php echo base_url() ?>orders/create_action",
+                            data:new FormData(a), //penggunaan FormData
+                            processData:false,
+                            contentType:false,
+                            cache:false,
+                            async:false,
+                            success: function(data){
+                            
+                                Swal.fire({
+                                  icon: 'success',
+                                  title: "Sukses",
+                                  text: 'Data orders berhasil tercatat'
+                                })
+                                $('#panel-body').html(data);
+                                changewindowtitle('List Data orders')
+                            },
+                            error: function(error) {
+                                Swal.fire({
+                                  icon: 'error',
+                                  title: "Oops!",
+                                  text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                                })
+                            }
+                        });
+                    }
+
+                    if (action == 'savethenproduction') {
+                        $.ajax({
+                            type: "POST",
+                            url: "<?php echo base_url() ?>orders/create_action_then_production",
+                            data:new FormData(a), //penggunaan FormData
+                            processData:false,
+                            contentType:false,
+                            cache:false,
+                            async:false,
+                            success: function(data){
+                                // alert(data)
+                                var dt = JSON.parse(data)
+                                Swal.fire({
+                                  icon: 'success',
+                                  title: "Sukses",
+                                  text: 'Data orders berhasil tercatat, sedang mengarahkan ke form tambah produksi...'
+                                })
+                                window.location.href = '<?php echo base_url() ?>orders/redirect/productionaddform/' + dt.kode_order
+                            
+                            },
+                            error: function(error) {
+                                Swal.fire({
+                                  icon: 'error',
+                                  title: "Oops!",
+                                  text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                                })
+                            }
+                        }); 
+                    }
+
+                    // dataString = $("#form_create_action").serialize() + "&action=" + action;
 
                   }
                 })
@@ -281,5 +319,4 @@
                 })
 
             })
-
         </script>
