@@ -40,6 +40,12 @@ class Produksi_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_schedule()
+    {
+        $year = date('Y');
+        return $this->db->query("SELECT * FROM `produksi` WHERE date(tanggal_produksi) >= '01-01-".$year." 00:00:00'; ")->result();
+    }
+
     // get data by id
     function get_by_id($id)
     {
