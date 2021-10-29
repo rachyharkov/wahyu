@@ -1,8 +1,22 @@
+<?php
+$title = ''; 
+if ($action == 'create') {
+    $title = 'Tambah Data Order';
+}
+
+if ($action == 'waiting') {
+    $title = 'Waiting Data Order';
+}
+
+if ($action == null) {
+    $title = 'List Data Order';
+}
+?>
 <div id="content" class="app-content">
-    <h1 class="page-header">KELOLA DATA ORDERS</h1>  
+    <h1 class="page-header">MY ORDER</h1>  
     <div class="panel panel-inverse">
       <div class="panel-heading">
-        <h4 class="panel-title panel-title-orders">List Data orders </h4>
+        <h4 class="panel-title panel-title-orders"><?php echo $title ?></h4>
             <div class="panel-heading-btn">
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
                 <a href="javascript:;" class="btn btn-xs btn-icon btn-success btn-loading" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -11,7 +25,19 @@
             </div>
             </div>
         <div class="panel-body" id="panel-body">
-            <?php $classnyak->list() ?>
+            <?php 
+            if ($action == 'create') {
+                $classnyak->create();
+            }
+
+            if ($action == 'waiting') {
+                $classnyak->waiting();
+            }
+
+            if ($action == null) {
+                $classnyak->list();
+            }
+            ?>
         </div>
     </div>
 </div>
@@ -65,7 +91,8 @@
                     url: "<?php echo base_url() ?>orders/create",
                     success: function(data){
                         $('#panel-body').html(data);
-                        changewindowtitle('Tambah Order Baru - Identitas')
+                        changewindowtitle('Form Order Baru')
+                        $('.page-header').text('Form Order Baru - Customer')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -86,6 +113,7 @@
                     success: function(data){
                         $('#panel-body').html(data);
                         changewindowtitle('List Data orders')
+                        $('.page-header').text('My Order')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -318,5 +346,83 @@
                   }
                 })
 
+            })
+
+            $(document).on('click','.read_waiting_data', function() {
+
+                const id = $(this).attr('id')
+                $('.btn-loading').click()
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() ?>orders/read_w_order",
+                    data: {
+                        id:id,
+                    },
+                    success: function(data){
+                        $('#panel-body').html(data);
+                        changewindowtitle('Read data orders')
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
+            $(document).on('click','#form_waiting_data', function() {
+                e.preventDefault()
+                
+                var a = this
+
+                if ($(this).valid) return false;
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() ?>orders/update_waiting_action",
+                    data:new FormData(a), //penggunaan FormData
+                    processData:false,
+                    contentType:false,
+                    cache:false,
+                    async:false,
+                    success: function(data){
+                        Swal.fire({
+                          icon: 'success',
+                          title: action + "Sukses",
+                          text: 'Data orders berhasil di ' + action
+                        })
+                        $('#panel-body').html(data);
+                        changewindowtitle('Read data orders')
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
+            $(document).on('click','.waiting-list-data', function(e) {
+                e.preventDefault()
+                $('.btn-loading').click()
+                $.ajax({
+                    type: "GET",
+                    url: "<?php echo base_url() ?>orders/waiting",
+                    success: function(data){
+                        $('#panel-body').html(data);
+                        changewindowtitle('Waiting orders')
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
             })
         </script>

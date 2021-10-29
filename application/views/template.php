@@ -14,6 +14,7 @@
 <link href="<?= base_url() ?>assets/assets/plugins/jvectormap-next/jquery-jvectormap.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/nvd3/build/nv.d3.css" rel="stylesheet" />
 <link href="<?= base_url() ?>assets/assets/plugins/select-picker/dist/picker.min.css" rel="stylesheet" />
+<link href="<?= base_url() ?>assets/assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
 
 <!-- data table -->
 <link href="<?= base_url() ?>assets/assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />

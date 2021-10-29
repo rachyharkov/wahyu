@@ -158,6 +158,13 @@ class Produksi_model extends CI_Model
             ")->result();
     }
 
+    function find_produksi($machine, $month, $year)
+    {
+        return $this->db->query("
+            SELECT * FROM `produksi` WHERE machine_use LIKE '%".$machine."%' month(tanggal_produksi) = '".$month."' AND year(tanggal_produksi) >= '".$year."';
+            ")->result();
+    }
+
 }
 
 /* End of file Produksi_model.php */

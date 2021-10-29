@@ -42,6 +42,20 @@
 </style>
 
 <div id="content" class="app-content">
+    <div class="accordion" id="accordion-work-calendar">
+      <div class="accordion-item border-0">
+        <div class="accordion-header" id="headingTne">
+          <button class="accordion-button bg-gray-900 text-white px-3 py-10px pointer-cursor" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-work-calendar">
+            <i class="fa fa-circle fa-fw text-blue me-2 fs-8px"></i> Calendar Work
+          </button>
+        </div>
+        <div id="collapse-work-calendar" class="accordion-collapse collapse show" data-bs-parent="#accordion-work-calendar">
+          <div class="accordion-body bg-gray-800 text-white">
+            
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="accordion" id="accordion-calendar">
       <div class="accordion-item border-0">

@@ -216,7 +216,11 @@
             levelId: levelId,
           },
           success: function() {
-            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
+            Swal.fire({
+              icon: 'success',
+              title: "Berhasil!",
+              text: 'Perizinan berhasil diupdate'
+            })
           }
 
         });
@@ -234,7 +238,11 @@
             levelId: levelId,
           },
           success: function() {
-            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
+            Swal.fire({
+              icon: 'success',
+              title: "Berhasil!",
+              text: 'Perizinan berhasil diupdate'
+            })
           }
 
         });
@@ -252,7 +260,11 @@
             levelId: levelId,
           },
           success: function() {
-            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
+            Swal.fire({
+              icon: 'success',
+              title: "Berhasil!",
+              text: 'Perizinan berhasil diupdate'
+            })
           }
 
         });
@@ -270,7 +282,11 @@
             levelId: levelId,
           },
           success: function() {
-            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
+            Swal.fire({
+              icon: 'success',
+              title: "Berhasil!",
+              text: 'Perizinan berhasil diupdate'
+            })
           }
 
         });
@@ -288,7 +304,11 @@
             levelId: levelId,
           },
           success: function() {
-            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
+            Swal.fire({
+              icon: 'success',
+              title: "Berhasil!",
+              text: 'Perizinan berhasil diupdate'
+            })
           }
 
         });
@@ -306,7 +326,11 @@
             levelId: levelId,
           },
           success: function() {
-            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
+            Swal.fire({
+              icon: 'success',
+              title: "Berhasil!",
+              text: 'Perizinan berhasil diupdate'
+            })
           }
 
         });

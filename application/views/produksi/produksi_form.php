@@ -104,7 +104,7 @@
 							<th hidden>Used For</th>
 							<th>Throughput</th>
 							<th>Shift</th>
-							<th>Material Processed</th>
+							<th hidden>Material Processed</th>
 							<th>Products</th>
 							<th>Time</th>
 							<th hidden="hidden">T. Minutes</th>
@@ -115,7 +115,7 @@
 					<tfoot>
 						<tr>
 							<td colspan="3" style="text-align: right; font-size: 14px;"><b>Total</b></td>
-							<td><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
+							<td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
 							<td><input type="text" name="totalproductions" class="form-control-plaintext totalproductions"></td>
 							<td><input type="text" name="predictiondone" class="form-control-plaintext predictiondone"></td>
 							<td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>

@@ -28,6 +28,13 @@ class Orders_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_by_thisuser($userid)
+    {
+        $this->db->where('user_id',$userid);
+        $this->db->order_by($this->id, $this->order);
+        return $this->db->get($this->table)->result();   
+    }
+
     function get_by_kd_orders($kd_order, $status = null)
     {
         $where = array(

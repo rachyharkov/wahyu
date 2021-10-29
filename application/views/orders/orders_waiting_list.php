@@ -5,8 +5,6 @@
                                 <div class='row'>
                                     <div class='col-md-9'>
                                         <div style="padding-bottom: 10px;">
-   <button class="btn btn-danger btn-sm tambah_data"><i class="fas fa-plus-square" aria-hidden="true"></i> Tambah Data</button>
-                                                <a class="btn btn-success btn-sm" href="<?php echo base_url().'orders/excel' ?>"><i class="far fa-file-excel" aria-hidden="true"></i> Export Ms Excel</a>
             </div>
         </div>
     </div>    
@@ -75,9 +73,9 @@
         } ?></td>
 		<td><?php echo $orders->tanggal_order ?></td>
 		<td style="text-align:center" width="200px">
-			<button type="button" class="btn btn-success btn-sm read_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-primary btn-sm update_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-danger btn-sm delete_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-info btn-sm read_waiting_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-success btn-sm approve_waiting_data" act="approve" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-check" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-danger btn-sm reject_waiting_data" act="reject" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-times" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-info btn-sm copy_code" id="<?php echo $orders->kd_order ?>"  ><i class="fas fa-copy"></i></button>
 		</td>
 	</tr>

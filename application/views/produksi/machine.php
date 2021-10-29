@@ -27,7 +27,7 @@
 			<label class="form-check-label" for="shift2machine<?php echo $value->mesin_id ?>">2</label>
 		</div>
 	</td>
-	<td>
+	<td hidden>
 		<input type="number" name="materialallocated[]" class="form-control materialallocated readonly" readonly value="0">
 	</td>
 	<td>

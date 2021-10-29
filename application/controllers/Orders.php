@@ -11,6 +11,7 @@ class Orders extends CI_Controller
         parent::__construct();
         is_login();
         $this->load->model('Orders_model');
+        $this->load->model('Bagian_model');
         $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
     }
@@ -18,8 +19,12 @@ class Orders extends CI_Controller
     public function index()
     {
         is_allowed($this->uri->segment(1),null);
+
+        $action = $this->input->get('action');
+        
         $data = array(
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+            'action' => $action,
             'classnyak' => $this
         );
         $this->template->load('template','orders/orders_wrapper', $data);
@@ -28,11 +33,78 @@ class Orders extends CI_Controller
     public function list()
     {
         is_allowed($this->uri->segment(1),null);
-        $orders = $this->Orders_model->get_all();
+        $orders = $this->Orders_model->get_all_by_thisuser($this->session->userdata('userid'));
         $data = array(
             'orders_data' => $orders,
         );
         $this->load->view('orders/orders_list', $data);
+    }
+
+    public function waiting()
+    {
+        is_allowed($this->uri->segment(1),null);
+        $orders = $this->Orders_model->get_all_tertentu('WAITING');
+        $data = array(
+            'orders_data' => $orders,
+        );
+        $this->load->view('orders/orders_waiting_list', $data);
+    }
+
+    public function update_waiting_action($id, $action)
+    {
+        $id = $this->input->post('id');
+        $action = $this->input->post('action');
+
+        if ($action == 'approve') {
+            $this->approve($id);
+        }
+
+        if ($action == 'reject') {
+            $this->reject($id);
+        }
+    }
+
+    public function approve($id)
+    {
+        $updatedataorder = array(
+            'status' => 'APPROVED',
+            'approved_by' => $this->session->userdata('userid') 
+        );
+
+        $this->Orders_model->update($id, $updatedataorder);
+        $this->waiting();
+    }
+
+    public function reject($id)
+    {
+        $updatedataorder = array(
+            'status' => 'REJECTED',
+            'approved_by' => $this->session->userdata('userid')
+        );
+
+        $this->Orders_model->update($id, $updatedataorder);
+        $this->waiting();
+    }
+
+    public function read_w_order() 
+    {
+        is_allowed($this->uri->segment(1),'read');
+        $id = $this->input->post('id');
+        $row = $this->Orders_model->get_by_id(decrypt_url($id));
+        if ($row) {
+            $data = array(
+                'order_id' => $row->order_id,
+                'nama_pemesan' => $row->nama_pemesan,
+                'bagian' => $row->bagian,
+                'keterangan' => $row->keterangan,
+                'priority' => $row->priority,
+                'approved_by' => $row->approved_by,
+                'attachment' => $row->attachment,
+            );
+            $this->load->view('orders/orders_waiting_read', $data);
+        } else {
+            echo 'not found';
+        }
     }
 
     public function read() 
@@ -42,14 +114,14 @@ class Orders extends CI_Controller
         $row = $this->Orders_model->get_by_id(decrypt_url($id));
         if ($row) {
             $data = array(
-		'order_id' => $row->order_id,
-		'nama_pemesan' => $row->nama_pemesan,
-		'bagian' => $row->bagian,
-		'keterangan' => $row->keterangan,
-		'priority' => $row->priority,
-		'approved_by' => $row->approved_by,
-		'attachment' => $row->attachment,
-	    );
+        		'order_id' => $row->order_id,
+        		'nama_pemesan' => $row->nama_pemesan,
+        		'bagian' => $row->bagian,
+        		'keterangan' => $row->keterangan,
+        		'priority' => $row->priority,
+        		'approved_by' => $row->approved_by,
+        		'attachment' => $row->attachment,
+    	    );
             $this->load->view('orders/orders_read', $data);
         } else {
             echo 'not found';
@@ -65,11 +137,19 @@ class Orders extends CI_Controller
     	    'order_id' => set_value('order_id'),
     	    'nama_pemesan' => set_value('nama_pemesan'),
     	    'bagian' => set_value('bagian'),
+            'no_kontak' => set_value('no_kontak'),
+
+            'nama_barang' => set_value('nama_barang'),
+            'qty' => set_value('qty'),
+            'due_date' => set_value('due_date'),
+            'note' => set_value('note'),
+
     	    'keterangan' => set_value('keterangan'),
     	    'priority' => set_value('priority'),
     	    'approved_by' => set_value('approved_by'),
     	    'attachment' => set_value('attachment'),
-            'datee' => date('Y-m-d h:m:s')
+            'datee' => date('Y-m-d h:m:s'),
+            'bagian_list' => $this->Bagian_model->get_all()
     	);
         $this->load->view('orders/orders_form', $data);
     }
@@ -105,10 +185,19 @@ class Orders extends CI_Controller
                 'kd_order' => $kode,
                 'bagian' => $this->input->post('bagian',TRUE),
                 'keterangan' => $this->input->post('keterangan',TRUE),
+
+                'nama_barang' => $this->input->post('nama_barang',TRUE),
+                'qty' => $this->input->post('qty',TRUE),
+                'due_date' => $this->input->post('due_date',TRUE),
+                'note' => $this->input->post('note',TRUE),
+                'no_kontak' => $this->input->post('no_kontak',TRUE),
+
                 'priority' => $this->input->post('priority',TRUE),
-                'approved_by' => $this->input->post('approved_by',TRUE),
+                'approved_by' => 'NULL',
                 'attachment' => $uploadData['file_name'],
-                'status' => 'READY'
+                'status' => 'WAITING',
+
+                'user_id' => $this->session->userdata('userid')
             );
             // print_r($data);
 
@@ -126,7 +215,6 @@ class Orders extends CI_Controller
         $bagian = $this->input->post('bagian',TRUE);
         $keterangan = $this->input->post('keterangan',TRUE);
         $priority = $this->input->post('priority',TRUE);
-        $approved_by = $this->input->post('approved_by',TRUE);
         $kode = $this->Orders_model->buat_kode();
 
         $this->load->library('upload'); //call library upload 
@@ -153,10 +241,19 @@ class Orders extends CI_Controller
                 'kd_order' => $kode,
                 'bagian' => $bagian,
                 'keterangan' => $keterangan,
+
+                'nama_barang' => $this->input->post('nama_barang',TRUE),
+                'qty' => $this->input->post('qty',TRUE),
+                'due_date' => $this->input->post('due_date',TRUE),
+                'note' => $this->input->post('note',TRUE),
+                'no_kontak' => $this->input->post('no_kontak',TRUE),
+
                 'priority' => $priority,
-                'approved_by' => $approved_by,
+                'approved_by' => 'NULL',
                 'attachment' => $uploadData['file_name'],
-                'status' => 'READY'
+                'status' => 'WAITING',
+
+                'user_id' => $this->session->userdata('userid')
             );
             // print_r($data);
 
@@ -192,8 +289,14 @@ class Orders extends CI_Controller
         		'nama_pemesan' => set_value('nama_pemesan', $row->nama_pemesan),
         		'bagian' => set_value('bagian', $row->bagian),
         		'keterangan' => set_value('keterangan', $row->keterangan),
+
+                'nama_barang' => set_value('nama_barang', $row->nama_barang),
+                'qty' => set_value('qty', $row->qty),
+                'due_date' => set_value('due_date', $row->due_date),
+                'note' => set_value('note', $row->note),
+                'no_kontak' => set_value('no_kontak', $row->no_kontak),
+
         		'priority' => set_value('priority', $row->priority),
-        		'approved_by' => set_value('approved_by', $row->approved_by),
         		'attachment' => set_value('attachment', $row->attachment),
     	    );
             $this->load->view('orders/orders_form', $data);
@@ -232,6 +335,13 @@ class Orders extends CI_Controller
                 'nama_pemesan' => $this->input->post('nama_pemesan',TRUE),
                 'bagian' => $this->input->post('bagian',TRUE),
                 'keterangan' => $this->input->post('keterangan',TRUE),
+
+                'nama_barang' => $this->input->post('nama_barang',TRUE),
+                'qty' => $this->input->post('qty',TRUE),
+                'due_date' => $this->input->post('due_date',TRUE),
+                'note' => $this->input->post('note',TRUE),
+                'no_kontak' => $this->input->post('no_kontak',TRUE),
+
                 'priority' => $this->input->post('priority',TRUE),
                 'approved_by' => $this->input->post('approved_by',TRUE),
                 'attachment' => $uploadData['file_name'],
