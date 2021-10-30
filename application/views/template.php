@@ -150,7 +150,16 @@
 	                $subMenu = $this->db->query($querySubMenu)->result_array();
 	            ?>
 	            <?php foreach ($subMenu as $sm) : ?>
-                <a href="<?= base_url($sm['url']) ?>" class="menu-link"><div class="menu-text"><?= $sm['nama_sub_menu'] ?></div></a>
+                <a href="<?= base_url($sm['url']) ?>" class="menu-link">
+                	<div class="menu-text"><?= $sm['nama_sub_menu'] ?></div>
+                	<?php
+                	if($sm['nama_sub_menu'] == 'Menunggu Persetujuan') {
+                		?>
+                			<div class="menu-badge count-waiting-order"><?php echo $this->db->where('status', 'WAITING')->get('orders')->num_rows() ?></div>
+                		<?php
+                	}
+                	?>
+                </a>
               <?php endforeach; ?>
 							</div>
 						</div>
@@ -243,6 +252,13 @@
   });
   //ckeditor
   $('#wysihtml5').wysihtml5();
+
+  setInterval(function(){
+      $.get("<?php echo base_url() ?>orders/count_waiting_orders", function(data){
+          data = $.parseJSON(data);
+          $('.count-waiting-order').html(data)
+      });
+  }, 1000);
 
 </script>
 

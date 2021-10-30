@@ -30,24 +30,24 @@
 		<td><?= $no++?></td>
         <td><?php echo $orders->kd_order ?></td>
 		<td><?php echo $orders->nama_pemesan ?></td>
-		<td><?php echo $orders->bagian ?></td>
+		<td><?php echo $classnyak->getbagiandata($orders->bagian)->nama_bagian ?></td>
 		<td><?php
 
         $op = $orders->priority;
 
-        if ($op == 0) {
+        if ($op == 1) {
             ?>
             <label class="badge bg-success">Biasa</label>
             <?php
         }
 
-        if ($op == 1) {
+        if ($op == 2) {
             ?>
             <label class="badge bg-warning">Urgent</label>
             <?php
         }
 
-        if ($op == 2) {
+        if ($op == 3) {
             ?>
             <label class="badge bg-danger">Top Urgent</label>
             <?php

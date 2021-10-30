@@ -216,11 +216,7 @@
             levelId: levelId,
           },
           success: function() {
-            Swal.fire({
-              icon: 'success',
-              title: "Berhasil!",
-              text: 'Perizinan berhasil diupdate'
-            })
+            document.location.href = "<?= base_url('level/role/') ?>" + levelId;
           }
 
         });
@@ -238,11 +234,7 @@
             levelId: levelId,
           },
           success: function() {
-            Swal.fire({
-              icon: 'success',
-              title: "Berhasil!",
-              text: 'Perizinan berhasil diupdate'
-            })
+            
           }
 
         });
@@ -260,11 +252,7 @@
             levelId: levelId,
           },
           success: function() {
-            Swal.fire({
-              icon: 'success',
-              title: "Berhasil!",
-              text: 'Perizinan berhasil diupdate'
-            })
+            
           }
 
         });
@@ -282,11 +270,7 @@
             levelId: levelId,
           },
           success: function() {
-            Swal.fire({
-              icon: 'success',
-              title: "Berhasil!",
-              text: 'Perizinan berhasil diupdate'
-            })
+            
           }
 
         });
@@ -304,11 +288,7 @@
             levelId: levelId,
           },
           success: function() {
-            Swal.fire({
-              icon: 'success',
-              title: "Berhasil!",
-              text: 'Perizinan berhasil diupdate'
-            })
+            
           }
 
         });
@@ -326,11 +306,7 @@
             levelId: levelId,
           },
           success: function() {
-            Swal.fire({
-              icon: 'success',
-              title: "Berhasil!",
-              text: 'Perizinan berhasil diupdate'
-            })
+            
           }
 
         });

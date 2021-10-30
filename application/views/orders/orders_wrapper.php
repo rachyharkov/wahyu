@@ -13,7 +13,7 @@ if ($action == null) {
 }
 ?>
 <div id="content" class="app-content">
-    <h1 class="page-header">MY ORDER</h1>  
+    <h1 class="page-header">ORDER</h1>  
     <div class="panel panel-inverse">
       <div class="panel-heading">
         <h4 class="panel-title panel-title-orders"><?php echo $title ?></h4>
@@ -40,6 +40,48 @@ if ($action == null) {
             ?>
         </div>
     </div>
+</div>
+
+<!-- #modal-dialog -->
+<div class="modal fade" id="modal-dialog-sketch-preview">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Dialog</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- #modal-dialog -->
+<div class="modal fade" id="modal-reject-reason">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form id="reject-form">
+          <div class="modal-header">
+            <h4 class="modal-title">Reject Reason</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+          </div>
+          <div class="modal-body">
+            <label class="form-label mb-15px">Silahkan masukan alasan reject pada kotak dibawah :</label>
+            <textarea class="form-control" id="txtrejectreason" name="txtrejectreason" rows="3" placeholder="Enter your Reject Reason here..." style="border: solid 1px gray; color: gray;"></textarea>
+            <input type="hidden" name="id" id="id" value="">
+          </div>
+          <div class="modal-footer">
+            <p style="color: red;">* Dengan menekan reject, tindakan akan langsung dilakukan</p>
+            <button type="submit" class="btn btn-danger">Reject</button>
+            <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+          </div>
+        </form>
+    </div>
+  </div>
 </div>
 
 
@@ -92,7 +134,6 @@ if ($action == null) {
                     success: function(data){
                         $('#panel-body').html(data);
                         changewindowtitle('Form Order Baru')
-                        $('.page-header').text('Form Order Baru - Customer')
                     },
                     error: function(error) {
                         Swal.fire({
@@ -113,7 +154,7 @@ if ($action == null) {
                     success: function(data){
                         $('#panel-body').html(data);
                         changewindowtitle('List Data orders')
-                        $('.page-header').text('My Order')
+                        
                     },
                     error: function(error) {
                         Swal.fire({
@@ -122,7 +163,7 @@ if ($action == null) {
                           text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
                         })
                     }
-                });
+                })
             })
 
             $(document).on('click','.read_data', function() {
@@ -212,41 +253,104 @@ if ($action == null) {
                 })
             })
 
-            $(document).on('submit','#form_create_action', function(e) {
+            $(document).on('click', '.reject_waiting_data', function() {
+                $('#id').val($(this).attr('id'))
+            })
 
+            $(document).on('submit','#modal-reject-reason', function(e) {
                 e.preventDefault()
                 
                 if ($(this).valid) return false;
 
+                var formData = new FormData($('#reject-form')[0])
+
+                var btnselected = $(document.activeElement)
+
+                btnselected.html('<i class="fas fa-sync fa-spin"></i>').addClass('disabled').attr('disabled')
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() ?>orders/update_approve",
+                    data:formData, //penggunaan FormData
+                    processData:false,
+                    contentType:false,
+                    cache:false,
+                    async:false,
+                    success: function(data){
+                        // alert(data)
+                        $('.modal').modal('hide');
+                        Swal.fire({
+                          icon: 'success',
+                          title: "Sukses",
+                          text: 'Data orders berhasil diupdate'
+                        })
+                        $('#panel-body').html(data);
+                        changewindowtitle('List Data orders')
+                        btnselected.html('<i class="fas fa-sync fa-spin"></i>').removeClass('disabled').removeAttr('disabled')
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
+            $(document).on('submit','#form-approve', function(e) {
+              e.preventDefault()
+                
+                if ($(this).valid) return false;
+
                 var a = this
-                var action = $(document.activeElement).attr('action')
+
+                var btnselected = $(document.activeElement)
+                
+                var owo = 0
+
+                var message = ''
+                $('.approve-check').each(function() {
+                    if (!this.checked) {
+                        owo = 1
+                    }
+                })
+
+                if (owo == 1) {
+                    message = 'Beberapa hal tidak terpenuhi terdeteksi. Dengan menyimpan status approve ini secara otomatis akan me-reject order, pastikan alasan reject sudah terisi.'
+                }
+
+                if (owo == 0) {
+                    message = 'Dengan menyimpan status approve ini secara otomatis akan mengubah status order menjadi "Approved".'
+                }
 
                 Swal.fire({
-                  title: 'Konfirmasi Tindakan',
-                  text: "Yakin disimpan?",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes'
+                    title: 'Konfirmasi Tindakan',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
                 }).then((result) => {
-                  if (result.isConfirmed) {
+                    if (result.isConfirmed) {
 
-                    if (action == 'save') {
+                        btnselected.html('<i class="fas fa-sync fa-spin"></i>').addClass('disabled').attr('disabled')
+
                         $.ajax({
                             type: "POST",
-                            url: "<?php echo base_url() ?>orders/create_action",
+                            url: "<?php echo base_url() ?>orders/update_approve",
                             data:new FormData(a), //penggunaan FormData
                             processData:false,
                             contentType:false,
                             cache:false,
                             async:false,
                             success: function(data){
-                            
+                                // alert(data)
                                 Swal.fire({
                                   icon: 'success',
                                   title: "Sukses",
-                                  text: 'Data orders berhasil tercatat'
+                                  text: 'Data orders berhasil diupdate'
                                 })
                                 $('#panel-body').html(data);
                                 changewindowtitle('List Data orders')
@@ -260,38 +364,58 @@ if ($action == null) {
                             }
                         });
                     }
+                })  
+            })
 
-                    if (action == 'savethenproduction') {
-                        $.ajax({
-                            type: "POST",
-                            url: "<?php echo base_url() ?>orders/create_action_then_production",
-                            data:new FormData(a), //penggunaan FormData
-                            processData:false,
-                            contentType:false,
-                            cache:false,
-                            async:false,
-                            success: function(data){
-                                // alert(data)
-                                var dt = JSON.parse(data)
-                                Swal.fire({
-                                  icon: 'success',
-                                  title: "Sukses",
-                                  text: 'Data orders berhasil tercatat, sedang mengarahkan ke form tambah produksi...'
-                                })
-                                window.location.href = '<?php echo base_url() ?>orders/redirect/productionaddform/' + dt.kode_order
-                            
-                            },
-                            error: function(error) {
-                                Swal.fire({
-                                  icon: 'error',
-                                  title: "Oops!",
-                                  text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
-                                })
-                            }
-                        }); 
-                    }
+            $(document).on('submit','#form_create_action', function(e) {
 
-                    // dataString = $("#form_create_action").serialize() + "&action=" + action;
+                e.preventDefault()
+                
+                if ($(this).valid) return false;
+
+                var a = this
+
+                var btnselected = $(document.activeElement)
+
+                Swal.fire({
+                  title: 'Konfirmasi Tindakan',
+                  text: "Yakin disimpan?",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+
+                    btnselected.html('<i class="fas fa-sync fa-spin"></i>').addClass('disabled').attr('disabled')
+
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url() ?>orders/create_action",
+                        data:new FormData(a), //penggunaan FormData
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(data){
+                        
+                            Swal.fire({
+                              icon: 'success',
+                              title: "Sukses",
+                              text: 'Data orders berhasil tercatat'
+                            })
+                            $('#panel-body').html(data);
+                            changewindowtitle('List Data orders')
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                              icon: 'error',
+                              title: "Oops!",
+                              text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                            })
+                        }
+                    });
 
                   }
                 })
@@ -424,5 +548,12 @@ if ($action == null) {
                         })
                     }
                 });
+            })
+
+            $(document).on('click','.sketsa_preview', function() {
+                var attachment = $(this).attr('picture')
+
+                $('#modal-dialog-sketch-preview').find('.modal-body').html('<img style="width: 100%;" src="<?php echo base_url().'assets/internal' ?>/' + attachment + '"/>')
+
             })
         </script>

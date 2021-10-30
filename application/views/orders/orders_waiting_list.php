@@ -73,10 +73,10 @@
         } ?></td>
 		<td><?php echo $orders->tanggal_order ?></td>
 		<td style="text-align:center" width="200px">
-			<button type="button" class="btn btn-info btn-sm read_waiting_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-success btn-sm approve_waiting_data" act="approve" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-check" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-danger btn-sm reject_waiting_data" act="reject" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-times" aria-hidden="true"></i></button>
-            <button type="button" class="btn btn-info btn-sm copy_code" id="<?php echo $orders->kd_order ?>"  ><i class="fas fa-copy"></i></button>
+            <div class="input-group">
+    			<button type="button" class="btn btn-info btn-sm read_waiting_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-info btn-sm copy_code" id="<?php echo $orders->kd_order ?>"  ><i class="fas fa-copy"></i></button>
+            </div>
 		</td>
 	</tr>
             <?php } ?>

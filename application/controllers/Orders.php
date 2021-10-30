@@ -21,6 +21,12 @@ class Orders extends CI_Controller
         is_allowed($this->uri->segment(1),null);
 
         $action = $this->input->get('action');
+
+        if ($action == 'waiting') {
+            if ($this->session->userdata('level_id') == 219) {
+                redirect('not_access');
+            }
+        }
         
         $data = array(
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
@@ -36,6 +42,7 @@ class Orders extends CI_Controller
         $orders = $this->Orders_model->get_all_by_thisuser($this->session->userdata('userid'));
         $data = array(
             'orders_data' => $orders,
+            'classnyak' => $this
         );
         $this->load->view('orders/orders_list', $data);
     }
@@ -46,22 +53,32 @@ class Orders extends CI_Controller
         $orders = $this->Orders_model->get_all_tertentu('WAITING');
         $data = array(
             'orders_data' => $orders,
+            'action'=> 'waiting'
         );
         $this->load->view('orders/orders_waiting_list', $data);
     }
 
-    public function update_waiting_action($id, $action)
+    public function update_approve()
     {
         $id = $this->input->post('id');
-        $action = $this->input->post('action');
 
-        if ($action == 'approve') {
+        $attachment = $this->input->post('attachmentapprovestatus');
+        $material = $this->input->post('materialavailablestatus');
+
+        $reason = $this->input->post('txtrejectreason');
+
+        if ($attachment && $material) {
             $this->approve($id);
+        } else {
+            $this->reject($id, $reason);
         }
+    }
 
-        if ($action == 'reject') {
-            $this->reject($id);
-        }
+    public function count_waiting_orders()
+    {
+        $count = $this->db->where('status', 'WAITING')->get('orders')->num_rows();
+
+        echo json_encode($count);
     }
 
     public function approve($id)
@@ -75,11 +92,12 @@ class Orders extends CI_Controller
         $this->waiting();
     }
 
-    public function reject($id)
+    public function reject($id, $reason)
     {
         $updatedataorder = array(
             'status' => 'REJECTED',
-            'approved_by' => $this->session->userdata('userid')
+            'approved_by' => $this->session->userdata('userid'),
+            'reject_note' => $reason
         );
 
         $this->Orders_model->update($id, $updatedataorder);
@@ -97,9 +115,18 @@ class Orders extends CI_Controller
                 'nama_pemesan' => $row->nama_pemesan,
                 'bagian' => $row->bagian,
                 'keterangan' => $row->keterangan,
+
+                'nama_barang' => $row->nama_barang,
+                'qty' => $row->qty,
+                'due_date' => $row->due_date,
+                'note' => $row->note,
+                'no_kontak' => $row->no_kontak,
+
                 'priority' => $row->priority,
                 'approved_by' => $row->approved_by,
                 'attachment' => $row->attachment,
+                'status' => $row->status,
+                'reject_note' => $row->reject_note
             );
             $this->load->view('orders/orders_waiting_read', $data);
         } else {
@@ -118,9 +145,18 @@ class Orders extends CI_Controller
         		'nama_pemesan' => $row->nama_pemesan,
         		'bagian' => $row->bagian,
         		'keterangan' => $row->keterangan,
+
+                'nama_barang' => $row->nama_barang,
+                'qty' => $row->qty,
+                'due_date' => $row->due_date,
+                'note' => $row->note,
+                'no_kontak' => $row->no_kontak,
+
         		'priority' => $row->priority,
         		'approved_by' => $row->approved_by,
         		'attachment' => $row->attachment,
+                'status' => $row->status,
+                'reject_note' => $row->reject_note
     	    );
             $this->load->view('orders/orders_read', $data);
         } else {
@@ -197,6 +233,8 @@ class Orders extends CI_Controller
                 'attachment' => $uploadData['file_name'],
                 'status' => 'WAITING',
 
+                'reject_note' => null,
+
                 'user_id' => $this->session->userdata('userid')
             );
             // print_r($data);
@@ -207,64 +245,6 @@ class Orders extends CI_Controller
             echo 'no files for'.$_FILES['attachment']['name'].'???';
         }
         
-    }
-
-    function create_action_then_production() 
-    {
-        $nama_pemesan = $this->input->post('nama_pemesan',TRUE);
-        $bagian = $this->input->post('bagian',TRUE);
-        $keterangan = $this->input->post('keterangan',TRUE);
-        $priority = $this->input->post('priority',TRUE);
-        $kode = $this->Orders_model->buat_kode();
-
-        $this->load->library('upload'); //call library upload 
-
-        if($_FILES['attachment']['name']){
-            $filenamee = 'prodattach-'.date('ymdhms').'-'.substr(sha1(rand()),0,10);
-
-            $config['upload_path']          = './assets/internal'; 
-            $config['allowed_types']        = 'jpg|png|pdf';
-            $config['max_size']             = 10000;
-            $config['file_name']            = $filenamee;
-
-            $_FILES['file']['name'] = $_FILES['attachment']['name'];
-            $_FILES['file']['type'] = $_FILES['attachment']['type'];
-            $_FILES['file']['tmp_name'] = $_FILES['attachment']['tmp_name'];
-            $_FILES['file']['error'] = $_FILES['attachment']['error'];
-            $_FILES['file']['size'] = $_FILES['attachment']['size'];
-            $this->upload->initialize($config);
-            $this->upload->do_upload('file');
-            $uploadData = $this->upload->data();
-            $data = array(
-                'nama_pemesan' => $nama_pemesan,
-                'tanggal_order' => date('Y-m-d h:m:s'),
-                'kd_order' => $kode,
-                'bagian' => $bagian,
-                'keterangan' => $keterangan,
-
-                'nama_barang' => $this->input->post('nama_barang',TRUE),
-                'qty' => $this->input->post('qty',TRUE),
-                'due_date' => $this->input->post('due_date',TRUE),
-                'note' => $this->input->post('note',TRUE),
-                'no_kontak' => $this->input->post('no_kontak',TRUE),
-
-                'priority' => $priority,
-                'approved_by' => 'NULL',
-                'attachment' => $uploadData['file_name'],
-                'status' => 'WAITING',
-
-                'user_id' => $this->session->userdata('userid')
-            );
-            // print_r($data);
-
-            $this->Orders_model->insert($data);
-            
-            $a = array(
-                'kode_order' => $kode
-            );
-
-            echo json_encode($a);
-        }
     }
 
     public function redirect($towhere, $data = null)
@@ -298,6 +278,7 @@ class Orders extends CI_Controller
 
         		'priority' => set_value('priority', $row->priority),
         		'attachment' => set_value('attachment', $row->attachment),
+                'bagian_list' => $this->Bagian_model->get_all()
     	    );
             $this->load->view('orders/orders_form', $data);
         } else {
@@ -345,6 +326,8 @@ class Orders extends CI_Controller
                 'priority' => $this->input->post('priority',TRUE),
                 'approved_by' => $this->input->post('approved_by',TRUE),
                 'attachment' => $uploadData['file_name'],
+
+                'status' => 'WAITING'
             );
             // print_r($data);
 
@@ -438,6 +421,12 @@ class Orders extends CI_Controller
 
         xlsEOF();
         exit();
+    }
+
+    public function getbagiandata($id)
+    {
+        $data = $this->Bagian_model->get_by_id($id);
+        return $data;
     }
 
 }
