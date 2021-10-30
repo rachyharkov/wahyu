@@ -53,7 +53,8 @@ class Orders extends CI_Controller
         $orders = $this->Orders_model->get_all_tertentu('WAITING');
         $data = array(
             'orders_data' => $orders,
-            'action'=> 'waiting'
+            'action'=> 'waiting',
+            'classnyak' => $this
         );
         $this->load->view('orders/orders_waiting_list', $data);
     }
@@ -65,12 +66,39 @@ class Orders extends CI_Controller
         $attachment = $this->input->post('attachmentapprovestatus');
         $material = $this->input->post('materialavailablestatus');
 
+        $kd_order = $this->input->post('kd_order');
         $reason = $this->input->post('txtrejectreason');
 
         if ($attachment && $material) {
-            $this->approve($id);
+            $arr = array(
+                'response' => 2,
+                'kd_order' => $kd_order
+            );
+
+            echo json_encode($arr);
         } else {
-            $this->reject($id, $reason);
+
+            $updatedataorder = array(
+                'status' => 'REJECTED',
+                'approved_by' => $this->session->userdata('userid'),
+                'reject_note' => $reason
+            );
+
+            $this->Orders_model->update($id, $updatedataorder);
+
+            $orders = $this->Orders_model->get_all_tertentu('WAITING');
+            $data = array(
+                'orders_data' => $orders,
+                'action'=> 'waiting',
+                'classnyak' => $this
+            );
+
+            $arr = array(
+                'response' => 1,
+                'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+            );
+
+            echo json_encode($arr);
         }
     }
 
@@ -81,16 +109,16 @@ class Orders extends CI_Controller
         echo json_encode($count);
     }
 
-    public function approve($id)
-    {
-        $updatedataorder = array(
-            'status' => 'APPROVED',
-            'approved_by' => $this->session->userdata('userid') 
-        );
+    // public function approve($id)
+    // {
+    //     $updatedataorder = array(
+    //         'status' => 'ON PROGRESS',
+    //         'approved_by' => $this->session->userdata('userid') 
+    //     );
 
-        $this->Orders_model->update($id, $updatedataorder);
-        $this->waiting();
-    }
+    //     $this->Orders_model->update($id, $updatedataorder);
+    //     $this->waiting();
+    // }
 
     public function reject($id, $reason)
     {
@@ -115,7 +143,7 @@ class Orders extends CI_Controller
                 'nama_pemesan' => $row->nama_pemesan,
                 'bagian' => $row->bagian,
                 'keterangan' => $row->keterangan,
-
+                'kd_order' => $row->kd_order,
                 'nama_barang' => $row->nama_barang,
                 'qty' => $row->qty,
                 'due_date' => $row->due_date,
@@ -126,7 +154,8 @@ class Orders extends CI_Controller
                 'approved_by' => $row->approved_by,
                 'attachment' => $row->attachment,
                 'status' => $row->status,
-                'reject_note' => $row->reject_note
+                'reject_note' => $row->reject_note,
+                'classnyak' => $this
             );
             $this->load->view('orders/orders_waiting_read', $data);
         } else {

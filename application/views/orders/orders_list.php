@@ -62,9 +62,15 @@
             <?php
         }
 
-        if ($opx == 'APPROVED') {
+        if ($opx == 'DONE') {
             ?>
-            <label class="badge bg-success">Diterima</label>
+            <label class="badge bg-success">Selesai</label>
+            <?php
+        }
+
+        if ($opx == 'ON PROGRESS') {
+            ?>
+            <label class="badge bg-info">Diproses</label>
             <?php
         }
 

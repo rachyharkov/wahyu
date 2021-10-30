@@ -321,7 +321,7 @@ if ($action == null) {
                 }
 
                 if (owo == 0) {
-                    message = 'Dengan menyimpan status approve ini secara otomatis akan mengubah status order menjadi "Approved".'
+                    message = 'Anda akan diarahkan ke laman tambah produksi untuk estimasi waktu pemrosesan order, lanjut dengan tindakan?'
                 }
 
                 Swal.fire({
@@ -346,14 +346,22 @@ if ($action == null) {
                             cache:false,
                             async:false,
                             success: function(data){
-                                // alert(data)
-                                Swal.fire({
-                                  icon: 'success',
-                                  title: "Sukses",
-                                  text: 'Data orders berhasil diupdate'
-                                })
-                                $('#panel-body').html(data);
-                                changewindowtitle('List Data orders')
+                                var dt = JSON.parse(data)
+
+                                if (dt.response == 1) {
+                                    // alert(data)
+                                    Swal.fire({
+                                      icon: 'success',
+                                      title: "Sukses",
+                                      text: 'Data orders berhasil diupdate'
+                                    })
+                                    $('#panel-body').html(dt.page);
+                                    changewindowtitle('List Data orders')
+                                }
+
+                                if (dt.response == 2) {
+                                    window.location.href = "<?= base_url('orders/redirect/productionaddform/') ?>" + dt.kd_order;
+                                }
                             },
                             error: function(error) {
                                 Swal.fire({

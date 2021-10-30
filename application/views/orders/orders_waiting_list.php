@@ -28,7 +28,7 @@
 		<td><?= $no++?></td>
         <td><?php echo $orders->kd_order ?></td>
 		<td><?php echo $orders->nama_pemesan ?></td>
-		<td><?php echo $orders->bagian ?></td>
+		<td><?php echo $classnyak->getbagiandata($orders->bagian)->nama_bagian ?></td>
 		<td><?php
 
         $op = $orders->priority;

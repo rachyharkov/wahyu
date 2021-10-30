@@ -380,10 +380,10 @@ class Produksi extends CI_Controller
     {
         $kd_order = $this->input->post('id');
 
-        $detect = $this->Orders_model->get_by_kd_orders($kd_order, 'READY');
+        $detect = $this->Orders_model->get_by_kd_orders($kd_order, 'WAITING');
 
         if ($detect) {
-            if ($detect->status != 'READY') {
+            if ($detect->status != 'WAITING') {
                 $arr = array(
                     'status' => 'no'
                 );

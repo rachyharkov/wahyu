@@ -9,7 +9,18 @@
     <tr><td>Due Date</td><td><?php echo $due_date; ?></td></tr>
     <tr><td>Note</td><td><?php echo $note; ?></td></tr>
     <tr><td>Priority</td><td><?php echo $priority; ?></td></tr>
-    <tr><td>Keterangan</td><td><?php echo $keterangan; ?></td></tr>
+    <tr><td>Keterangan</td><td><?php 
+    if ($keterangan == 1) {
+        echo 'Part Baru';
+    }
+
+    if ($keterangan == 2) {
+        echo 'Repair';
+    }
+
+    if ($keterangan == 3) {
+        echo 'Modifikasi';
+    } ?></td></tr>
 
     <tr><td>Status</td><td><?php echo $status; ?></td></tr>
     <tr><td>Reject Note</td><td><?php echo $reject_note; ?></td></tr>
