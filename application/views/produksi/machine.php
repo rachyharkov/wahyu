@@ -6,9 +6,6 @@
 			<label class="form-check-label" for="checkbox<?php echo $value->mesin_id ?>"><?php echo $value->nama_mesin ?></label>
 		</div>
 	</td>
-	<td hidden>
-		<input type="text" name="machineusedfor[]" class="form-control-plaintext" readonly value="<?php echo $value->used_for ?>">	
-	</td>
 	<td>
 		<div class="input-group">
 			<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct readonly" readonly value="0" min="0">
@@ -31,7 +28,7 @@
 		<input type="number" name="materialallocated[]" class="form-control materialallocated readonly" readonly value="0">
 	</td>
 	<td>
-		<input type="text" name="goodsallocated[]" readonly class="form-control-plaintext goodsallocated readonly" readonly value="0">
+		<input type="text" name="goodsallocated[]" class="form-control goodsallocated" readonly value="0">
 	</td>
 	<td>
 		<div class="input-group">

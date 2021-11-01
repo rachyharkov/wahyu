@@ -11,6 +11,7 @@ class Orders extends CI_Controller
         parent::__construct();
         is_login();
         $this->load->model('Orders_model');
+        $this->load->model('Material_model');
         $this->load->model('Bagian_model');
         $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
@@ -155,7 +156,9 @@ class Orders extends CI_Controller
                 'attachment' => $row->attachment,
                 'status' => $row->status,
                 'reject_note' => $row->reject_note,
-                'classnyak' => $this
+                'classnyak' => $this,
+                'material' => $this->Material_model->get_all()
+
             );
             $this->load->view('orders/orders_waiting_read', $data);
         } else {
@@ -456,6 +459,47 @@ class Orders extends CI_Controller
     {
         $data = $this->Bagian_model->get_by_id($id);
         return $data;
+    }
+
+    public function search_material($keyword)
+    {
+        $data = $this->db->like('kd_material',$keyword)->get('material')->result();
+
+        if ($data) {
+            $strbuttonresult = '';
+
+            foreach ($data as $key => $value) {
+
+                $dimensi = json_decode($value->dimensi, true);
+
+                $dt = $dimensi['diametertebal'];
+                $p = $dimensi['panjang'];
+                $l = $dimensi['lebar'];
+
+                $strbuttonresult.= '
+                    <button class="btn btn-xs btn-primary btn-fetch-material" data-kdmaterial="'.$value->kd_material.'" data-diametertebal="'.$dt.'" data-panjang="'.$p.'" data-lebar="'.$l.'" data-weight="'.$value->berat_per_pcs.'" data-massamaterial="'.$value->masa_jenis_material.'" data-stok="'.$value->qty.'">'.$value->kd_material.' </button>
+                ';
+            }
+
+            $output = array(
+                'response' => 'found',
+                'search_result' => $strbuttonresult,
+                'message' => 'found'
+            );
+
+            echo json_encode($output);
+        } else {
+            $strbuttonresult = '';
+
+            $output = array(
+                'response' => 'not found',
+                'search_result' => '-',
+                'message' => '<p style="text-align: center;"><i class="fas fa-comment-alt"></i> Material tidak ditemukan</p></td>'
+            );
+
+            echo json_encode($output);
+        }
+
     }
 
 }

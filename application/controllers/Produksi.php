@@ -432,6 +432,7 @@ class Produksi extends CI_Controller
                 $arr = array(
                     'status' => 'ok',
                     'message' => $data,
+                    'qty' => $detect->qty,
                     'priority' => $op
                 );
 

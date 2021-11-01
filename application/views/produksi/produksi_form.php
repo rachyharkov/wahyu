@@ -71,17 +71,27 @@
 						  </span>
 						</div>
 					</div>
-				</div>	
+				</div>
 
-				<!-- <div class="row mb-15px">
-					<div class="ol-md-3"></div>
+				<div class="row mb-15px">
+					<label class="form-label col-form-label col-md-3">Qty Order</label>
+					<div class="col-md-6">
+						<input required type="number" class="form-control" readonly name="qty_order" id="qty_order" placeholder="Qty order"/>
+					</div>
+					<div class="col-md-3">
+						
+					</div>
+				</div>
+
+				<div class="row mb-15px">
+					<div class="col-md-3"></div>
 					<div class="col-md-9">
 						<div class="form-check form-switch">
-						  	<input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" checked />
+						  	<input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" />
 						  	<label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
 						</div>
 					</div>
-				</div> -->	
+				</div>	
 			</div>
 			<div class="col-md-3">
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -97,136 +107,30 @@
 			
 		</div>
 		<div class="row mb-15px">
-				<table class="table table-hover table-sm tabel-machine">
-					<thead>
-						<tr>
-							<th>Machine Name</th>
-							<th hidden>Used For</th>
-							<th>Throughput</th>
-							<th>Shift</th>
-							<th hidden>Material Processed</th>
-							<th>Products</th>
-							<th>Time</th>
-							<th hidden="hidden">T. Minutes</th>
-						</tr>
-					</thead>
-					<tbody class="daftar_mesin">
-					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="3" style="text-align: right; font-size: 14px;"><b>Total</b></td>
-							<td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
-							<td><input type="text" name="totalproductions" class="form-control-plaintext totalproductions"></td>
-							<td><input type="text" name="predictiondone" class="form-control-plaintext predictiondone"></td>
-							<td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
-						</tr>
-					</tfoot>
-				</table>
-		</div>
-
-		<div class="container">
-			<h4>Kebutuhan Material per-barang</h4>
-			<div class="alertdiv">
-				
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<table class="table table-bordered table-hover table-td-valign-middle tabel-material-ready-to-use">
-						<thead>
-							<tr>
-								<th>No</th>
-								<th>Nama Material</th>
-								<th>Qty</th>
-								<th>will be used</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody id="materials_ready_to_use">
-							<?php
-							if ($material_needs) {
-								foreach ($material_needs as $key => $value) {
-									?>
-									<tr id="<?php echo $value->kd_material ?>">
-						        		<td></td>
-						        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-<?php echo $value->kd_material ?>-material" value="<?php echo $value->kd_material ?>" /></td>
-						        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-qty ready-to-use-<?php echo $value->kd_material ?>-qty" value="<?php echo $value->jumlah_bahan ?>" /></td>
-						        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext qty-x-used qty-x-used-<?php echo $value->kd_material ?>" value="69" /></td>
-						        		<td style="width: 80px;">
-						        			<div class="input-group">
-						        			<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
-						        			</div>
-						        	</tr>
-									<?php
-								}
-							}
-							?>
-							
-						</tbody>
-					</table>
-				</div>
-				<div class="col-md-6">
-					<table class="table table-hover table-sm tabel-material-yang-ada table-td-valign-middle">
-						<thead>
-							<tr>
-								<th rowspan="2">Kode Material</th>
-								<th rowspan="2">Weight/Pcs (Kg)</th>
-								<th colspan="3">Dimensi</th>
-								<th rowspan="2">Stock</th>
-								<th rowspan="2">Action</th>
-							</tr>
-							<tr>
-								<th>D/T (mm)</th>
-								<th>P (mm)</th>
-								<th>L (mm)</th>
-							</tr>
-						</thead>
-						<tbody id="materials_available">
-							<?php
-							if ($material) {
-								$o = 1;
-								foreach ($material as $key => $value) {
-									?>
-									<tr class="material-available material-available-<?php echo $value->kd_material ?>">
-										<td><input type="hidden" name="id_material_in_stock[]" value="<?php echo $value->id ?>"><input type="text" readonly class="form-control-plaintext" value="<?php echo $value->kd_material ?>"/></td>
-										<td><span class="txtberatperpcs"><?php echo $value->berat_per_pcs ?></span></td>
-										<?php
-
-										$jsonanu = json_decode($value->dimensi, TRUE);
-											?>
-											<td>
-												<input type="text" class="form-control-plaintext" name="dimensidiametertebal" value="<?php echo $jsonanu['diametertebal'] ?>">
-											</td>
-											<td>
-												<input type="text" class="form-control-plaintext" name="dimensipanjang" value="<?php echo $jsonanu['panjang'] ?>">
-											</td>
-											<td>
-												<input type="text" class="form-control-plaintext" name="dimensilebar" value="<?php echo $jsonanu['lebar'] ?>">
-											</td>
-											<?php
-										?>
-										<td><input type="text" name="qty_material_in_stock[]" readonly class="form-control-plaintext stock<?php echo $value->kd_material ?>" value="<?php echo $value->qty ?>"/></td>
-										<td style="width: 80px;">
-											<div class="input-group">
-												<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-success btn-detail-material"><i class="fas fa-eye"></i></button>
-												<button type="button" id="<?php echo $value->kd_material ?>" class="btn btn-xs btn-primary btn-add-material"><i class="fas fa-plus-square"></i></button>
-											</div>
-										</td>
-									</tr>
-									<?php
-								}
-							} else {
-								?>
-								<tr>
-									<td colspan="4">Tidak ada material tersedia</td>
-								</tr>
-								<?php
-							}
-							?>
-							
-						</tbody>
-					</table>
-				</div>
-			</div>
+			<table class="table table-hover table-sm tabel-machine">
+				<thead>
+					<tr>
+						<th>Machine Name</th>
+						<th>Throughput</th>
+						<th>Shift</th>
+						<th hidden>Material Processed</th>
+						<th>Products</th>
+						<th>Time</th>
+						<th hidden="hidden">T. Minutes</th>
+					</tr>
+				</thead>
+				<tbody class="daftar_mesin">
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3" style="text-align: right; font-size: 14px;"><b>Total</b></td>
+						<td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
+						<td><input type="text" readonly name="totalproductions" class="form-control-plaintext totalproductions"></td>
+						<td><input type="text" readonly name="predictiondone" class="form-control-plaintext predictiondone"></td>
+						<td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
+					</tr>
+				</tfoot>
+			</table>
 		</div>
 	</div>
 </form>
@@ -240,11 +144,11 @@
 
 		let smartallocate = 0
 
-		$('.total-material').change(function() {
-			if (smartallocate == 1) {
-				smartAllocate()
-			}
-		})
+		// $('.total-material').change(function() {
+		// 	if (smartallocate == 1) {
+		// 		smartAllocate()
+		// 	}
+		// })
 
 		function getMachine(machine_id) {
 			$.ajax({
@@ -265,17 +169,17 @@
 
 		function enableDisableInputMachine(thisel) {
 			if (thisel.parents('tr').hasClass('checked')) {
-				thisel.parents('tr').find('td').eq(2).find('input').removeAttr('readonly').removeClass('readonly')
-				thisel.parents('tr').find('td').eq(4).find('input').removeAttr('readonly').removeClass('readonly')
-				thisel.parents('tr').find('td').eq(5).find('input').removeAttr('readonly').removeClass('readonly')
-				thisel.parents('tr').find('td').eq(6).find('input').removeAttr('readonly').removeClass('readonly')
-				thisel.parents('tr').find('td').eq(7).find('input').removeAttr('readonly').removeClass('readonly')
+				thisel.parents('tr').find('td').eq(1).find('input').removeAttr('readonly')
+				thisel.parents('tr').find('td').eq(3).find('input').removeAttr('readonly')
+				thisel.parents('tr').find('td').eq(4).find('input').removeAttr('readonly')
+				thisel.parents('tr').find('td').eq(5).find('input').removeAttr('readonly')
+				thisel.parents('tr').find('td').eq(6).find('input').removeAttr('readonly')
 			} else {
-				thisel.parents('tr').find('td').eq(2).find('input').attr('readonly','readonly').addClass('readonly')
-				thisel.parents('tr').find('td').eq(4).find('input').attr('readonly','readonly').addClass('readonly')
-				thisel.parents('tr').find('td').eq(5).find('input').attr('readonly','readonly').addClass('readonly')
-				thisel.parents('tr').find('td').eq(6).find('input').attr('readonly','readonly').addClass('readonly')
-				thisel.parents('tr').find('td').eq(7).find('input').attr('readonly','readonly').addClass('readonly')
+				thisel.parents('tr').find('td').eq(1).find('input').attr('readonly','readonly')
+				thisel.parents('tr').find('td').eq(3).find('input').attr('readonly','readonly')
+				thisel.parents('tr').find('td').eq(4).find('input').attr('readonly','readonly')
+				thisel.parents('tr').find('td').eq(5).find('input').attr('readonly','readonly')
+				thisel.parents('tr').find('td').eq(6).find('input').attr('readonly','readonly')
 			}
 		}
 
@@ -324,7 +228,7 @@
 
 	                	//cari data mesin baru
 
-	                	// dt di filter arraynya untuk menampilkan arraiabilablemachinesaatini tidak ada di dt
+	                	// dt di filter arraynya untuk menampilkan arraiabilablemachinesaatini tidak ada di dt (shit, it's been a long time i'm not learning this)
 	                	var foundnew = dt.filter( ai => !arravailablemachinesaatini.includes(ai) );
 
 	                	console.log(arravailablemachinesaatini)
@@ -385,62 +289,95 @@
 
 		function sumthismachineETA(thisel) {
 
-	    	var getrow = thisel
-    		var idmesin = getrow.attr('id')
-	    	var minutesperproduction = getrow.find('td').eq(2).find('input').val()
-    		var productionpermachine = 0
+			if (smartallocate == 1) {
 
-    		//tetapkan jam kerja
-    		var jamkerja = 0
+		    	var getrow = thisel
+	    		var idmesin = getrow.attr('id')
+		    	var minutesperproduction = getrow.find('td').eq(1).find('input').val()
+	    		var productionpermachine = 0
 
-    		var jamkerjashift1 = 480 //menit
-    		var jamkerjashift2 = 420 //menit
+	    		//tetapkan jam kerja
+	    		var jamkerja = 0
 
-    		var checkboxshift1 = $('#shift1machine' + idmesin).val()
-    		var checkboxshift2 = $('#shift2machine' + idmesin).val()
-	    	//bagi 2 shift
-		    
-	    	if (checkboxshift1 == 1) {
-		    	jamkerja += jamkerjashift1
-		    }
+	    		var jamkerjashift1 = 480 //menit
+	    		var jamkerjashift2 = 420 //menit
 
-		    if (checkboxshift2 == 1) {
-		    	jamkerja += jamkerjashift2
-		    }
+	    		var checkboxshift1 = $('#shift1machine' + idmesin).val()
+	    		var checkboxshift2 = $('#shift2machine' + idmesin).val()
+		    	//bagi 2 shift
+			    
+		    	if (checkboxshift1 == 1) {
+			    	jamkerja += jamkerjashift1
+			    }
 
-	    	productionpermachine = jamkerja/minutesperproduction
+			    if (checkboxshift2 == 1) {
+			    	jamkerja += jamkerjashift2
+			    }
 
-			// console.log(productionpermachine)
+		    	productionpermachine = jamkerja/minutesperproduction
 
-			if (productionpermachine == null || productionpermachine == Infinity ) {
-				productionpermachine = 0
+				// console.log(productionpermachine)
+
+				if (productionpermachine == null || productionpermachine == Infinity ) {
+					productionpermachine = 0
+				}
+
+		    	getrow.find('td').eq(4).find('input').val(parseInt(productionpermachine))
+
+		    	var o = 0
+
+		    	if (productionpermachine > 0) {
+	    			o = parseInt(minutesperproduction) * parseInt(productionpermachine)
+		    	} else {
+		    		o = parseInt(productionpermachine) * 1
+		    	}
+
+		    	console.log(o)
+
+	    		getrow.find('td').eq(6).find('input').val(o)
+
+	    		var duration = moment.duration(o, 'minutes');
+
+		    	// var workhour = duration.hours()
+		    	// if (detectedhours) {}
+				
+				var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
+		    	var eta = timeString
+		    	getrow.find('td').eq(5).find('input').val(eta)
 			}
 
-	    	getrow.find('td').eq(5).find('input').val(parseInt(productionpermachine))
+			if (smartallocate == 0) {
+				var getrow = thisel
+	    		var idmesin = getrow.attr('id')
+		    	var minutesperproduction = getrow.find('td').eq(1).find('input').val()
+	    		var productionpermachine = getrow.find('td').eq(4).find('input').val()
 
-	    	var o = 0
+		    	var o = 0
 
-	    	if (productionpermachine > 0) {
-    			o = parseInt(minutesperproduction) * parseInt(productionpermachine)
-	    	} else {
-	    		o = parseInt(productionpermachine) * 1
-	    	}
+		    	if (productionpermachine > 0) {
+	    			o = parseInt(minutesperproduction) * parseInt(productionpermachine)
+		    	} else {
+		    		o = parseInt(productionpermachine) * 1
+		    	}
 
-	    	console.log(o)
+		    	console.log(o)
 
-    		getrow.find('td').eq(7).find('input').val(o)
+	    		getrow.find('td').eq(6).find('input').val(o)
 
-    		var duration = moment.duration(o, 'minutes');
+	    		var duration = moment.duration(o, 'minutes');
 
-	    	// var workhour = duration.hours()
-	    	// if (detectedhours) {}
-			
-			var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-	    	var eta = timeString
-	    	getrow.find('td').eq(6).find('input').val(eta)
+		    	// var workhour = duration.hours()
+		    	// if (detectedhours) {}
+				
+				var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
+		    	var eta = timeString
+		    	getrow.find('td').eq(5).find('input').val(eta)	
+			}
+
 	    }
 
 		function sumETA() {
+
 	    	var arrminutes = []
 			var summinutes = 0;
 
@@ -453,7 +390,7 @@
 	    			sumthismachineETA(thisel)
 	    			//kumpulin menit dulu terus jumlah
 
-	    			var getminutestotal = thisel.find('td').eq(7).find('input').val()
+	    			var getminutestotal = thisel.find('td').eq(6).find('input').val()
 
 	    			if (!getminutestotal) {
 	    				getminutestotal = 0
@@ -463,7 +400,7 @@
 	    			arrminutes.push(getminutestotal)
 
 					//umpulin produksi yang dihasilan dulu, terus jumlah
-					var getproductiontotaal = thisel.find('td').eq(5).find('input').val()
+					var getproductiontotaal = thisel.find('td').eq(4).find('input').val()
 					sumproduction += parseInt(getproductiontotaal)
     			} else {
 					arrminutes.push(0)
@@ -514,7 +451,7 @@
 
 				var nama_material = $(this).parents('tr').attr('id')
 
-				var getqty = parseInt($(this).parents('tr').find('td').eq(2).find('input').val())
+				var getqty = parseInt($(this).parents('tr').find('td').eq(1).find('input').val())
 
 				var total = getqty * sumproduction
 
@@ -524,7 +461,7 @@
 
 				$(this).parents('tr').removeClass('oops')
 
-				$(this).parents('tr').find('td').eq(3).find('input').val(total)
+				$(this).parents('tr').find('td').eq(2).find('input').val(total)
 				
 				if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
 					$(this).parents('tr').addClass('oops')
@@ -558,69 +495,6 @@
 	    	}
 		}
 
-		function smartAllocate() {
-
-			//auto material allocated
-			var totalmaterial = parseInt($('.total-material').val())
-			var tresholdmaterialspermachine = 20 //tune here
-
-			//auto goods allocated
-			var totalgoods = parseInt($('#total_barang_jadi').val())
-			var tresholdgoodspermachine = 20 //tune here
-
-			if (smartallocate == 0) {
-				tresholdgoodspermachine = parseInt($('.tresholdgoodspermachine').val())
-				tresholdmaterialspermachine = parseInt($('.tresholdmaterialspermachine').val())
-			}
-
-			$('.available-machine').each(function() {
-				var allocated = 0
-				var thisidmachine = $(this).attr('id')
-
-				if(totalgoods <= 0) {
-					allocated = 0
-				} else {
-					$('#checkbox' + thisidmachine + '').prop("checked", true).parents('tr').addClass('checked')
-					if (totalgoods <= tresholdgoodspermachine) {
-						allocated = totalgoods
-					}
-					if(totalgoods > tresholdgoodspermachine) {
-						for (var x = 0; x < tresholdgoodspermachine; x++) {
-							allocated++
-						}
-					}
-				}
-
-				totalgoods-=tresholdgoodspermachine
-				$(this).find('td').eq(4).find('input').val(allocated)
-			})
-
-			$('.available-machine').each(function() {
-				var allocated = 0
-
-				if(totalmaterial <= 0) {
-					allocated = 0
-				} else {
-					if (totalmaterial <= tresholdmaterialspermachine) {
-						allocated = totalmaterial
-					}
-
-					if(totalmaterial > tresholdmaterialspermachine) {
-						for (var x = 0; x < tresholdmaterialspermachine; x++) {
-							allocated++
-						}
-					}
-				}
-
-				totalmaterial-=tresholdmaterialspermachine
-				$(this).find('td').eq(3).find('input').val(allocated)
-			})
-
-
-			sumETA()
-		}
-
-
 		function checkdisablecreateproductionbutton() {
 			if ($('.tabel-material-ready-to-use tbody tr').length > 0 ){
 				$('.btn-create-produksi').removeAttr('disabled').removeClass('disabled');
@@ -629,65 +503,6 @@
 			}
 		}
 
-		let urutan = 1;
-
-	    $('.tabel-material-yang-ada').on('click','.btn-add-material', function() {
-	        const nama_material = $(this).attr('id')
-	        const thisel = $(this)
-		    let stockvalue = $('.stock' + nama_material)
-
-		    if (stockvalue.val() > 0) {
-		    	if ($('.tabel-material-ready-to-use tbody tr#' + nama_material).length > 0) {
-			    	//let oldval = $('.ready-to-use-' + nama_material + '-qty').val()
-			    	$('.ready-to-use-' + nama_material + '-qty').get(0).value++
-
-			    } else {
-			        $('#materials_ready_to_use').append(`
-			        	<tr id="${nama_material}">
-			        		<td></td>
-			        		<td><input type="text" name="material_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-` + nama_material + `-material" value="${nama_material}" /></td>
-			        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext ready-to-use-qty ready-to-use-` + nama_material + `-qty" value="1" /></td>
-			        		<td><input type="text" name="stok_dibutuhkan[]" readonly class="form-control-plaintext qty-x-used qty-x-used-` + nama_material + `" value="1" /></td>
-			        		<td style="width: 80px;">
-			        			<div class="input-group">
-			        			<button type="button" id="${nama_material}" class="btn btn-xs btn-secondary btn-kurangi-material"><i class="fas fa-minus"></i></button><button type="button" id="${nama_material}" class="btn btn-xs btn-danger btn-hapus-material"><i class="fas fa-times"></i></button></td>
-			        			</div>
-			        	</tr>`);
-			    }
-			    // updateStock(nama_material, stockused, 'kurangin')
-			    var willbeused = 0
-		    	willbeused = parseInt($('.ready-to-use-' + nama_material + '-qty').val()) * parseInt($('.totalproductions').val())
-
-		    	$('.qty-x-used-' + nama_material).val(willbeused)
-
-		    	checkmaterialwillbeused(willbeused)
-		    } else {
-		    	Swal.fire({
-                  icon: 'error',
-                  title: "Stok Habis!",
-                  text: 'Silahkan tambah pada menu material'
-                })
-		    }
-		    checkdisablecreateproductionbutton()
-	    });
-
-	    $('.tabel-material-ready-to-use').on('click','.btn-kurangi-material', function() {
-	        const nama_material = $(this).attr('id')
-	        const thisel = $(this)
-	        let thisrow = thisel.parents('tr')
-
-		    let stockvalue = $('.ready-to-use-' + nama_material + '-qty')
-		    
-		    
-		    if (stockvalue.val() > 1) {
-		    	stockvalue.get(0).value--
-		    } else {
-		        thisrow.remove()
-		        urutan--    	
-		    }
-		    sumETA()
-		    checkdisablecreateproductionbutton()
-	    })
 
 	    $('.tabel-material-ready-to-use').on('click','.btn-hapus-material', function() {
 	        const nama_material = $(this).attr('id')
@@ -698,22 +513,24 @@
 			checkdisablecreateproductionbutton()
 	    })
 
-	    $('#optionone').on('change', function() {
+	    $('#cbsmartallocate').on('change', function() {
 	    	if (this.checked) {
 	    		smartallocate = 1
-	    		// smartAllocate()
-	    		// $('.available-machine').each(function(){
-	    		// 	$(this).find('td').eq(3).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
-	    		// 	$(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
-	    		// })
+	    		alert('active')
+	    		$('.available-machine').each(function(){
+	    			$(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
+	    		})
 	    	} else {
 	    		smartallocate = 0
-	    		// $('.available-machine').each(function(){
-	    		// 	$(this).find('td').eq(3).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
-	    		// 	$(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
-	    		// 	$(this).find('td').eq(3).find('input').val(0)
-	    		// 	$(this).find('td').eq(4).find('input').val(0)
-	    		// })
+	    		alert('deactivated')
+	    		$('.available-machine').each(function(){
+	    			if (!$(this).hasClass('checked')) {
+	    				$(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control')
+	    			} else {
+	    				$(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
+	    			}
+
+	    		})
 	    	}
 	    	// checkAlokasiMelebihiTotalMaterial()
 	    })
@@ -753,6 +570,15 @@
 	    	}
 	    })
 
+	    $('.daftar_mesin').on('input','.goodsallocated',function() {
+	    	
+	    	var thisel = $(this)
+
+	    	if (thisel.parents('tr').hasClass('checked')) {
+	    		sumETA()
+	    	}
+	    })
+
 	    $('.daftar_mesin').on('change','.checkboxmachine', function() {
 	    	
 	    	var thisel = $(this)
@@ -761,11 +587,11 @@
 	    		thisel.parents('tr').addClass('checked')
 	    	} else {
 	    		thisel.parents('tr').removeClass('checked')
-	    		thisel.parents('tr').find('td').eq(2).find('input').val(0)
+	    		thisel.parents('tr').find('td').eq(1).find('input').val(0)
+				thisel.parents('tr').find('td').eq(3).find('input').val(0)
 				thisel.parents('tr').find('td').eq(4).find('input').val(0)
-				thisel.parents('tr').find('td').eq(5).find('input').val(0)
-				thisel.parents('tr').find('td').eq(6).find('input').val('')
-				thisel.parents('tr').find('td').eq(7).find('input').val(0)
+				thisel.parents('tr').find('td').eq(5).find('input').val('')
+				thisel.parents('tr').find('td').eq(6).find('input').val(0)
 	    	}
 			sumETA()
 			enableDisableInputMachine(thisel)
@@ -824,6 +650,7 @@
 		                $('#smart_assist_recommendation').html("")
 		                $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button><button type="button" class="btn btn-success btn-next">Konfirmasi</button>')
 		                $('#priority').val(dt.priority)
+		                $('#qty_order').val(dt.qty)
                 	} else {
                 		// alert('no!')
                 		$('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')

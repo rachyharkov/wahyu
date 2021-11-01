@@ -253,12 +253,12 @@
   //ckeditor
   $('#wysihtml5').wysihtml5();
 
-  setInterval(function(){
-      $.get("<?php echo base_url() ?>orders/count_waiting_orders", function(data){
-          data = $.parseJSON(data);
-          $('.count-waiting-order').html(data)
-      });
-  }, 1000);
+  // setInterval(function(){
+  //     $.get("<?php echo base_url() ?>orders/count_waiting_orders", function(data){
+  //         data = $.parseJSON(data);
+  //         $('.count-waiting-order').html(data)
+  //     });
+  // }, 1000);
 
 </script>
 

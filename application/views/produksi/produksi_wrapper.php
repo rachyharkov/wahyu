@@ -195,6 +195,7 @@
                                         $('#smart_assist_recommendation').html("")
                                         $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button><button type="button" class="btn btn-success btn-next">Konfirmasi</button>')
                                         $('#priority').val(dt.priority)
+                                        $('#qty_order').val(dt.qty)
                                     } else {
                                         // alert('no!')
                                         $('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')
