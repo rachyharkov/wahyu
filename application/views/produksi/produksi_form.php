@@ -112,7 +112,7 @@
 					<tr>
 						<th>Machine Name</th>
 						<th>Throughput</th>
-						<th>Shift</th>
+						<th class="shiftmachine" hidden>Shift</th>
 						<th hidden>Material Processed</th>
 						<th>Products</th>
 						<th>Time</th>
@@ -123,7 +123,9 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="3" style="text-align: right; font-size: 14px;"><b>Total</b></td>
+						<td class="shiftmachine" hidden></td>
+						<td></td>
+						<td style="text-align: right; font-size: 14px;"><b>Total</b></td>
 						<td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
 						<td><input type="text" readonly name="totalproductions" class="form-control-plaintext totalproductions"></td>
 						<td><input type="text" readonly name="predictiondone" class="form-control-plaintext predictiondone"></td>
@@ -506,13 +508,13 @@
 	    $('#cbsmartallocate').on('change', function() {
 	    	if (this.checked) {
 	    		smartallocate = 1
-	    		alert('active')
+	    		$('.shiftmachine').removeAttr('hidden')
 	    		$('.available-machine').each(function(){
 	    			$(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
 	    		})
 	    	} else {
 	    		smartallocate = 0
-	    		alert('deactivated')
+	    		$('.shiftmachine').attr('hidden','')
 	    		$('.available-machine').each(function(){
 	    			if (!$(this).hasClass('checked')) {
 	    				$(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control')

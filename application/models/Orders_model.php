@@ -46,6 +46,16 @@ class Orders_model extends CI_Model
         return $this->db->get('orders')->row();
     }
 
+    function get_by_kd_orders_pure($kd_order)
+    {
+        $where = array(
+            'kd_order' => $kd_order
+        );
+
+        $this->db->where($where);
+        return $this->db->get('orders')->row();
+    }
+
     // get data by id
     function get_by_id($id)
     {

@@ -10,7 +10,22 @@
                 <tr><td>Quantity</td><td><?php echo $qty; ?></td></tr>
                 <tr><td>Due Date</td><td><?php echo $due_date; ?></td></tr>
                 <tr><td>Note</td><td><?php echo $note; ?></td></tr>
-                <tr><td>Priority</td><td><?php echo $priority; ?></td></tr>
+                <tr><td>Priority</td><td><?php 
+
+                $op = $priority;
+                $badge = '';
+                if ($op == 1) {
+                    $badge = '<label class="badge bg-success">Biasa</label>';
+                }
+                if ($op == 2) {         
+                    $badge = '<label class="badge bg-warning">Urgent</label>';
+                }
+                if ($op == 3) {
+                    $badge = '<label class="badge bg-danger">Top Urgent</label>';
+                 
+                }
+                echo $badge;
+                 ?></td></tr>
                 <tr><td>Keterangan</td><td><?php 
                 if ($keterangan == 1) {
                     echo 'Part Baru';

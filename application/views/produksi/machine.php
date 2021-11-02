@@ -14,7 +14,7 @@
 			</span>
 		</div>
 	</td>
-	<td>
+	<td class="shiftmachine" hidden>
 		<div class="form-check form-check-inline">
 			<input class="form-check-input checkboxshiftformachine<?php echo $value->mesin_id ?> readonly" readonly name="shift1machine<?php echo $value->mesin_id ?>" type="checkbox" id="shift1machine<?php echo $value->mesin_id ?>" checked value="1" />
 			<label class="form-check-label" for="shift1machine<?php echo $value->mesin_id ?>">1</label>

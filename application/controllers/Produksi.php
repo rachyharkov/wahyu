@@ -12,6 +12,7 @@ class Produksi extends CI_Controller
         is_login();
         $this->load->model('Produksi_model');
         $this->load->model('Material_model');
+        $this->load->model('Bagian_model');
         $this->load->model('Orders_model');
         $this->load->model('Mesin_model');
         $this->load->model('Setting_app_model');
@@ -266,7 +267,7 @@ class Produksi extends CI_Controller
                 $data_temuan .= '
                 <tr>
                     <td><i class="fas fa-cog fa-spin"></i></td>
-                    <td><a href="#modaldetailproduksi" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
+                    <td><a href="#modaldetailproduksi" class="modal-dtl-produksi-right" idproduksi="'.$value->id.'" idorder="'.$value->kd_order.'" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
                     <td><label class="badge bg-danger">'.$value->priority.'</label></td>
                 </tr>';
             }
@@ -359,23 +360,6 @@ class Produksi extends CI_Controller
         $this->load->view('produksi/machine', $datax);
     }
 
-    // public function machineList()
-    // {
-
-    //     $ds = $this->input->post('ds');
-    //     $de = $this->input->post('de');
-
-    //     $machinelist = $this->Mesin_model->get_all();
-
-    //     $data_penggunaan_mesin_oleh_produksi_lain = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
-
-    //     $data = array(
-    //         'machine_list' => $machinelist,
-    //         'data_produksi' => $data_penggunaan_mesin_oleh_produksi_lain
-    //     );
-        
-    // }
-
     function cek_kode_order_ready()
     {
         $kd_order = $this->input->post('id');
@@ -393,16 +377,29 @@ class Produksi extends CI_Controller
 
                 $op = $detect->priority;
                 $badge = '';
-                if ($op == 0) {
+                if ($op == 1) {
                     $badge = '<label class="badge bg-success">Biasa</label>';
                 }
-                if ($op == 1) {         
+                if ($op == 2) {         
                     $badge = '<label class="badge bg-warning">Urgent</label>';
                 }
-                if ($op == 2) {
+                if ($op == 3) {
                     $badge = '<label class="badge bg-danger">Top Urgent</label>';
                  
                 }
+
+                $ktr = $detect->keterangan;
+                $ktrstr = '';
+                if ($ktr == 1) {
+                    $ktrstr = 'PART BARU';
+                }
+                if ($ktr == 2) {         
+                    $ktrstr = 'REPAIR';
+                }
+                if ($ktr == 3) {
+                    $ktrstr = 'MODIFIKASI';
+                }
+
                 $data = '
                     <b>'.$detect->kd_order.'</b>
                     <table class="table table-sm table-hover">
@@ -424,7 +421,7 @@ class Produksi extends CI_Controller
                         <tr>
                             <td>Keterangan</td>
                             <td>:</td>
-                            <td>'.$detect->keterangan.'</td>
+                            <td>'.$ktrstr.'</td>
                         </tr>
                     </table>
                     <a href="#modal-dialog-sketch-preview" picture="'.$detect->attachment.'" class="btn btn-green btn-sm sketsa_preview" style="width: 100%;" data-bs-toggle="modal">Sketsa</a>
@@ -445,6 +442,45 @@ class Produksi extends CI_Controller
 
             echo json_encode($arr);
         }
+    }
+
+    public function getbagiandata($id)
+    {
+        $data = $this->Bagian_model->get_by_id($id);
+        return $data;
+    }
+
+    function get_data_order($kdorder)
+    {
+        $data = $this->Orders_model->get_by_kd_orders_pure($kdorder);
+
+        $op = $data->priority;
+        $badge = '';
+        if ($op == 1) {
+            $badge = '<label class="badge bg-success">Biasa</label>';
+        }
+        if ($op == 2) {         
+            $badge = '<label class="badge bg-warning">Urgent</label>';
+        }
+        if ($op == 3) {
+            $badge = '<label class="badge bg-danger">Top Urgent</label>';
+         
+        }
+
+        $dt = array(
+            'kdorder' => $kdorder,
+            'tanggal_order' => $data->tanggal_order,
+            'due_date' => $data->due_date,
+            'nama_pemesan' => $data->nama_pemesan,
+            'bagian' => $this->getbagiandata($data->bagian)->nama_bagian,
+            'priority' => $badge,
+            'status' => $data->status,
+            'attachment' => $data->attachment,
+            'barang' => $data->nama_barang,
+            'qty' => $data->qty,
+        );
+
+        echo json_encode($dt);
     }
 
 }

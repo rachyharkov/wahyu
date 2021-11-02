@@ -71,22 +71,25 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">test</h4>
+        <h4 class="modal-title info_kdorder">-</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
       </div>
       <div class="modal-body">
-        <table class="table table-sm table-dark">
-            <tr><td style="width: 90px;">Tanggal Order</td><td style="width: 5px;">:</td><td>test</td></tr>
-            <tr><td style="width: 90px;">Pemesan</td><td style="width: 5px;">:</td><td>test</td></tr>
-            <tr><td style="width: 90px;">Bagian</td><td style="width: 5px;">:</td><td>test</td></tr>
-            <tr><td style="width: 90px;">Prioritas</td><td style="width: 5px;">:</td><td>test</td></tr>
-            <tr><td style="width: 90px;">Approved by</td><td style="width: 5px;">:</td><td>test</td></tr>
-            <tr><td style="width: 90px;">Status</td><td style="width: 5px;">:</td><td>test</td></tr>
-            <tr><td style="width: 90px;">Attachment</td><td style="width: 5px;">:</td><td>test</td></tr>
+        <table class="table table-sm text-gray">
+            <tr><td style="width: 90px;">Barang</td><td style="width: 5px;">:</td><td class="info_barang"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Jumlah</td><td style="width: 5px;">:</td><td class="info_qty"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Tanggal Order</td><td style="width: 5px;">:</td><td class="info_tanggal_order"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Due Date</td><td style="width: 5px;">:</td><td class="info_due_date"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Pemesan</td><td style="width: 5px;">:</td><td class="info_nama_pemesan"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Bagian</td><td style="width: 5px;">:</td><td class="info_bagian"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Prioritas</td><td style="width: 5px;">:</td><td class="info_priority"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Approved by</td><td style="width: 5px;">:</td><td class="info_tanggal_order"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Status</td><td style="width: 5px;">:</td><td class="info_status"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Attachment</td><td style="width: 5px;">:</td><td class="info_attachment"><i class="fas fa-sync fa-spin"></i></td></tr>
         </table>
       </div>
       <div class="modal-footer">
-        <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+        <a href="javascript:;" class="btn btn-white btn-close-modal-dtl-produksi" data-bs-dismiss="modal">Close</a>
       </div>
     </div>
   </div>
@@ -161,6 +164,50 @@
                     $('.tambah_data').click()
                     <?php
                 } ?>
+            })
+
+            $(document).on('click','.modal-dtl-produksi-right', function() {
+                    
+                var kdorder = $(this).attr('idorder')
+                var kdprod = $(this).attr('idproduksi')
+
+                $.ajax({
+                    type: "GET",
+                    url: "<?php echo base_url() ?>produksi/get_data_order/" + kdorder,
+                    success: function(data){
+                        var dt = JSON.parse(data)
+                        $('.info_kdorder').html(kdorder)
+                        $('.info_tanggal_order').html(dt.tanggal_order)
+                        $('.info_nama_pemesan').html(dt.nama_pemesan)
+                        $('.info_bagian').html(dt.bagian)
+                        $('.info_priority').html(dt.priority)
+                        $('.info_status').html(dt.status)
+                        $('.info_attachment').html(dt.attachment)
+                        $('.info_barang').html(dt.barang)
+                        $('.info_qty').html(dt.qty)
+                        $('.info_due_date').html(dt.due_date)
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                });
+            })
+
+            $(document).on('click','.btn-close-modal-dtl-produksi', function() {
+                $('.info_kdorder').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_tanggal_order').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_nama_pemesan').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_bagian').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_priority').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_status').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_attachment').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_barang').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_qty').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_due_date').html('<i class="fas fa-sync fa-spin"></i>')
             })
 
             $(document).on('click','.tambah_data', function() {

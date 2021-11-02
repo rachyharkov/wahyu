@@ -188,7 +188,8 @@ class Orders extends CI_Controller
         		'approved_by' => $row->approved_by,
         		'attachment' => $row->attachment,
                 'status' => $row->status,
-                'reject_note' => $row->reject_note
+                'reject_note' => $row->reject_note,
+                'classnyak' => $this
     	    );
             $this->load->view('orders/orders_read', $data);
         } else {
