@@ -1,3 +1,5 @@
+<link href="<?php echo base_url() ?>assets/assets/plugins/bootstrap-clockpicker/src/clockpicker.css" rel="stylesheet" />
+<link href="<?php echo base_url() ?>assets/assets/plugins/bootstrap-clockpicker/src/standalone.css" rel="stylesheet" />
 <style>
 	
 	.select2-container
@@ -49,12 +51,14 @@
 						<input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
 					</div>
 					<div class="col-md-3">
-						<div class="input-group">
-						  <input type="text" class="form-control masked-input-date jam-awal" name="jam_awal" value="08:00"/>
+
+						<div class="input-group clockpicker">
+						  <input type="text" class="form-control jam-awal" name="jam_awal" value="08:00"/>
 						  <span class="input-group-text input-group-addon">
 						    <i class="fa fa-clock"></i>
 						  </span>
 						</div>
+
 					</div>
 				</div>
 
@@ -136,10 +140,12 @@
 		</div>
 	</div>
 </form>
+<script src="<?php echo base_url() ?>assets/assets/plugins/bootstrap-clockpicker/src/clockpicker.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url() ?>assets/assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
 <script type="text/javascript">
+
 	$(document).ready(function() {
 
 		$(".masked-input-date").mask("99:99");
@@ -639,6 +645,19 @@
 			$('.input-group-kdorder').remove()
 			$('#kode_order').addClass('readonly').attr('readonly','readonly')
 		})
+
+		$('.clockpicker').clockpicker({
+			autoclose: true,
+			afterDone: function() {
+				sumETA()
+		    	deteksiKetersediaanJadwal()
+		    	refreshMachineList()
+		    	setTimeout(function() {
+		    		sumETA()
+		    		checkdisablecreateproductionbutton()
+		    	},500)
+			}
+		});
 	    <?php 
 
 	    if ($machine_list) {

@@ -450,10 +450,11 @@ class Produksi extends CI_Controller
         return $data;
     }
 
-    function get_data_order($kdorder)
+    function get_data_order($kdorder,$kdprod)
     {
         $data = $this->Orders_model->get_by_kd_orders_pure($kdorder);
-
+        $dataprod = $this->Produksi_model->get_by_id($kdprod);
+        
         $op = $data->priority;
         $badge = '';
         if ($op == 1) {
@@ -478,6 +479,8 @@ class Produksi extends CI_Controller
             'attachment' => $data->attachment,
             'barang' => $data->nama_barang,
             'qty' => $data->qty,
+            'tanggal_produksi' => $dataprod->tanggal_produksi,
+            'rencana_selesai' => $dataprod->rencana_selesai
         );
 
         echo json_encode($dt);

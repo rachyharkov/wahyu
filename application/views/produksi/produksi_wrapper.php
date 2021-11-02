@@ -86,6 +86,8 @@
             <tr><td style="width: 90px;">Approved by</td><td style="width: 5px;">:</td><td class="info_tanggal_order"><i class="fas fa-sync fa-spin"></i></td></tr>
             <tr><td style="width: 90px;">Status</td><td style="width: 5px;">:</td><td class="info_status"><i class="fas fa-sync fa-spin"></i></td></tr>
             <tr><td style="width: 90px;">Attachment</td><td style="width: 5px;">:</td><td class="info_attachment"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Tanggal Produksi</td><td style="width: 5px;">:</td><td class="info_tanggal_produksi"><i class="fas fa-sync fa-spin"></i></td></tr>
+            <tr><td style="width: 90px;">Rencana Selesai</td><td style="width: 5px;">:</td><td class="info_rencana_selesai"><i class="fas fa-sync fa-spin"></i></td></tr>
         </table>
       </div>
       <div class="modal-footer">
@@ -112,7 +114,6 @@
     </div>
   </div>
 </div>
-
         <?php
         if (is_allowed_button($this->uri->segment(1),'read')<1) { ?>
             <script>
@@ -150,7 +151,6 @@
 
         <script type="text/javascript">
 
-
             //THIS IS FOR PRODUKSI
             
             function changewindowtitle(text) {
@@ -173,7 +173,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "<?php echo base_url() ?>produksi/get_data_order/" + kdorder,
+                    url: "<?php echo base_url() ?>produksi/get_data_order/" + kdorder + "/" + kdprod,
                     success: function(data){
                         var dt = JSON.parse(data)
                         $('.info_kdorder').html(kdorder)
@@ -186,6 +186,8 @@
                         $('.info_barang').html(dt.barang)
                         $('.info_qty').html(dt.qty)
                         $('.info_due_date').html(dt.due_date)
+                        $('.info_tanggal_produksi').html(dt.tanggal_produksi)
+                        $('.info_rencana_selesai').html(dt.rencana_selesai)
                     },
                     error: function(error) {
                         Swal.fire({
@@ -208,6 +210,8 @@
                 $('.info_barang').html('<i class="fas fa-sync fa-spin"></i>')
                 $('.info_qty').html('<i class="fas fa-sync fa-spin"></i>')
                 $('.info_due_date').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_tanggal_produksi').html('<i class="fas fa-sync fa-spin"></i>')
+                $('.info_rencana_selesai').html('<i class="fas fa-sync fa-spin"></i>')
             })
 
             $(document).on('click','.tambah_data', function() {
