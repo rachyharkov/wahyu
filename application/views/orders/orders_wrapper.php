@@ -87,7 +87,7 @@ if ($action == null) {
                                         <th>D/T</th>
                                         <th>P</th>
                                         <th>L</th>
-                                        <th>M. Material</th>
+                                        <th>Masa</th>
                                         <th>Stok</th>
                                         <th>Action</th>
                                     </tr>

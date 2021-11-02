@@ -496,22 +496,12 @@
 		}
 
 		function checkdisablecreateproductionbutton() {
-			if ($('.tabel-material-ready-to-use tbody tr').length > 0 ){
+			if ($('.available-machine').length > 0 ){
 				$('.btn-create-produksi').removeAttr('disabled').removeClass('disabled');
 			} else {
 				$('.btn-create-produksi').attr('disabled',true).addClass('disabled');
 			}
 		}
-
-
-	    $('.tabel-material-ready-to-use').on('click','.btn-hapus-material', function() {
-	        const nama_material = $(this).attr('id')
-	        const thisel = $(this)
-	        let thisrow = thisel.parents('tr')
-
-			thisrow.remove()
-			checkdisablecreateproductionbutton()
-	    })
 
 	    $('#cbsmartallocate').on('change', function() {
 	    	if (this.checked) {
@@ -532,34 +522,7 @@
 
 	    		})
 	    	}
-	    	// checkAlokasiMelebihiTotalMaterial()
 	    })
-
-	    // $('.tabel-machine').on('input','.materialallocated', function() {
-
-	    // 	var thisel = $(this)
-
-	    // 	var materialallocatedonthismachine = parseInt($(this).val())
-	    // 	var treshdldpermachine = parseInt($('.tresholdmaterialspermachine').val())
-    		
-    	// 	thisel.removeClass('is-invalid')
-	    	
-	    // 	if (materialallocatedonthismachine > treshdldpermachine) {
-	    // 		thisel.addClass('is-invalid')
-	    // 	}
-
-	    // 	checkAlokasiMelebihiTotalMaterial()
-	    // })
-
-	    // $('.tabel-machine').on('input','.goodsallocated', function() {
-
-	    // 	var thisel = $(this)
-
-	    // 	if (thisel.parents('tr').hasClass('checked')) {
-		   //  	sumETA()
-	    // 	}
-
-	    // })
 
 	    $('.daftar_mesin').on('input','.troughputperproduct',function() {
 	    	
@@ -601,9 +564,9 @@
     		sumETA()
 	    	deteksiKetersediaanJadwal()
 	    	refreshMachineList()
-	    	checkdisablecreateproductionbutton()
 	    	setTimeout(function() {
 	    		sumETA()
+	    		checkdisablecreateproductionbutton()
 	    	},500)
 	    })
 
