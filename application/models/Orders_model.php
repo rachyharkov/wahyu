@@ -22,6 +22,13 @@ class Orders_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_step_for_signer($level_id, $priority)
+    {
+        $this->db->where('order_category',$priority);
+        $this->db->where('level_id', $level_id);
+        return $this->db->get('flow_approved')->row();
+    }
+
     function get_all_waiting()
     {
         $this->db->where('status', 'WAITING');

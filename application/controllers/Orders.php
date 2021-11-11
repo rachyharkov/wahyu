@@ -103,102 +103,92 @@ class Orders extends CI_Controller
 
         if ($attachment && $material) {
 
-            $leveluser = $this->session->userdata('level_id');
+            $signer = $this->session->userdata('level_id');
 
             $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
 
-            if ($dataorder->priority == 1) {
-                if ($leveluser == 220) { //ADMIN WM
-                    $approvalresult = $this->sign_order('setujui',$leveluser,$kd_order);
-
-                    $updatedataorder = array(
-                        'status' => 'ON PROGRESS',
-                        'approved_by' => $approvalresult
-                    );
-
-                    $this->Orders_model->update($id, $updatedataorder);
 
 
-                    $orders = $this->Orders_model->get_all_waiting();
-                    $data = array(
-                        'orders_data' => $orders,
-                        'action'=> 'waiting',
-                        'classnyak' => $this
-                    );
-                    $arr = array(
-                        'response' => 1,
-                        'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
-                    );
+            $arr_appr = json_decode($dataorder->approved_by,true);
 
-                    echo json_encode($arr);
+
+            $detectstepforthissigner = $this->Orders_model->get_step_for_signer($signer, $dataorder->priority)->step;
+
+            $realstep = $detectstepforthissigner;
+
+
+            $counted = count($arr_appr);
+
+            $a = 'WAITING';
+
+
+            if ($realstep <= $counted) {
+            
+                $init = $arr_appr;
+
+                $init[$realstep - 1]['status'] = 'true';
+                $init[$realstep - 1]['tanda_tangan'] = 'sudah';
+                
+                $stepforupcomersigner = $this->Categori_request_model->get_step_for_signer($init[$realstep - 1]['user_id'], $categori_request_id)->step;
+
+
+                if ($stepforupcomersigner > $counted - 1) {
+                    $a = 'ON PROGRESS';
+                    //echo $a;
+                }
+                else
+                {
+                    $init[$stepforupcomersigner]['tanda_tangan'] = 'sekarang';
                 }
             }
 
-            if ($dataorder->priority == 2 || $dataorder->priority == 3) {
-                if ($leveluser == 220) { //KEPALA DEV
-                    $approvalresult = $this->sign_order('setujui',$leveluser,$kd_order);
+            $updatedataorder = array(
+                'status' => $a,
+                'approved_by' => json_encode($init)
+            );
 
-                    $updatedataorder = array(
-                        'status' => 'WAITING',
-                        'approved_by' => $approvalresult
-                    );
-
-                    $this->Orders_model->update($id, $updatedataorder);
+            $this->Orders_model->update($id, $updatedataorder);
 
 
-                    $orders = $this->Orders_model->get_all_waiting();
-                    $data = array(
-                        'orders_data' => $orders,
-                        'action'=> 'waiting',
-                        'classnyak' => $this
-                    );
-                    $arr = array(
-                        'response' => 1,
-                        'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
-                    );
+            $orders = $this->Orders_model->get_all_waiting();
+            $data = array(
+                'orders_data' => $orders,
+                'action'=> 'waiting',
+                'classnyak' => $this
+            );
+            $arr = array(
+                'response' => 1,
+                'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+            );
 
-                    echo json_encode($arr);
-                }
-
-                if ($leveluser == 221) { //KEPALA DEV
-                    $approvalresult = $this->sign_order('setujui',$leveluser,$kd_order);
-
-                    $updatedataorder = array(
-                        'status' => 'ON PROGRESS',
-                        'approved_by' => $approvalresult
-                    );
-
-                    $this->Orders_model->update($id, $updatedataorder);
-
-
-                    $orders = $this->Orders_model->get_all_waiting();
-                    $data = array(
-                        'orders_data' => $orders,
-                        'action'=> 'waiting',
-                        'classnyak' => $this
-                    );
-                    $arr = array(
-                        'response' => 1,
-                        'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
-                    );
-
-                    echo json_encode($arr);
-                }
-            }
+            echo json_encode($arr);
 
         } else {
 
-            $approvalresult = $this->sign_order('tolak',$leveluser,$kd_order);
+            $signer = $this->session->userdata('level_id');
+
+            $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+
+            $arr_appr = json_decode($dataorder->approved_by,true);
+
+            $detectstepforthissigner = $this->Orders_model->get_step_for_signer($signer, $dataorder->priority)->step;
+
+            $realstep = intval($detectstepforthissigner) - 1;
+
+            $init = $arr_appr;
+
+            $init[$realstep]['status'] = 'false';
+            $init[$realstep]['tanda_tangan'] = 'sudah';
+
             //print_r($pp);
             $updatedataorder = array(
                 'status' => 'REJECTED',
-                'approved_by' => $pp,
+                'approved_by' => json_encode($init),
                 'reject_note' => $reason
             );
 
             $this->Orders_model->update($id, $updatedataorder);
 
-            $role = $this->session->userdata('level_id');
             $orders = $this->Orders_model->get_all_waiting();
             $data = array(
                 'orders_data' => $orders,

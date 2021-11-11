@@ -12,7 +12,7 @@
     <table id="data-table-data" class="table table-bordered table-hover table-td-valign-middle text-white">
      <thead>
         <tr>
-            <th>No<?php echo $rolenya ?></th>
+            <th>No</th>
 	<th>Kode Order</th>
 	<th>Nama Pemesan</th>
 	<th>Bagian</th>
