@@ -22,6 +22,13 @@ class Orders_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_waiting()
+    {
+        $this->db->where('status', 'WAITING');
+        $this->db->like('approved_by','-');
+        return $this->db->get('orders')->result();
+    }
+
     function get_all_tertentu($status)
     {
         $this->db->where('status', $status);
@@ -48,11 +55,7 @@ class Orders_model extends CI_Model
 
     function get_by_kd_orders_pure($kd_order)
     {
-        $where = array(
-            'kd_order' => $kd_order
-        );
-
-        $this->db->where($where);
+        $this->db->where('kd_order', $kd_order);
         return $this->db->get('orders')->row();
     }
 
@@ -116,6 +119,14 @@ class Orders_model extends CI_Model
         }
         date_default_timezone_set('Asia/Jakarta');
         return 'O'.date('dmy').$kd;
+    }
+
+    function get_all_approval_name_and_step($priority)
+    {
+        $this->db->join('level','level.level_id = flow_approved.level_id');
+        $this->db->where('flow_approved.order_category',$priority);
+        $this->db->order_by('step','ASC');
+        return $this->db->get('flow_approved')->result();
     }
 
 }

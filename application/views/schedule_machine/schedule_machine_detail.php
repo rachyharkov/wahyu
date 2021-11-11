@@ -90,9 +90,79 @@
 	          		</thead>
 	          		<tbody>
 	          			<?php
+	          			$hariliburAPI = file_get_contents('https://api-harilibur.vercel.app/api?month='.$month.'&year='.$year.'');
+          				$resp = json_decode($hariliburAPI, TRUE);
 
+          				$arrtgllibur = [];
+
+          				foreach ($resp as $key => $value) {
+          					$arrtgllibur[] = $value['holiday_date'];
+          				}
+
+          				print_r($arrtgllibur);
+
+
+	          			$i = 1;
+	          			foreach ($dataproduksi as $key => $value) {
+	          				
+
+	          				$dataorder = $classnyak->get_data_order_njson($value->kd_order,$value->id);
+	          				// print_r($resp);
+
+	          				?>
+	          				<tr>
+	          					<td><?php echo $i++ ?></td>
+	          					<td><?php echo $value->id ?></td>
+	          					<td><?php echo $dataorder['barang'] ?></td>
+	          					<td><?php echo $dataorder['qty'] ?></td>
+	          					<td>P</td>
+	          					<?php
+	          					$datestartnya = date('d', strtotime($dataorder['tanggal_produksi']));
+	          					$dateendnya = date('d', strtotime($dataorder['rencana_selesai']));
+	          					foreach ($period as $value) {
+
+	          						if ($value->format('d') >= $datestartnya && $value->format('d') <= $dateendnya) {
+
+	          							if (in_array($value->format('Y-m-j'), $arrtgllibur)) {
+	          								?>
+	          								<td style="background-color: red;"></td>
+	          								<?php
+	          							} else {
+	          								?>
+	          								<td style="background-color: green;"><?php echo $value->format('Y-m-j') ?></td>
+	          								<?php
+	          							}
+	          						} else {
+	          							if (in_array($value->format('Y-m-j'), $arrtgllibur)) {
+	          								?>
+	          								<td style="background-color: red;"></td>
+	          								<?php
+	          							} else {
+	          								?>
+	          								<td></td>
+	          								<?php
+	          							}
+	          						}
+	          					}
+	          					?>
+	          				</tr>
+	          				<tr>
+	          					<td></td>
+	          					<td></td>
+	          					<td></td>
+	          					<td></td>
+	          					<td>A</td>
+	          					<?php
+	          					foreach ($period as $value) {
+	          						?>
+	          						<td></td>
+	          						<?php
+	          					}
+	          					?>
+	          				</tr>
+	          				<?php
+	          			}
 	          			?>
-	          			<tr></tr>
 	          		</tbody>
 	          	</table>
           	</div>

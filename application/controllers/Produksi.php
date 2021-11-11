@@ -100,6 +100,37 @@ class Produksi extends CI_Controller
         $kode = $this->Produksi_model->buat_kode(date('Y-m-d'));
         $kd_order = $this->input->post('kode_order', TRUE);
 
+        $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+
+        $approvenya = json_decode($data->approved_by, true);
+        $statusorder = '';
+
+        if ($dataorder->priority == 1) {
+            $statusorder = 'ON PROGRESS';
+            foreach ($approvenya as $key => $value) {
+                if ($key == 'adminwm') {
+                    $approvenya[$key] = 'true';
+                }
+            }
+        }
+
+        if ($dataorder->priority == 2 || $dataorder->priority == 3) {
+            $statusorder = 'WAITING';
+
+            foreach ($approvenya as $key => $value) {
+                if ($key == 'adminwm') {
+                    $approvenya[$key] = 'true';
+                }
+
+                if ($key == 'kepaladev') {
+                    $approvenya[$key] = '-';
+                }
+            }
+
+        }
+
+        $pp = json_encode($approvenya);
+
         // for ($i = 0; $i < count($material_dibutuhkan); $i++) { 
         //     $readytouse = array(
         //         'kode_produksi' => $kode,
@@ -162,7 +193,8 @@ class Produksi extends CI_Controller
         $this->Produksi_model->insert($data);
 
         $updatedataorder = array(
-            'status' => 'ON PROGRESS'
+            'status' => $statusorder,
+            'approved_by' => $pp
         );
 
         $this->Orders_model->update_by_kd_order($kd_order, $updatedataorder);
@@ -485,7 +517,6 @@ class Produksi extends CI_Controller
 
         echo json_encode($dt);
     }
-
 }
 
 /* End of file Produksi.php */

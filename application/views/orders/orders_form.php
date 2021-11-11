@@ -129,7 +129,7 @@
 					</label>
 					<img id="frame" src="<?php echo base_url().'assets/internal/'.$attachment ?>" width="100%" height="200px" style="object-fit: cover; display: <?php echo $action == 'form_update_action' ? 'block':'none' ?>;" />
 					<div class="mb-15px">
-					  <input class="form-control form-control-lg" name="attachment" id="attachment" type="file" onchange="preview(this)" required/>
+					  <input class="form-control form-control-lg" name="attachment" id="attachment" type="file" onchange="preview(this)"/>
 			    		<input type="hidden" name="attachment_old" id="attachment_old" placeholder="Attachment" value="<?php echo $attachment; ?>" />
 					</div>
 

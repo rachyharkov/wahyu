@@ -436,7 +436,7 @@
 
 			var date = moment($('#tanggal_produksi').val() + ' ' + $('.jam-awal').val(), 'YYYY-MM-DD HH:mm')
 			date.add(summinutes, 'minutes')
-			var test = summinutes - 900
+			var test = summinutes - 900 //8 jam ga ada kerja
 			console.log(test)
 			if (test > 0) {
 				date.add(540, 'minutes')

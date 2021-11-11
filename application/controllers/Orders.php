@@ -51,13 +51,42 @@ class Orders extends CI_Controller
     public function waiting()
     {
         is_allowed($this->uri->segment(1),null);
-        $orders = $this->Orders_model->get_all_tertentu('WAITING');
+
+        $role = $this->session->userdata('level_id');
+        $orders = $this->Orders_model->get_all_waiting();
         $data = array(
             'orders_data' => $orders,
+            'rolenya'=> $role,
             'action'=> 'waiting',
             'classnyak' => $this
         );
         $this->load->view('orders/orders_waiting_list', $data);
+    }
+
+    function sign_order($type,$leveluser, $kdorder)
+    {
+        $data = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+        if ($type == 'setujui') {
+            $approvenya = json_decode($data->approved_by, true);
+            foreach ($approvenya as $key => $value) {
+                if ($key == $leveluser && $value == '-') {
+                    $approvenya[$key] = 'true';
+                }
+            }
+            $pp = json_encode($approvenya);
+            return $pp;
+        }
+
+        if ($type == 'tolak') {
+            $approvenya = json_decode($data->approved_by, true);
+            foreach ($approvenya as $key => $value) {
+                if ($key == $leveluser && $value == '-') {
+                    $approvenya[$key] = 'false';
+                }
+            }
+            $pp = json_encode($approvenya);
+            return $pp;
+        }
     }
 
     public function update_approve()
@@ -70,24 +99,107 @@ class Orders extends CI_Controller
         $kd_order = $this->input->post('kd_order');
         $reason = $this->input->post('txtrejectreason');
 
-        if ($attachment && $material) {
-            $arr = array(
-                'response' => 2,
-                'kd_order' => $kd_order
-            );
+        // $priority = $this->input->post('priority');
 
-            echo json_encode($arr);
+        if ($attachment && $material) {
+
+            $leveluser = $this->session->userdata('level_id');
+
+            $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+
+            if ($dataorder->priority == 1) {
+                if ($leveluser == 220) { //ADMIN WM
+                    $approvalresult = $this->sign_order('setujui',$leveluser,$kd_order);
+
+                    $updatedataorder = array(
+                        'status' => 'ON PROGRESS',
+                        'approved_by' => $approvalresult
+                    );
+
+                    $this->Orders_model->update($id, $updatedataorder);
+
+
+                    $orders = $this->Orders_model->get_all_waiting();
+                    $data = array(
+                        'orders_data' => $orders,
+                        'action'=> 'waiting',
+                        'classnyak' => $this
+                    );
+                    $arr = array(
+                        'response' => 1,
+                        'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+                    );
+
+                    echo json_encode($arr);
+                }
+            }
+
+            if ($dataorder->priority == 2 || $dataorder->priority == 3) {
+                if ($leveluser == 220) { //KEPALA DEV
+                    $approvalresult = $this->sign_order('setujui',$leveluser,$kd_order);
+
+                    $updatedataorder = array(
+                        'status' => 'WAITING',
+                        'approved_by' => $approvalresult
+                    );
+
+                    $this->Orders_model->update($id, $updatedataorder);
+
+
+                    $orders = $this->Orders_model->get_all_waiting();
+                    $data = array(
+                        'orders_data' => $orders,
+                        'action'=> 'waiting',
+                        'classnyak' => $this
+                    );
+                    $arr = array(
+                        'response' => 1,
+                        'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+                    );
+
+                    echo json_encode($arr);
+                }
+
+                if ($leveluser == 221) { //KEPALA DEV
+                    $approvalresult = $this->sign_order('setujui',$leveluser,$kd_order);
+
+                    $updatedataorder = array(
+                        'status' => 'ON PROGRESS',
+                        'approved_by' => $approvalresult
+                    );
+
+                    $this->Orders_model->update($id, $updatedataorder);
+
+
+                    $orders = $this->Orders_model->get_all_waiting();
+                    $data = array(
+                        'orders_data' => $orders,
+                        'action'=> 'waiting',
+                        'classnyak' => $this
+                    );
+                    $arr = array(
+                        'response' => 1,
+                        'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+                    );
+
+                    echo json_encode($arr);
+                }
+            }
+
         } else {
 
+            $approvalresult = $this->sign_order('tolak',$leveluser,$kd_order);
+            //print_r($pp);
             $updatedataorder = array(
                 'status' => 'REJECTED',
-                'approved_by' => $this->session->userdata('userid'),
+                'approved_by' => $pp,
                 'reject_note' => $reason
             );
 
             $this->Orders_model->update($id, $updatedataorder);
 
-            $orders = $this->Orders_model->get_all_tertentu('WAITING');
+            $role = $this->session->userdata('level_id');
+            $orders = $this->Orders_model->get_all_waiting();
             $data = array(
                 'orders_data' => $orders,
                 'action'=> 'waiting',
@@ -156,6 +268,7 @@ class Orders extends CI_Controller
                 'attachment' => $row->attachment,
                 'status' => $row->status,
                 'reject_note' => $row->reject_note,
+                'whoisreviewing' => $row->approved_by,
                 'classnyak' => $this,
                 'material' => $this->Material_model->get_all()
 
@@ -164,6 +277,13 @@ class Orders extends CI_Controller
         } else {
             echo 'not found';
         }
+    }
+
+    public function getlevelname($id)
+    {
+        $this->load->model('Level_model');
+        $data = $this->Level_model->get_by_id($id);
+        return $data;
     }
 
     public function read() 
@@ -222,6 +342,33 @@ class Orders extends CI_Controller
     	);
         $this->load->view('orders/orders_form', $data);
     }
+
+    function generate_approval_list($priority)
+    {
+        $data = $this->Orders_model->get_all_approval_name_and_step($priority);
+
+        $arr = [];
+
+        $i = 0;
+        
+        foreach ($data as $key => $value) {
+
+            $arr[$i]['level_id'] = $value->level_id;
+            $arr[$i]['status'] = '-';
+            
+            if ($i == 0) {
+            
+                $arr[$i]['tanda_tangan'] = 'sekarang';
+            } else {
+                $arr[$i]['tanda_tangan'] = 'belum';
+            }
+            
+            $i++;
+        }
+
+        return json_encode($arr);
+
+    }
     
     function create_action() 
     {
@@ -262,7 +409,7 @@ class Orders extends CI_Controller
                 'no_kontak' => $this->input->post('no_kontak',TRUE),
 
                 'priority' => $this->input->post('priority',TRUE),
-                'approved_by' => 'NULL',
+                'approved_by' => $this->generate_approval_list($this->input->post('priority',TRUE)),
                 'attachment' => $uploadData['file_name'],
                 'status' => 'WAITING',
 
@@ -357,7 +504,7 @@ class Orders extends CI_Controller
                 'no_kontak' => $this->input->post('no_kontak',TRUE),
 
                 'priority' => $this->input->post('priority',TRUE),
-                'approved_by' => $this->input->post('approved_by',TRUE),
+                'approved_by' => $this->generate_approval_list($this->input->post('priority',TRUE)),
                 'attachment' => $uploadData['file_name'],
 
                 'status' => 'WAITING'
@@ -369,6 +516,26 @@ class Orders extends CI_Controller
 
         } else {
 
+            $data = array(
+                'nama_pemesan' => $this->input->post('nama_pemesan',TRUE),
+                'bagian' => $this->input->post('bagian',TRUE),
+                'keterangan' => $this->input->post('keterangan',TRUE),
+
+                'nama_barang' => $this->input->post('nama_barang',TRUE),
+                'qty' => $this->input->post('qty',TRUE),
+                'due_date' => $this->input->post('due_date',TRUE),
+                'note' => $this->input->post('note',TRUE),
+                'no_kontak' => $this->input->post('no_kontak',TRUE),
+
+                'priority' => $this->input->post('priority',TRUE),
+                'approved_by' => $this->generate_approval_list($this->input->post('priority',TRUE)),
+                'attachment' => $this->input->post('attachment_old',TRUE),
+
+                'status' => 'WAITING'
+            );
+            // print_r($data);
+
+            $this->Orders_model->update($this->input->post('order_id', TRUE), $data);
             $this->list();
         }
     }

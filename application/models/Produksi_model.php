@@ -161,7 +161,7 @@ class Produksi_model extends CI_Model
     function find_produksi($machine, $month, $year)
     {
         return $this->db->query("
-            SELECT * FROM `produksi` WHERE machine_use LIKE '%".$machine."%' month(tanggal_produksi) = '".$month."' AND year(tanggal_produksi) >= '".$year."';
+            SELECT * FROM `produksi` WHERE machine_use LIKE '%".$machine."%' AND month(tanggal_produksi) = '".$month."' AND year(tanggal_produksi) = '".$year."';
             ")->result();
     }
 

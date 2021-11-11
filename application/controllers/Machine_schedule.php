@@ -11,6 +11,7 @@ class Machine_schedule extends CI_Controller {
         $this->load->model('Mesin_model');
         $this->load->model('Karyawan_model');
         $this->load->model('Produksi_model');
+        $this->load->model('Orders_model');
         $this->load->model('Setting_app_model');
     }
 
@@ -34,10 +35,32 @@ class Machine_schedule extends CI_Controller {
 			'machine_name' => $machinedata->nama_mesin,
 			'month' => $month,
 			'year' => $year,
-
+			'dataproduksi' => $dataproduksi,
 			'classnyak' => $this,
             'sett_apps' =>$this->Setting_app_model->get_by_id(1),
 		);
 		$this->template->load('template','schedule_machine/schedule_machine_detail',$data);
 	}
+
+	function get_data_order_njson($kdorder,$kdprod)
+    {
+        $data = $this->Orders_model->get_by_kd_orders_pure($kdorder);
+        $dataprod = $this->Produksi_model->get_by_id($kdprod);
+
+        $dt = array(
+            'kdorder' => $kdorder,
+            'tanggal_order' => $data->tanggal_order,
+            'due_date' => $data->due_date,
+            'nama_pemesan' => $data->nama_pemesan,
+            'priority' => $data->priority,
+            'status' => $data->status,
+            'attachment' => $data->attachment,
+            'barang' => $data->nama_barang,
+            'qty' => $data->qty,
+            'tanggal_produksi' => $dataprod->tanggal_produksi,
+            'rencana_selesai' => $dataprod->rencana_selesai
+        );
+
+        return $dt;
+    }
 }

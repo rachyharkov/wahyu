@@ -2,7 +2,7 @@
 <tr class="available-machine" id="<?php echo $value->mesin_id ?>">
 	<td>
 		<div class="form-check">
-			<input class="form-check-input checkboxmachine" name="machine_use[]" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>" value="<?php echo $value->mesin_id ?>"/>
+			<input class="form-check-input checkboxmachine" name="machine_use[]" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>" value="<?php echo $value->kd_mesin ?>"/>
 			<label class="form-check-label" for="checkbox<?php echo $value->mesin_id ?>"><?php echo $value->nama_mesin ?></label>
 		</div>
 	</td>
