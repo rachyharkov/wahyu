@@ -11,7 +11,9 @@ class Orders extends CI_Controller
         parent::__construct();
         is_login();
         $this->load->model('Orders_model');
+        $this->load->model('Mesin_model');
         $this->load->model('Material_model');
+        $this->load->model('Produksi_model');
         $this->load->model('Bagian_model');
         $this->load->model('Setting_app_model');
         $this->load->library('form_validation');
@@ -89,19 +91,23 @@ class Orders extends CI_Controller
         }
     }
 
-    public function update_approve()
+    public function update_approve($action)
     {
         $id = $this->input->post('id');
 
         $attachment = $this->input->post('attachmentapprovestatus');
         $material = $this->input->post('materialavailablestatus');
+        $etproduction = $this->input->post('kalkulasi');
 
         $kd_order = $this->input->post('kd_order');
         $reason = $this->input->post('txtrejectreason');
 
         // $priority = $this->input->post('priority');
 
-        if ($attachment && $material) {
+        $responsecode = 1;
+
+
+        if ($action == 'approve') {
 
             $signer = $this->session->userdata('level_id');
 
@@ -116,6 +122,10 @@ class Orders extends CI_Controller
 
             $realstep = $detectstepforthissigner;
 
+            // echo 'before <br>';
+            // echo '<pre>';
+            //     print_r($arr_appr);
+            // echo '</pre>';
 
             $counted = count($arr_appr);
 
@@ -129,11 +139,12 @@ class Orders extends CI_Controller
                 $init[$realstep - 1]['status'] = 'true';
                 $init[$realstep - 1]['tanda_tangan'] = 'sudah';
                 
-                $stepforupcomersigner = $this->Categori_request_model->get_step_for_signer($init[$realstep - 1]['user_id'], $categori_request_id)->step;
+                $stepforupcomersigner = $this->Orders_model->get_step_for_signer($init[$realstep - 1]['level_id'], $dataorder->priority)->step;
 
 
                 if ($stepforupcomersigner > $counted - 1) {
                     $a = 'ON PROGRESS';
+                    $responsecode = 2;
                     //echo $a;
                 }
                 else
@@ -141,6 +152,11 @@ class Orders extends CI_Controller
                     $init[$stepforupcomersigner]['tanda_tangan'] = 'sekarang';
                 }
             }
+
+            // echo '<br><br>aFTER';
+            // echo '<pre>';
+            //     print_r($init);
+            // echo '</pre>';
 
             $updatedataorder = array(
                 'status' => $a,
@@ -156,14 +172,42 @@ class Orders extends CI_Controller
                 'action'=> 'waiting',
                 'classnyak' => $this
             );
-            $arr = array(
-                'response' => 1,
-                'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
-            );
 
-            echo json_encode($arr);
+            if ($responsecode == 1) {
+                
+                $arr = array(
+                    'response' => $responsecode,
+                    'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+                );
 
-        } else {
+                echo json_encode($arr);
+            }
+
+            if ($responsecode == 2) {
+                $arr = array(
+                    'response' => $responsecode,
+                    'kd_order' => $kd_order//$this->approve($id);
+                );
+
+                echo json_encode($arr);
+            }
+
+
+        }
+
+        if($action == 'reject'){
+
+            if (!$attachment) {
+                $reason.= '[Attachment perlu Perbaikan]';
+            }
+
+            if (!$material) {
+                $reason.= '[Kendala Material]';
+            }
+
+            if (!$etproduction) {
+                $reason.= '[Estimasi Waktu/Kendala Mesin]';
+            }
 
             $signer = $this->session->userdata('level_id');
 
@@ -197,7 +241,7 @@ class Orders extends CI_Controller
             );
 
             $arr = array(
-                'response' => 1,
+                'response' => $responsecode,
                 'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
             );
 
@@ -253,6 +297,12 @@ class Orders extends CI_Controller
                 'note' => $row->note,
                 'no_kontak' => $row->no_kontak,
 
+                
+                'machine_list' => $this->Mesin_model->get_all(),
+                'tanggal_produksi' => set_value('tanggal_produksi',date('Y-m-d')),
+                'total_barang_jadi' => set_value('total_barang_jadi',1),
+                'rencana_selesai' => set_value('rencana_selesai',date('Y-m-d')),
+
                 'priority' => $row->priority,
                 'approved_by' => $row->approved_by,
                 'attachment' => $row->attachment,
@@ -264,6 +314,36 @@ class Orders extends CI_Controller
 
             );
             $this->load->view('orders/orders_waiting_read', $data);
+        } else {
+            echo 'not found';
+        }
+    }
+
+    public function detail_order($kd_order)
+    {
+        is_allowed($this->uri->segment(1),'read');
+        $row = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+        if ($row) {
+            $data = array(
+                'order_id' => $row->order_id,
+                'nama_pemesan' => $row->nama_pemesan,
+                'bagian' => $row->bagian,
+                'keterangan' => $row->keterangan,
+                'kd_order' => $row->kd_order,
+                'nama_barang' => $row->nama_barang,
+                'qty' => $row->qty,
+                'due_date' => $row->due_date,
+                'note' => $row->note,
+                'no_kontak' => $row->no_kontak,
+
+                'priority' => $row->priority,
+                'approved_by' => $row->approved_by,
+                'attachment' => $row->attachment,
+                'status' => $row->status,
+                'reject_note' => $row->reject_note,
+                'classnyak' => $this
+            );
+            $this->load->view('orders/orders_detail', $data);
         } else {
             echo 'not found';
         }
@@ -613,12 +693,6 @@ class Orders extends CI_Controller
         exit();
     }
 
-    public function getbagiandata($id)
-    {
-        $data = $this->Bagian_model->get_by_id($id);
-        return $data;
-    }
-
     public function search_material($keyword)
     {
         $data = $this->db->like('kd_material',$keyword)->get('material')->result();
@@ -658,6 +732,259 @@ class Orders extends CI_Controller
             echo json_encode($output);
         }
 
+    }
+
+    function getmachinedetail($id)
+    {
+        $data = $this->Mesin_model->get_by_id($id);
+        return $data;
+    }
+
+    function deteksi_ketersediaan_jadwal() {
+
+        $ds = $this->input->post('ds');
+        $de = $this->input->post('de');
+
+        $data = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
+
+        $machinelist = $this->Mesin_model->get_all();
+
+        $data_penggunaan_mesin_oleh_produksi_lain = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
+
+        $datax = array(
+            'machine_list' => $machinelist,
+            'data_produksi' => $data_penggunaan_mesin_oleh_produksi_lain
+        );
+
+        if ($data) {
+
+            $data_temuan = '';
+            $modal = '';
+
+            foreach ($data as $key => $value) {
+                $data_temuan .= '
+                <tr>
+                    <td><i class="fas fa-cog fa-spin"></i></td>
+                    <td><a href="#modaldetailproduksi" class="modal-dtl-produksi-right" idproduksi="'.$value->id.'" idorder="'.$value->kd_order.'" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
+                    <td><label class="badge bg-danger">'.$value->priority.'</label></td>
+                </tr>';
+            }
+
+
+            $arr = array(
+                'message' => $ds.'/'.$de.' (oops)',
+                'smart_assist_title' => 'Jadwal Ditemukan',
+                'smart_assist_message' => '<div class="alert alert-danger"><b>Jadwal Ditemukan.</b> Ada proses produksi yang berjalan pada tanggal tersebut, untuk informasi detail mengenai masalah ini, berikut temuan data terkait.</div>
+                <table class="table table-sm table-hover">'.$data_temuan.'</table>',
+                'smart_assist_recommendation_action' => 'Anda bisa memilih mesin tertentu untuk digunakan oleh produksi saat ini',
+                // 'machinelist' => $this->load->view('produksi/machine_list', $datax, true)
+            );
+            echo json_encode($arr);
+        } else {
+
+
+            $arr = array(
+                'message' => $ds.'/'.$de.'jadwal_tersedia',
+                'smart_assist_title' => 'Jadwal tersedia',
+                'smart_assist_message' => '<div class="alert alert-success"><b>Jadwal Tersedia.</b> Tanggal ini belum di isi oleh jadwal produksi apapun.</div>',
+                'smart_assist_recommendation_action' => 'test',
+                // 'machinelist' => $this->load->view('produksi/machine_list', $datax, true)
+            );
+            echo json_encode($arr);
+        }
+    }
+
+    function get_machine_list()
+    {
+        $ds = $this->input->post('ds');
+        $de = $this->input->post('de');
+
+        $machine_list = $this->Mesin_model->get_all();
+
+        $data_produksi = $this->Produksi_model->deteksi_pengunaan_mesin_pada_tanggal($ds,$de);
+
+        $machine_id_list = [];
+
+        if ($machine_list) {
+            
+            if ($data_produksi) {
+
+                $dataproduksi = [];
+
+                foreach ($data_produksi as $value) {
+                    array_push($dataproduksi, $value->machine_use);
+                }
+
+                // print_r($dataproduksi);
+
+                $datamesin = [];
+
+                foreach ($dataproduksi as $key => $value) {
+                    $data_mesin_produksi_aktif = json_decode($value, true);
+
+                    foreach ($data_mesin_produksi_aktif as $x) {
+
+                        if (!in_array($x['machine_id'], $datamesin)) {
+                            array_push($datamesin, $x['machine_id']);
+                        }
+                    }
+                }
+
+                foreach ($machine_list as $key => $value) {
+
+                    //deteksi penggunan mesin bila ada data produksi pada tanggal tsb
+                    if (!in_array($value->mesin_id, $datamesin)) {
+                        //ambil data mesin pada produksi
+                        array_push($machine_id_list, $value->mesin_id);
+                    }
+                }
+            } else {
+                foreach ($machine_list as $key => $value) {
+                    array_push($machine_id_list, $value->mesin_id);
+                }
+            }
+        }
+
+        echo json_encode($machine_id_list);
+    }
+
+    //-----------DETEKSI JADWAL AREA-----------------//
+
+
+    function get_machine_data($id)
+    {
+        $data = $this->Mesin_model->get_by_id($id);
+
+        $datax = array(
+            'value' => $data
+        );
+        $this->load->view('produksi/machine', $datax);
+    }
+
+    function cek_kode_order_ready()
+    {
+        $kd_order = $this->input->post('id');
+
+        $detect = $this->Orders_model->get_by_kd_orders($kd_order, 'ON PROGRESS');
+
+        if ($detect) {
+            if ($detect->status != 'ON PROGRESS') {
+                $arr = array(
+                    'status' => 'no'
+                );
+
+                echo json_encode($arr);
+            } else {
+
+                $op = $detect->priority;
+                $badge = '';
+                if ($op == 1) {
+                    $badge = '<label class="badge bg-success">Biasa</label>';
+                }
+                if ($op == 2) {         
+                    $badge = '<label class="badge bg-warning">Urgent</label>';
+                }
+                if ($op == 3) {
+                    $badge = '<label class="badge bg-danger">Top Urgent</label>';
+                 
+                }
+
+                $ktr = $detect->keterangan;
+                $ktrstr = '';
+                if ($ktr == 1) {
+                    $ktrstr = 'PART BARU';
+                }
+                if ($ktr == 2) {         
+                    $ktrstr = 'REPAIR';
+                }
+                if ($ktr == 3) {
+                    $ktrstr = 'MODIFIKASI';
+                }
+
+                $data = '
+                    <b>'.$detect->kd_order.'</b>
+                    <table class="table table-sm table-hover">
+                        <tr>
+                            <td>Waktu</td>
+                            <td>:</td>
+                            <td>'.$detect->tanggal_order.'</td>
+                        </tr>
+                        <tr>
+                            <td>Pemesan</td>
+                            <td>:</td>
+                            <td>'.$detect->nama_pemesan.' ('.$detect->bagian.')</td>
+                        </tr>
+                        <tr>
+                            <td>Prioritas</td>
+                            <td>:</td>
+                            <td>'.$badge.'</td>
+                        </tr>
+                        <tr>
+                            <td>Keterangan</td>
+                            <td>:</td>
+                            <td>'.$ktrstr.'</td>
+                        </tr>
+                    </table>
+                    <a href="#modal-dialog-sketch-preview" picture="'.$detect->attachment.'" class="btn btn-green btn-sm sketsa_preview" style="width: 100%;" data-bs-toggle="modal">Sketsa</a>
+                ';
+                $arr = array(
+                    'status' => 'ok',
+                    'message' => $data,
+                    'qty' => $detect->qty,
+                    'priority' => $op
+                );
+
+                echo json_encode($arr);
+            }
+        } else {
+            $arr = array(
+                'status' => 'no'
+            );
+
+            echo json_encode($arr);
+        }
+    }
+
+    public function getbagiandata($id)
+    {
+        $data = $this->Bagian_model->get_by_id($id);
+        return $data;
+    }
+
+    function get_data_order($kdorder,$kdprod)
+    {
+        $data = $this->Orders_model->get_by_kd_orders_pure($kdorder);
+        $dataprod = $this->Produksi_model->get_by_id($kdprod);
+        
+        $op = $data->priority;
+        $badge = '';
+        if ($op == 1) {
+            $badge = '<label class="badge bg-success">Biasa</label>';
+        }
+        if ($op == 2) {         
+            $badge = '<label class="badge bg-warning">Urgent</label>';
+        }
+        if ($op == 3) {
+            $badge = '<label class="badge bg-danger">Top Urgent</label>';
+         
+        }
+
+        $dt = array(
+            'kdorder' => $kdorder,
+            'tanggal_order' => $data->tanggal_order,
+            'due_date' => $data->due_date,
+            'nama_pemesan' => $data->nama_pemesan,
+            'bagian' => $this->getbagiandata($data->bagian)->nama_bagian,
+            'priority' => $badge,
+            'status' => $data->status,
+            'attachment' => $data->attachment,
+            'barang' => $data->nama_barang,
+            'qty' => $data->qty,
+            'tanggal_produksi' => $dataprod->tanggal_produksi,
+            'rencana_selesai' => $dataprod->rencana_selesai
+        );
+
+        echo json_encode($dt);
     }
 
 }

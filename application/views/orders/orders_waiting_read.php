@@ -1,3 +1,5 @@
+<link href="<?php echo base_url() ?>assets/assets/plugins/bootstrap-clockpicker/src/clockpicker.css" rel="stylesheet" />
+<link href="<?php echo base_url() ?>assets/assets/plugins/bootstrap-clockpicker/src/standalone.css" rel="stylesheet" />
 <style type="text/css">
 
 .need-attention {
@@ -78,6 +80,11 @@
 
 <div class="row">
     <div class="col-12">
+        <div class="input-group mb-25px">
+            <input type="text" class="form-control" name="kode_order" id="kode_order" value="<?php echo $kd_order ?>" />
+            <button type="button" id="<?php echo $kd_order ?>" class="btn btn-warning btn-info-order input-group-button" data-toggle="modal" data-target="#modalDetailOrder"><i class="fas fa-info-circle"></i></button>
+        </div>
+
         <div class="hori-timeline" dir="ltr">
             <ul class="list-inline events">
 
@@ -146,101 +153,167 @@
             </ul>
         </div>
         <form id="form-approve">
-            <table class="table table-hover table-bordered table-td-valign-middle">
-                <tr><td>Nama Pemesan</td><td><?php echo $nama_pemesan; ?></td></tr>
-                <tr><td>Bagian</td><td><?php echo $classnyak->getbagiandata($bagian)->nama_bagian; ?></td></tr>
-                <tr><td>No. Kontak</td><td><?php echo $no_kontak; ?></td></tr>
 
-                <tr><td>Nama Barang</td><td><?php echo $nama_barang; ?></td></tr>
-                <tr><td>Quantity</td><td><?php echo $qty; ?></td></tr>
-                <tr><td>Due Date</td><td><?php echo $due_date; ?></td></tr>
-                <tr><td>Note</td><td><?php echo $note; ?></td></tr>
-                <tr><td>Priority</td><td><?php 
-
-                $op = $priority;
-                $badge = '';
-                if ($op == 1) {
-                    $badge = '<label class="badge bg-success">Biasa</label>';
-                }
-                if ($op == 2) {         
-                    $badge = '<label class="badge bg-warning">Urgent</label>';
-                }
-                if ($op == 3) {
-                    $badge = '<label class="badge bg-danger">Top Urgent</label>';
-                 
-                }
-                echo $badge;
-                 ?><input type="hidden" name="priority" id="priority" value="<?php echo $badge; ?>"></td></tr>
-                <tr><td>Keterangan</td><td><?php 
-                if ($keterangan == 1) {
-                    echo 'Part Baru';
-                }
-
-                if ($keterangan == 2) {
-                    echo 'Repair';
-                }
-
-                if ($keterangan == 3) {
-                    echo 'Modifikasi';
-                }
-                 ?></td></tr>
-
-                <tr><td>Status</td><td><?php echo $status; ?></td></tr>
-                <tr><td>Attachment</td><td><?php echo $attachment; ?> <a class="btn btn-primary btn-xs sketsa_preview" href="#modal-dialog-sketch-preview" picture="<?php echo $attachment; ?>" data-bs-toggle="modal"><i class="fas fa-eye"></i></a>
-                    
-                </td></tr>
+<!--             
+            <table>
                 <?php
 
-                if ($status == 'WAITING') {
-                    $x = 'sekarang';
-                    $result = []; // initialize results
+                // if ($status == 'WAITING') {
+                //     $x = 'sekarang';
+                //     $result = []; // initialize results
 
-                    foreach ($wh as $key => $value) {
-                        if (array_search($x, $value)) {
-                            $result[] = $wh[$key]; // push to result if found
-                        }
-                    }
+                //     foreach ($wh as $key => $value) {
+                //         if (array_search($x, $value)) {
+                //             $result[] = $wh[$key]; // push to result if found
+                //         }
+                //     }
 
-                    if ($this->session->userdata('level_id') === $result[0]['level_id']) {
-                        ?>
+                //     if ($this->session->userdata('level_id') === $result[0]['level_id']) {
+                //         ?>
 
-                        <tr>
-                            <td>Approve Check</td>
-                            <td>
-                                <div class="form-check form-check-inline mb-15px">
-                                    <input type="checkbox" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus">
-                                    <label for="attachmentapprovestatus" class="form-check-label">Gambar Sesuai</label>
-                                </div>
-
-                                <div class="form-check form-check-inline mb-15px">
-                                    <input type="checkbox" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus">
-                                    <label for="materialavailablestatus" class="form-check-label">Material Tersedia</label>
-                                    <button type="button" class="btn btn-xs btn-info btn-cek-material"><i class="fas fa-cube"></i> Cek Material</button>
-                                </div>
-                                <textarea id="txtrejectreason" name="txtrejectreason" rows="3" class="form-control" placeholder="Masukan catatan reject order"></textarea>
-                            </td>
-                        </tr>
-                        <tr><td></td><td>
-                            <input type="hidden" name="id" value="<?php echo $order_id ?>">
-                            <input type="hidden" name="kd_order" value="<?php echo $kd_order ?>">
-                            <button type="submit" class="btn btn-success save-waiting-data-approve" id="<?php echo encrypt_url($order_id) ?>"><i class="fas fa-save" aria-hidden="true"></i> Simpan</button>
-                            <a href="#modal-reject-reason" data-bs-toggle="modal" class="btn btn-danger reject_waiting_data" id="<?php echo $order_id ?>" style="display: none;"><i class="fas fa-times" aria-hidden="true"></i> Reject</a>
-                            
-                        </td></tr>
-                        <?php
-                    }
-                }
+                //         <?php
+                //     }
+                // }
 
                 ?>
-            </table>
-            <button type="button" class="btn btn-info waiting-list-data"><i class="fas fa-undo"></i> Kembali</button>
+            </table> -->
+
+            <div class="formnya container">
+                <input type="hidden" name="id" value="<?php echo $order_id ?>">
+                <input type="hidden" name="kd_order" value="<?php echo $kd_order ?>">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="row mb-15px">
+                            <label class="form-label col-form-label col-md-2">Check</label>
+                            <div class="col-md-10">
+                                <div style="display: inline-flex;">
+                                    <div class="form-check form-check-inline mb-15px">
+                                        <input type="checkbox" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus">
+                                        <label for="attachmentapprovestatus" class="form-check-label">Gambar Sesuai</label>
+                                        <a class="btn btn-primary btn-xs sketsa_preview" href="#modal-dialog-sketch-preview" picture="<?php echo $attachment; ?>" data-bs-toggle="modal"><i class="fas fa-eye"></i></a>
+                                    </div>
+
+                                    <div class="form-check form-check-inline mb-15px">
+                                        <input type="checkbox" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus">
+                                        <label for="materialavailablestatus" class="form-check-label">Material Tersedia</label>
+                                        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#modalMaterialFinder"><i class="fas fa-search"></i> </button>
+                                    </div>
+
+                                    <div class="form-check form-check-inline mb-15px">
+                                        <input type="checkbox" class="form-check-input approve-check" readonly name="kalkulasi" id="kalkulasi" style="pointer-events: none;">
+                                        <label for="kalkulasi" class="form-check-label" style="pointer-events: none;">Kalkulasi Selesai</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-15px">
+                            <label class="form-label col-form-label col-md-2">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
+                            <div class="col-md-5">
+                                <input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="input-group clockpicker">
+                                  <input type="text" class="form-control jam-awal" name="jam_awal" value="08:00"/>
+                                  <span class="input-group-text input-group-addon">
+                                    <i class="fa fa-clock"></i>
+                                  </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-15px">
+                            <label class="form-label col-form-label col-md-2">Target Selesai</label>
+                            <div class="col-md-5">
+                                <input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                  <input type="text" class="form-control masked-input-date jam-akhir" readonly name="jam_akhir" value="16:00" />
+                                  <span class="input-group-text input-group-addon">
+                                    <i class="fa fa-clock"></i>
+                                  </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-15px">
+                            <label class="form-label col-form-label col-md-2">Qty Order</label>
+                            <div class="col-md-5">
+                                <input required type="number" class="form-control" readonly name="qty_order" id="qty_order" placeholder="Qty order" value="<?php echo $qty ?>"/>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check form-switch mt-10px">
+                                    <input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" />
+                                    <label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reject-note-wrapper mb-25px">
+                            <textarea class="form-control" name="txtrejectreason" rows="3"></textarea>
+                        </div>
+                        <div class="input-group input-group-button-action">
+                            <button type="submit" class="btn btn-success btn-approve" action="approve" style="display:none; flex: 15%;">Approve</button>
+                            <button style="flex: 15%;" type="submit" action="reject" class="btn btn-danger">Reject</button>
+                            <button style="flex: 15%;" type="button" class="btn btn-info waiting-list-data">Kembali</button>
+                        </div> 
+                    </div>
+
+                    <div class="col-5">
+                        <div id="available-schedule-wrapper" class="mb-25px">
+
+                        </div>
+                        <div class="alertnya mb-25px">
+                    
+                        </div>
+
+                        <table class="table table-hover table-sm tabel-machine">
+                            <thead>
+                                <tr>
+                                    <th>Machine</th>
+                                    <th>Throughput</th>
+                                    <th class="shiftmachine" hidden>Shift</th>
+                                    <th hidden>Material Processed</th>
+                                    <th>Products</th>
+                                    <th>Time</th>
+                                    <th hidden="hidden">T. Minutes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="daftar_mesin">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="shiftmachine" hidden></td>
+                                    <td></td>
+                                    <td style="text-align: right; font-size: 14px;"><b>Total</b></td>
+                                    <td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
+                                    <td><input type="text" readonly name="totalproductions" class="form-control-plaintext totalproductions"></td>
+                                    <td><input type="text" readonly name="predictiondone" class="form-control-plaintext predictiondone"></td>
+                                    <td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
         </form>        
     </div>
 </div>
 
-<script type="text/javascript">
-    $('.approve-check').click(function() {
+<script src="<?php echo base_url() ?>assets/assets/plugins/bootstrap-clockpicker/src/clockpicker.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                        
+                    </div>
+<script src="<?php echo base_url() ?>assets/assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
+
+<script type="text/javascript">
+
+    function checkApproveRequirement() {
         var owo = 0
 
         $('.approve-check').each(function() {
@@ -250,34 +323,581 @@
         })
 
         if (owo == 1) {
-            $('#txtrejectreason').css('display','block')
-            $('.reject_waiting_data').css('display','none')
+            $('.input-group-button-action').html(`<button type="submit" class="btn btn-success btn-approve" action="approve" style="flex: 15%;">Approve</button>
+                            <button style="flex: 15%;" type="submit" action="reject" class="btn btn-danger">Reject</button>
+                            <button style="flex: 15%;" type="button" class="btn btn-info waiting-list-data">Kembali</button>`)
+            $('.btn-approve').css('display','none')
+            $('.reject-note-wrapper').html(`
+                <textarea class="form-control" name="txtrejectreason" rows="3"></textarea>
+                `)
+
         }
 
         if (owo == 0) {
-            $('#txtrejectreason').css('display','none')
-            $('.reject_waiting_data').css('display','unset')
+            $('.btn-approve').css('display','block')
+            $('.reject-note-wrapper').html(``)
         }
+    }
+
+    $('.approve-check').click(function() {
+        checkApproveRequirement()
     })
 </script>
 
 <script type="text/javascript">
 
-      $(document).ready(function() {
+    $(document).ready(function() {
+
         $('.loading-material').remove()
         $('.list-material').css('display', 'block')
-      })
 
-      $('.btn-cek-material').click(function() {
+        $(".masked-input-date").mask("99:99");
 
-        document.querySelector('#material-finder').scrollIntoView({ behavior: 'smooth' })
+        let smartallocate = 0
 
-        $('#material-finder').addClass('need-attention')
+        // $('.total-material').change(function() {
+        //  if (smartallocate == 1) {
+        //      smartAllocate()
+        //  }
+        // })
 
-        setTimeout(function() {
-            $('#material-finder').removeClass('need-attention')
-        }, 2000)
+        function getMachine(machine_id) {
+            $.ajax({
+                type: "GET",
+                url: "<?php echo base_url() ?>orders/get_machine_data/" + machine_id,
+                success: function(data){
+                    $('.daftar_mesin').append(data)
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+        }
 
+        function enableDisableInputMachine(thisel) {
+            if (thisel.parents('tr').hasClass('checked')) {
+                thisel.parents('tr').find('td').eq(1).find('input').removeAttr('readonly')
+                thisel.parents('tr').find('td').eq(3).find('input').removeAttr('readonly')
+                thisel.parents('tr').find('td').eq(4).find('input').removeAttr('readonly')
+                thisel.parents('tr').find('td').eq(5).find('input').removeAttr('readonly')
+                thisel.parents('tr').find('td').eq(6).find('input').removeAttr('readonly')
+            } else {
+                thisel.parents('tr').find('td').eq(1).find('input').attr('readonly','readonly')
+                thisel.parents('tr').find('td').eq(3).find('input').attr('readonly','readonly')
+                thisel.parents('tr').find('td').eq(4).find('input').attr('readonly','readonly')
+                thisel.parents('tr').find('td').eq(5).find('input').attr('readonly','readonly')
+                thisel.parents('tr').find('td').eq(6).find('input').attr('readonly','readonly')
+            }
+        }
 
-      })
+        function refreshMachineList() {
+            var start_date = $('#tanggal_produksi').val() + ' ' + $('.jam-awal').val() + ':00'
+            var end_date = $('#rencana_selesai').val() + ' ' + $('.jam-akhir').val() + ':00'
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>orders/get_machine_list",
+                data: {
+                    ds: start_date,
+                    de: end_date
+                },
+                success: function(data){
+                    var dt = JSON.parse(data)
+
+                    if ($('.available-machine').length <= 0) {
+                        console.log('no machine available, generating...')
+
+                        for (let i = 0; i < dt.length; i++) {
+                            // $('.daftar_mesin').append('<div class="available-machine" id="' + dt[i] + '"><input type="checkbox" name="cb"/>' + dt[i] + '</div>')
+                            getMachine(dt[i])
+                        }
+                    } else {
+                        console.log('machine available, detecting...')
+
+                        //buat array daftar available machine (termasuk yang sudah dicopot)
+
+                        var arravailablemachinesaatini = []
+
+                        $('.available-machine').each(function(i) {
+
+                            var thisel = $(this)
+
+                            var thisid = $(this).attr('id')
+
+                            //jika element ini sudah tidak ada di dt, hapus ae
+                            if (!dt.includes(thisid)) {
+                                thisel.remove()
+                            }
+
+                            //dorong ke arrayavailablemachinesaatini
+                            arravailablemachinesaatini.push(thisid)
+                        })
+
+                        //cari data mesin baru
+
+                        // dt di filter arraynya untuk menampilkan arraiabilablemachinesaatini tidak ada di dt (shit, it's been a long time i'm not learning this)
+                        var foundnew = dt.filter( ai => !arravailablemachinesaatini.includes(ai) );
+
+                        console.log(arravailablemachinesaatini)
+                        console.log(foundnew)
+
+                        //jika ada data mesin baru dari server
+                        if (foundnew) {
+                            for (let i = 0; i < foundnew.length; i++) {
+                                getMachine(foundnew[i])
+                            }
+                        } else {
+                            $('.daftar_mesin').append('<tr><td colspan="6">No Machine Available</td></tr>')
+                        }
+                    }
+
+                    // $('.daftar_mesin').html(dt.machinelist)
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            }); 
+        }
+
+        function deteksiKetersediaanJadwal() {
+            var start_date = $('#tanggal_produksi').val() + ' ' + $('.jam-awal').val() + ':00'
+            var end_date = $('#rencana_selesai').val() + ' ' + $('.jam-akhir').val() + ':00'
+
+            console.log(start_date + '/' + end_date)
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>orders/deteksi_ketersediaan_jadwal",
+                data: {
+                    ds: start_date,
+                    de: end_date
+                },
+                success: function(data){
+                    var dt = JSON.parse(data)
+                    $('#available-schedule-wrapper').html(dt.smart_assist_message)
+                    // alert(dt.message)
+                    // $('.daftar_mesin').html(dt.machinelist)
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+        }
+
+        function sumthismachineETA(thisel) {
+
+            if (smartallocate == 1) {
+
+                var getrow = thisel
+                var idmesin = getrow.attr('id')
+                var minutesperproduction = getrow.find('td').eq(1).find('input').val()
+                var productionpermachine = 0
+
+                //tetapkan jam kerja
+                var jamkerja = 0
+
+                var jamkerjashift1 = 480 //menit
+                var jamkerjashift2 = 420 //menit
+
+                var checkboxshift1 = $('#shift1machine' + idmesin).val()
+                var checkboxshift2 = $('#shift2machine' + idmesin).val()
+                //bagi 2 shift
+                
+                if (checkboxshift1 == 1) {
+                    jamkerja += jamkerjashift1
+                }
+
+                if (checkboxshift2 == 1) {
+                    jamkerja += jamkerjashift2
+                }
+
+                productionpermachine = jamkerja/minutesperproduction
+
+                // console.log(productionpermachine)
+
+                if (productionpermachine == null || productionpermachine == Infinity ) {
+                    productionpermachine = 0
+                }
+
+                getrow.find('td').eq(4).find('input').val(parseInt(productionpermachine))
+
+                var o = 0
+
+                if (productionpermachine > 0) {
+                    o = parseInt(minutesperproduction) * parseInt(productionpermachine)
+                } else {
+                    o = parseInt(productionpermachine) * 1
+                }
+
+                console.log(o)
+
+                getrow.find('td').eq(6).find('input').val(o)
+
+                var duration = moment.duration(o, 'minutes');
+
+                // var workhour = duration.hours()
+                // if (detectedhours) {}
+                
+                var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
+                var eta = timeString
+                getrow.find('td').eq(5).find('input').val(eta)
+            }
+
+            if (smartallocate == 0) {
+                var getrow = thisel
+                var idmesin = getrow.attr('id')
+                var minutesperproduction = getrow.find('td').eq(1).find('input').val()
+                var productionpermachine = getrow.find('td').eq(4).find('input').val()
+
+                var o = 0
+
+                if (productionpermachine > 0) {
+                    o = parseInt(minutesperproduction) * parseInt(productionpermachine)
+                } else {
+                    o = parseInt(productionpermachine) * 1
+                }
+
+                console.log(o)
+
+                getrow.find('td').eq(6).find('input').val(o)
+
+                var duration = moment.duration(o, 'minutes');
+
+                // var workhour = duration.hours()
+                // if (detectedhours) {}
+                
+                var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
+                var eta = timeString
+                getrow.find('td').eq(5).find('input').val(eta)  
+            }
+
+        }
+
+        function sumETA() {
+
+            var arrminutes = []
+            var summinutes = 0;
+
+            var sumproduction = 0;
+
+            $('.available-machine').each(function() {
+                var thisel = $(this)
+
+                if (thisel.hasClass('checked')) {
+                    sumthismachineETA(thisel)
+                    //kumpulin menit dulu terus jumlah
+
+                    var getminutestotal = thisel.find('td').eq(6).find('input').val()
+
+                    if (!getminutestotal) {
+                        getminutestotal = 0
+                    }
+
+                    summinutes += parseInt(getminutestotal)
+                    arrminutes.push(getminutestotal)
+
+                    //umpulin produksi yang dihasilan dulu, terus jumlah
+                    var getproductiontotaal = thisel.find('td').eq(4).find('input').val()
+                    sumproduction += parseInt(getproductiontotaal)
+                } else {
+                    arrminutes.push(0)
+                    sumproduction += 0
+                }
+            })
+
+            // console.log(arrminutes)
+
+            //nyoba seting durasi ke 0 dah
+            var tot = moment.duration(0);
+
+            for (i = 0; i < arrminutes.length; i++) {                  
+                var durasimasingmasingmesin = arrminutes[i].toString();
+                tot.add(durasimasingmasingmesin, 'minutes');
+            }
+
+            //set total durasi pengerjaan
+            $('.predictiondone').val(tot.days() + ':' + tot.hours() + ':' + tot.minutes() + ':' + tot.seconds())
+
+            //it really not useful at all but it may be lmao
+            $('.totalminuteseverymachine').val(summinutes)
+
+            //JIKA melebihi dari jumlah jam kerja shift 1 dan shift 2, tambah waktu durasinya hingga besok sampe jam masuk kerja (majuin 8 jem)
+
+            var date = moment($('#tanggal_produksi').val() + ' ' + $('.jam-awal').val(), 'YYYY-MM-DD HH:mm')
+            date.add(summinutes, 'minutes')
+            var test = summinutes - 900 //8 jam ga ada kerja
+            console.log(test)
+            if (test > 0) {
+                date.add(540, 'minutes')
+                console.log('NEXT DAY!')
+            }
+
+            //set rencana selesai
+            $('#rencana_selesai').val(moment(date).format('YYYY-MM-DD'))
+            $('.jam-akhir').val(moment(date).format('HH:mm'))
+
+            //set total target barang jadi
+            $('.totalproductions').val(sumproduction)
+
+            checkmaterialwillbeused(sumproduction)
+
+        }
+
+        function checkmaterialwillbeused(sumproduction) {
+            $('.qty-x-used').each(function(i) {
+
+                var nama_material = $(this).parents('tr').attr('id')
+
+                var getqty = parseInt($(this).parents('tr').find('td').eq(1).find('input').val())
+
+                var total = getqty * sumproduction
+
+                if (total == 0) {
+                    total = 1
+                }
+
+                $(this).parents('tr').removeClass('oops')
+
+                $(this).parents('tr').find('td').eq(2).find('input').val(total)
+                
+                if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
+                    $(this).parents('tr').addClass('oops')
+                }
+            })
+        }
+
+        function checkAlokasiMelebihiTotalQtyOrder() {
+            var sum = 0
+            $('.goodsallocated').each(function() {
+                sum += parseInt($(this).val())  
+            })
+
+            $('.alertnya').html('')
+
+            if (sum > parseInt($('#qty_order').val())) {
+                $('.alertnya').html('<div class="alert alert-danger"><b>Alokasi barang jadi Melebihi batas Quantity Order.</b> Kurangi target barang jadi anda pada mesin yang dipilih.</div>')
+            }
+        }
+
+        function checkdisablecreateproductionbutton() {
+            if ($('.available-machine').length > 0 ){
+                $('.btn-create-produksi').removeAttr('disabled').removeClass('disabled');
+            } else {
+                $('.btn-create-produksi').attr('disabled',true).addClass('disabled');
+            }
+        }
+
+        $('#cbsmartallocate').on('change', function() {
+            if (this.checked) {
+                smartallocate = 1
+                $('.shiftmachine').removeAttr('hidden')
+                $('.available-machine').each(function(){
+                    $(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
+                })
+            } else {
+                smartallocate = 0
+                $('.shiftmachine').attr('hidden','')
+                $('.available-machine').each(function(){
+                    if (!$(this).hasClass('checked')) {
+                        $(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control')
+                    } else {
+                        $(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
+                    }
+
+                })
+            }
+        })
+
+        $('.daftar_mesin').on('input','.troughputperproduct',function() {
+            
+            var thisel = $(this)
+
+            if (thisel.parents('tr').hasClass('checked')) {
+                var throughtputvalue = thisel.parents('tr').find('td').eq(1).find('input').val()
+                if (throughtputvalue > 0 || throughtputvalue) {
+                    $('.approve-check#kalkulasi').prop('checked',true)
+                } else {
+                    $('.approve-check#kalkulasi').prop('checked',false)
+                }
+                checkApproveRequirement()
+                sumETA()
+                checkAlokasiMelebihiTotalQtyOrder()
+            }
+        })
+
+        $('.daftar_mesin').on('input','.goodsallocated',function() {
+            
+            var thisel = $(this)
+
+            if (thisel.parents('tr').hasClass('checked')) {
+                sumETA()
+                checkAlokasiMelebihiTotalQtyOrder()
+            }
+        })
+
+        $('.daftar_mesin').on('change','.checkboxmachine', function() {
+            
+            var thisel = $(this)
+
+            if (this.checked) {
+                thisel.parents('tr').addClass('checked')
+            } else {
+                thisel.parents('tr').removeClass('checked')
+                thisel.parents('tr').find('td').eq(1).find('input').val(0)
+                thisel.parents('tr').find('td').eq(3).find('input').val(0)
+                thisel.parents('tr').find('td').eq(4).find('input').val(0)
+                thisel.parents('tr').find('td').eq(5).find('input').val('')
+                thisel.parents('tr').find('td').eq(6).find('input').val(0)
+                $('.approve-check#kalkulasi').prop('checked',false)
+                checkApproveRequirement()
+            }
+            sumETA()
+            enableDisableInputMachine(thisel)
+            checkAlokasiMelebihiTotalQtyOrder()
+        })
+
+        $('#tanggal_produksi').on('change', function() {
+            sumETA()
+            deteksiKetersediaanJadwal()
+            refreshMachineList()
+            setTimeout(function() {
+                sumETA()
+                checkdisablecreateproductionbutton()
+                checkAlokasiMelebihiTotalQtyOrder()
+            },500)
+        })
+
+        var typingTimer;
+        var doneTypingInterval = 3000;
+
+        //on keyup, start the countdown
+        $('#kode_order').on('input',function(){
+            clearTimeout(typingTimer);
+
+            $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button>')
+
+            if ($('#kode_order').val()) {
+                $('.button-ceg').replaceWith('<button type="button" class="btn btn-primary button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-sync fa-spin"></i></button>')
+                $('#smart_assist_title').text('Sedang mencari...')
+                $('#smart_assist_message').html(`Sistem sedang mendeteksi kode order yang diinput, mohon tunggu...
+                    <div class="progress rounded-pill mb-2 mt-2">
+                        <div class="progress-bar bg-indigo progress-bar-striped progress-bar-animated rounded-pill fs-10px fw-bold" style="width: 100%"></div>
+                    </div>
+                    `)
+                $('#smart_assist_recommendation').html("")
+                typingTimer = setTimeout(doneTyping, doneTypingInterval);
+            }
+        });
+
+        //user is "finished typing," do something
+        function doneTyping() {
+            var id = $('#kode_order').val()
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>orders/cek_kode_order_ready",
+                data: {
+                    id: id,
+                },
+                success: function(data){
+                    var dt = JSON.parse(data)
+
+                    if (dt.status == 'ok') {
+                        // alert('sip')
+                        $('.button-ceg').replaceWith('<button type="button" class="btn btn-success button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-check"></i></button>')
+                        $('#smart_assist_title').text('Data Order')
+                        $('#smart_assist_message').html(dt.message)
+                        $('#smart_assist_recommendation').html("")
+                        $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button><button type="button" class="btn btn-success btn-next">Konfirmasi</button>')
+                        $('#priority').val(dt.priority)
+                        $('#qty_order').val(dt.qty)
+                    } else {
+                        // alert('no!')
+                        $('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')
+                        $('#smart_assist_title').text('Order tidak ditemukan!')
+                        $('#smart_assist_message').html('Cek kembali inputan, pastikan semua huruf adalah besar dan angka sudah sesuai. Jika memang sesuai, mungkin order tersebut sedang on progress atau sudah selesai produksinya')
+                        $('#smart_assist_recommendation').html("")
+                    }
+                },
+                error: function(error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: "Oops!",
+                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                    })
+                }
+            });
+        }
+
+        $(document).on('click','.btn-reject', function() {
+            $('.reject-note-wrapper').html(`
+                <textarea class="form-control" name="txtrejectreason" rows="3"></textarea>
+                `)
+            $('.input-group-button-action').html(`
+                <button style="flex: 50%;" type="submit" class="btn btn-success save-waiting-data-approve" id="<?php echo encrypt_url($order_id) ?>" action="reject"><i class="fas fa-times"></i> Reject</button> 
+                <button style="flex: 50%;" type="button" class="btn btn-info btn-batal-reject"><i class="fas fa-undo"></i> Batal</button>
+                `)
+        })
+
+        $(document).on('click','.btn-batal-reject', function() {
+            $('.reject-note-wrapper').html(``)
+            $('.input-group-button-action').html(`<button type="submit" class="btn btn-success btn-approve" action="approve" style="flex: 15%;">Approve</button>
+                            <button style="flex: 15%;" type="button" class="btn btn-danger btn-reject">Reject</button>
+                            <button style="flex: 15%;" type="button" class="btn btn-info waiting-list-data">Kembali</button>`)
+        })
+
+        $('.input-group-kdorder').on('click','.btn-next',function() {
+            $('.formnya').css('display','unset')
+            $('.input-group-kdorder').remove()
+            $('#kode_order').addClass('readonly').attr('readonly','readonly')
+        })
+
+        $('.clockpicker').clockpicker({
+            autoclose: true,
+            afterDone: function() {
+                sumETA()
+                deteksiKetersediaanJadwal()
+                refreshMachineList()
+                setTimeout(function() {
+                    sumETA()
+                    checkdisablecreateproductionbutton()
+                    checkAlokasiMelebihiTotalQtyOrder()
+                },500)
+            }
+        });
+        <?php 
+
+        if ($machine_list) {
+            foreach ($machine_list as $key => $value) {
+                ?>
+
+                $('.daftar_mesin').on('change','.checkboxshiftformachine<?php echo $value->mesin_id ?>', function() {
+                    var thisel = $(this)
+
+                    if (this.checked) {
+                        thisel.val(1)
+                    } else {
+                        thisel.val(0)
+                    }
+                    sumETA()
+                })
+
+                <?php
+            }
+        }
+
+        ?>
+    })
 </script>

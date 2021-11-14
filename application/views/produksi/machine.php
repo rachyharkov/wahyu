@@ -8,7 +8,7 @@
 	</td>
 	<td>
 		<div class="input-group">
-			<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct readonly" readonly value="0" min="0">
+			<input type="number" name="troughputperproduct[]" class="form-control troughputperproduct readonly" readonly value="0" min="0" style="-webkit-appearance: none;margin: 0;-moz-appearance: textfield;">
 			<span class="input-group-text">
 				Minute(s)/Pd.
 			</span>

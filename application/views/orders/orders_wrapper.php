@@ -32,17 +32,17 @@ if ($action == null) {
 <div id="content" class="app-content">
     <h1 class="page-header">ORDER</h1>  
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <div class="panel panel-inverse">
-              <div class="panel-heading">
-                <h4 class="panel-title panel-title-orders"><?php echo $title ?></h4>
+                <div class="panel-heading">
+                    <h4 class="panel-title panel-title-orders"><?php echo $title ?></h4>
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-success btn-loading" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
                     </div>
-                    </div>
+                </div>
                 <div class="panel-body" id="panel-body">
                     <?php 
                     if ($action == 'create') {
@@ -60,50 +60,72 @@ if ($action == null) {
                 </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="panel panel-inverse" id="material-finder">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Material Finder</h4>
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="panel-body" id="panel-body">
-                    <input type="text" name="txtsearchmaterial" id="txtsearchmaterial" class="form-control mb-15px" placeholder="Cari Material">
-                    <div class="listsuggestionnya" style="position: relative; display: none;">
-                        <label style="font-weight: bold;">Result :</label>
-                        <div class="container list-suggestion-material" style="border: solid 1px gray; border-radius: 8px; padding: 10px;">
-                            
-                        </div>
-                    </div>
-                    <div class="listpinnedmaterial">
-                        <div class="table-responsive">
-                            <table id="data-table-material" class="table table-sm table-hover text-white">
-                                <thead>
-                                    <tr>
-                                        <th>Material</th>
-                                        <th>Weight</th>
-                                        <th>D/T</th>
-                                        <th>P</th>
-                                        <th>L</th>
-                                        <th>Masa</th>
-                                        <th>Stok</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="materials-pinned">
-                                    <tr class="materials-info-tr">
-                                        <td colspan="8"><p style="text-align: center;"><i class="fas fa-exclamation-triangle"></i> Mulai ketik material dan pilih untuk mencatat material</p></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>  
-        </div>
     </div>
+</div>
+
+<div class="modal fade" id="modalDetailOrder">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalDetailOrderLabel">Fetching Detail...</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body">
+        <div id="detail-order-wrapper">
+        
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalMaterialFinder">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalMaterialFinderLabel">Material Finder</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" name="txtsearchmaterial" id="txtsearchmaterial" class="form-control mb-15px" placeholder="Cari Material" style="color: black;background: #a8a8a8;">
+            <div class="listsuggestionnya" style="position: relative; display: none;">
+                <label style="font-weight: bold;">Result :</label>
+                <div class="container list-suggestion-material" style="border: solid 1px gray; border-radius: 8px; padding: 10px;">
+                    
+                </div>
+            </div>
+            <div class="listpinnedmaterial">
+                <div class="table-responsive">
+                    <table id="data-table-material" class="table table-sm table-hover text-black">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Weight</th>
+                                <th>D/T</th>
+                                <th>P</th>
+                                <th>L</th>
+                                <th>Masa</th>
+                                <th>Stok</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materials-pinned">
+                            <tr class="materials-info-tr">
+                                <td colspan="8"><p style="text-align: center;"><i class="fas fa-exclamation-triangle"></i> Mulai ketik material dan pilih untuk mencatat material</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- #modal-dialog -->
@@ -120,6 +142,29 @@ if ($action == null) {
       <div class="modal-footer">
         <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-reject-reason">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form id="reject-form">
+          <div class="modal-header">
+            <h4 class="modal-title">Reject Reason</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+          </div>
+          <div class="modal-body">
+            <label class="form-label mb-15px">Silahkan masukan alasan reject pada kotak dibawah :</label>
+            <textarea class="form-control" id="txtrejectreason" name="txtrejectreason" rows="3" placeholder="Enter your Reject Reason here..." style="border: solid 1px gray; color: gray;"></textarea>
+            <input type="hidden" name="id" id="id" value="">
+          </div>
+          <div class="modal-footer">
+            <p style="color: red;">* Dengan menekan reject, tindakan akan langsung dilakukan</p>
+            <button type="submit" class="btn btn-danger">Reject</button>
+            <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+          </div>
+        </form>
     </div>
   </div>
 </div>
@@ -372,6 +417,8 @@ if ($action == null) {
 
                 var btnselected = $(document.activeElement)
                 
+                var action = btnselected.attr('action')
+
                 var owo = 0
 
                 var message = ''
@@ -404,7 +451,7 @@ if ($action == null) {
 
                         $.ajax({
                             type: "POST",
-                            url: "<?php echo base_url() ?>orders/update_approve",
+                            url: "<?php echo base_url() ?>orders/update_approve/" + action,
                             data:new FormData(a), //penggunaan FormData
                             processData:false,
                             contentType:false,
@@ -434,6 +481,7 @@ if ($action == null) {
                                   title: "Oops!",
                                   text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
                                 })
+                                btnselected.html('Reject').removeClass('disabled').removeAttr('disabled')
                             }
                         });
                     }
@@ -705,6 +753,29 @@ if ($action == null) {
                 }
                 checkmaterialpinned()
 
+            })
+
+            $(document).on('click','.btn-info-order', function(e) {
+                e.preventDefault()
+
+                var kd_order = $(this).attr('id')
+
+                $.ajax({
+                    type: "GET",
+                    url: "<?php echo base_url() ?>orders/detail_order/" + kd_order,
+                    success: function(data){
+                        $('#detail-order-wrapper').html(data);
+                        $('#modalDetailOrderLabel').text(kd_order)
+                        
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: "Oops!",
+                          text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                        })
+                    }
+                })
             })
 
 
