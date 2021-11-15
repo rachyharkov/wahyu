@@ -65,32 +65,6 @@ class Orders extends CI_Controller
         $this->load->view('orders/orders_waiting_list', $data);
     }
 
-    function sign_order($type,$leveluser, $kdorder)
-    {
-        $data = $this->Orders_model->get_by_kd_orders_pure($kd_order);
-        if ($type == 'setujui') {
-            $approvenya = json_decode($data->approved_by, true);
-            foreach ($approvenya as $key => $value) {
-                if ($key == $leveluser && $value == '-') {
-                    $approvenya[$key] = 'true';
-                }
-            }
-            $pp = json_encode($approvenya);
-            return $pp;
-        }
-
-        if ($type == 'tolak') {
-            $approvenya = json_decode($data->approved_by, true);
-            foreach ($approvenya as $key => $value) {
-                if ($key == $leveluser && $value == '-') {
-                    $approvenya[$key] = 'false';
-                }
-            }
-            $pp = json_encode($approvenya);
-            return $pp;
-        }
-    }
-
     public function update_approve($action)
     {
         $id = $this->input->post('id');
@@ -102,18 +76,66 @@ class Orders extends CI_Controller
         $kd_order = $this->input->post('kd_order');
         $reason = $this->input->post('txtrejectreason');
 
-        // $priority = $this->input->post('priority');
-
         $responsecode = 1;
 
 
         if ($action == 'approve') {
 
-            $signer = $this->session->userdata('level_id');
+            $cekdataproduksi = $this->Produksi_model->get_by_kd_order($id);
+
+            if (!$cekdataproduksi) {
+                $kode = $this->Produksi_model->buat_kode(date('Y-m-d'));
+
+                $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+
+                $machine_used = $this->input->post('machine_use');
+                $estimateddonepergoodsinminute = $this->input->post('troughputperproduct');
+                $materialallocated = $this->input->post('materialallocated');
+                $goodsallocated = $this->input->post('goodsallocated');
+                $etapermachine = $this->input->post('timespentpermachine');
+
+
+                $arraydetail = [];
+
+                if (count($machine_used) > 0) {
+                    for ($i=0; $i < count($machine_used); $i++) {
+
+                        $shift1machine = $this->input->post('shift1machine'.$machine_used[$i]);
+                        $shift2machine = $this->input->post('shift2machine'.$machine_used[$i]);
+
+                        $arraydetail[] = array(
+                            'machine_id' => $machine_used[$i],
+                            'estimateddonepergoods' => $estimateddonepergoodsinminute[$i],
+                            'materialallocated' => $materialallocated[$i],
+                            'goodsallocated' => $goodsallocated[$i],
+                            'shift1' => $shift1machine,
+                            'shift2' => $shift2machine,
+                            'etapermachine' => $etapermachine[$i],
+                        );
+                    }
+                }
+
+                
+                $data = array(
+                    'id' => $kode,
+                    'created_at' => date('Y-m-d h:m:s'),
+                    'kd_order' => $kd_order,
+                    'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.$this->input->post('jam_awal', TRUE).':00',
+                    'total_barang_jadi' => $this->input->post('totalproductions',TRUE),
+                    'priority' => $this->input->post('priority',TRUE),
+                    'status' => 'WAITING',
+                    'rencana_selesai' => $this->input->post('rencana_selesai',TRUE).' '.$this->input->post('jam_akhir', TRUE).':00',
+                    'aktual_selesai' => null,
+                    'machine_use' => json_encode($arraydetail, true),
+                    'user_id' => $this->session->userdata('userid'),
+                );
+
+                $this->Produksi_model->insert($data);
+            }
+
+            $signer = $this->input->post('signer');
 
             $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
-
-
 
             $arr_appr = json_decode($dataorder->approved_by,true);
 
@@ -122,10 +144,10 @@ class Orders extends CI_Controller
 
             $realstep = $detectstepforthissigner;
 
-            // echo 'before <br>';
-            // echo '<pre>';
-            //     print_r($arr_appr);
-            // echo '</pre>';
+            echo 'before <br>';
+            echo '<pre>';
+                print_r($arr_appr);
+            echo '</pre>';
 
             $counted = count($arr_appr);
 
@@ -153,15 +175,17 @@ class Orders extends CI_Controller
                 }
             }
 
-            // echo '<br><br>aFTER';
-            // echo '<pre>';
-            //     print_r($init);
-            // echo '</pre>';
+            echo '<br><br>aFTER';
+            echo '<pre>';
+                print_r($init);
+            echo '</pre>';
 
             $updatedataorder = array(
                 'status' => $a,
                 'approved_by' => json_encode($init)
             );
+
+            // print_r($updatedataorder);
 
             $this->Orders_model->update($id, $updatedataorder);
 
@@ -183,33 +207,36 @@ class Orders extends CI_Controller
                 echo json_encode($arr);
             }
 
-            if ($responsecode == 2) {
-                $arr = array(
-                    'response' => $responsecode,
-                    'kd_order' => $kd_order//$this->approve($id);
-                );
+            // if ($responsecode == 2) {
+            //     $arr = array(
+            //         'response' => $responsecode,
+            //         'kd_order' => $kd_order//$this->approve($id);
+            //     );
 
-                echo json_encode($arr);
-            }
+            //     echo json_encode($arr);
+            // }
 
 
         }
 
         if($action == 'reject'){
 
-            if (!$attachment) {
-                $reason.= '[Attachment perlu Perbaikan]';
-            }
 
-            if (!$material) {
-                $reason.= '[Kendala Material]';
-            }
+            $signer = $this->input->post('signer');
 
-            if (!$etproduction) {
-                $reason.= '[Estimasi Waktu/Kendala Mesin]';
-            }
+            if ($signer == 220) {
+                if (!$attachment) {
+                    $reason.= '[Attachment perlu Perbaikan]';
+                }
 
-            $signer = $this->session->userdata('level_id');
+                if (!$material) {
+                    $reason.= '[Kendala Material]';
+                }
+
+                if (!$etproduction) {
+                    $reason.= '[Estimasi Waktu/Kendala Mesin]';
+                }
+            }
 
             $dataorder = $this->Orders_model->get_by_kd_orders_pure($kd_order);
 
@@ -282,6 +309,7 @@ class Orders extends CI_Controller
     public function read_w_order() 
     {
         is_allowed($this->uri->segment(1),'read');
+
         $id = $this->input->post('id');
         $row = $this->Orders_model->get_by_id(decrypt_url($id));
         if ($row) {
@@ -314,6 +342,7 @@ class Orders extends CI_Controller
 
             );
             $this->load->view('orders/orders_waiting_read', $data);
+
         } else {
             echo 'not found';
         }
@@ -540,6 +569,14 @@ class Orders extends CI_Controller
     {
         is_allowed($this->uri->segment(1),'update');
 
+        $id_order = $this->input->post('order_id', TRUE);
+
+        $cekdataproduksi = $this->Produksi_model->get_by_id($id_order);
+
+        if ($cekdataproduksi) {
+            $this->Produksi_model->delete($id_order);
+        }
+
         $this->load->library('upload'); //call library upload 
 
         if($_FILES['attachment']['name']){
@@ -581,7 +618,7 @@ class Orders extends CI_Controller
             );
             // print_r($data);
 
-            $this->Orders_model->update($this->input->post('order_id', TRUE), $data);
+            $this->Orders_model->update($order_id, $data);
             $this->list();
 
         } else {
@@ -605,7 +642,7 @@ class Orders extends CI_Controller
             );
             // print_r($data);
 
-            $this->Orders_model->update($this->input->post('order_id', TRUE), $data);
+            $this->Orders_model->update($order_id, $data);
             $this->list();
         }
     }
@@ -736,7 +773,7 @@ class Orders extends CI_Controller
 
     function getmachinedetail($id)
     {
-        $data = $this->Mesin_model->get_by_id($id);
+        $data = $this->Mesin_model->get_by_kd_mesin($id);
         return $data;
     }
 
@@ -833,14 +870,14 @@ class Orders extends CI_Controller
                 foreach ($machine_list as $key => $value) {
 
                     //deteksi penggunan mesin bila ada data produksi pada tanggal tsb
-                    if (!in_array($value->mesin_id, $datamesin)) {
+                    if (!in_array($value->kd_mesin, $datamesin)) {
                         //ambil data mesin pada produksi
-                        array_push($machine_id_list, $value->mesin_id);
+                        array_push($machine_id_list, $value->kd_mesin);
                     }
                 }
             } else {
                 foreach ($machine_list as $key => $value) {
-                    array_push($machine_id_list, $value->mesin_id);
+                    array_push($machine_id_list, $value->kd_mesin);
                 }
             }
         }
@@ -853,7 +890,7 @@ class Orders extends CI_Controller
 
     function get_machine_data($id)
     {
-        $data = $this->Mesin_model->get_by_id($id);
+        $data = $this->Mesin_model->get_by_kd_mesin($id);
 
         $datax = array(
             'value' => $data
@@ -985,6 +1022,27 @@ class Orders extends CI_Controller
         );
 
         echo json_encode($dt);
+    }
+
+    function read_data_produksi($kd_order)
+    {
+
+        $row = $this->Produksi_model->get_by_kd_order($kd_order);
+        if ($row) {
+            $data = array(
+                'id' => $row->id,
+                'tanggal_produksi' => $row->tanggal_produksi,
+                'rencana_selesai' => $row->rencana_selesai,
+                'total_barang_jadi' => $row->total_barang_jadi,
+                'priority' => $row->priority,
+                'materialsdata' => $this->Material_model->get_material_for($row->id),
+                'machine_used' => $row->machine_use,
+                'user_id' => $row->user_id
+            );
+            return $data;
+        } else {
+            echo 'not found';
+        }
     }
 
 }

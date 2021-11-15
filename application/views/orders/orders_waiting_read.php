@@ -154,152 +154,262 @@
         </div>
         <form id="form-approve">
 
-<!--             
-            <table>
                 <?php
 
-                // if ($status == 'WAITING') {
-                //     $x = 'sekarang';
-                //     $result = []; // initialize results
+                if ($status == 'WAITING') {
+                    // $x = 'sekarang'; //untuk yang tanda tangan sekarang
+                    // $result = []; //untuk yang tanda tangan sekarang
 
-                //     foreach ($wh as $key => $value) {
-                //         if (array_search($x, $value)) {
-                //             $result[] = $wh[$key]; // push to result if found
-                //         }
-                //     }
+                    // $c = 'belum'; //untuk yang belum tanda tangan
+                    // $result2 = [];
 
-                //     if ($this->session->userdata('level_id') === $result[0]['level_id']) {
-                //         ?>
+                    // $k = 'sudah'; //untuk yang sudah tanda tangan
+                    // $result3 = [];
 
-                //         <?php
-                //     }
-                // }
+                    $roleini = $this->session->userdata('level_id');
+
+                    $whomustsignthisorder = '';
+                    $signstatus = '';
+
+                    if ($roleini == 1) {
+                        foreach ($wh as $key => $value) {
+                            if (array_search('sekarang', $value)) {
+                                // echo 'kau admin kh? good! here is da level id that must be sign this shit'.$value['level_id'];
+
+                                $whomustsignthisorder = $value['level_id'];
+                                $signstatus = $value['tanda_tangan'];
+                            }
+                        }
+                    } else {
+                        foreach ($wh as $key => $value) {
+                            if (array_search($roleini, $value)) {
+                                $whomustsignthisorder = $value['level_id'];
+                                $signstatus = $value['tanda_tangan'];
+                            }
+                        }
+                    }
+
+                    if ($whomustsignthisorder == 220) { //admin wm
+                        if ($signstatus == 'sekarang') {
+                            
+                            ?>
+                            <div class="formnya container">
+                                <input type="text" name="signer" value="<?php echo $whomustsignthisorder ?>">
+                                <input type="hidden" name="id" value="<?php echo $order_id ?>">
+                                <input type="hidden" name="kd_order" value="<?php echo $kd_order ?>">
+                                <input type="hidden" name="priority" value="<?php echo $priority ?>">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="row mb-15px">
+                                            <label class="form-label col-form-label col-md-2">Check</label>
+                                            <div class="col-md-10">
+                                                <div style="display: inline-flex;">
+                                                    <div class="form-check form-check-inline mb-15px">
+                                                        <input type="checkbox" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus">
+                                                        <label for="attachmentapprovestatus" class="form-check-label">Gambar Sesuai</label>
+                                                        <a class="btn btn-primary btn-xs sketsa_preview" href="#modal-dialog-sketch-preview" picture="<?php echo $attachment; ?>" data-bs-toggle="modal"><i class="fas fa-eye"></i></a>
+                                                    </div>
+
+                                                    <div class="form-check form-check-inline mb-15px">
+                                                        <input type="checkbox" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus">
+                                                        <label for="materialavailablestatus" class="form-check-label">Material Tersedia</label>
+                                                        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#modalMaterialFinder"><i class="fas fa-search"></i> </button>
+                                                    </div>
+
+                                                    <div class="form-check form-check-inline mb-15px">
+                                                        <input type="checkbox" class="form-check-input approve-check" readonly name="kalkulasi" id="kalkulasi" style="pointer-events: none;">
+                                                        <label for="kalkulasi" class="form-check-label" style="pointer-events: none;">Kalkulasi Selesai</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row mb-15px">
+                                            <label class="form-label col-form-label col-md-2">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
+                                            <div class="col-md-5">
+                                                <input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
+                                            </div>
+                                            <div class="col-md-3">
+
+                                                <div class="input-group clockpicker">
+                                                  <input type="text" class="form-control jam-awal" name="jam_awal" value="08:00"/>
+                                                  <span class="input-group-text input-group-addon">
+                                                    <i class="fa fa-clock"></i>
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-15px">
+                                            <label class="form-label col-form-label col-md-2">Target Selesai</label>
+                                            <div class="col-md-5">
+                                                <input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                  <input type="text" class="form-control masked-input-date jam-akhir" readonly name="jam_akhir" value="16:00" />
+                                                  <span class="input-group-text input-group-addon">
+                                                    <i class="fa fa-clock"></i>
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-15px">
+                                            <label class="form-label col-form-label col-md-2">Qty Order</label>
+                                            <div class="col-md-5">
+                                                <input required type="number" class="form-control" readonly name="qty_order" id="qty_order" placeholder="Qty order" value="<?php echo $qty ?>"/>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check form-switch mt-10px">
+                                                    <input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" />
+                                                    <label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="reject-note-wrapper mb-25px">
+                                            <textarea class="form-control" name="txtrejectreason" rows="3"></textarea>
+                                        </div>
+                                        <div class="input-group input-group-button-action">
+                                            <button type="submit" class="btn btn-success btn-approve" action="approve" style="display:none; flex: 15%;">Approve</button>
+                                            <button style="flex: 15%;" type="submit" action="reject" class="btn btn-danger">Reject</button>
+                                            <button style="flex: 15%;" type="button" class="btn btn-info waiting-list-data">Kembali</button>
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-5">
+                                        <div id="available-schedule-wrapper" class="mb-25px">
+
+                                        </div>
+                                        <div class="alertnya mb-25px">
+                                    
+                                        </div>
+
+                                        <table class="table table-hover table-sm tabel-machine">
+                                            <thead>
+                                                <tr>
+                                                    <th>Machine</th>
+                                                    <th>Throughput</th>
+                                                    <th class="shiftmachine" hidden>Shift</th>
+                                                    <th hidden>Material Processed</th>
+                                                    <th>Products</th>
+                                                    <th>Time</th>
+                                                    <th hidden="hidden">T. Minutes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="daftar_mesin">
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="shiftmachine" hidden></td>
+                                                    <td></td>
+                                                    <td style="text-align: right; font-size: 14px;"><b>Total</b></td>
+                                                    <td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
+                                                    <td><input type="text" readonly name="totalproductions" class="form-control-plaintext totalproductions"></td>
+                                                    <td><input type="text" readonly name="predictiondone" class="form-control-plaintext predictiondone"></td>
+                                                    <td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <?php
+
+                        } else {
+                            ?>
+                            <div class="alert alert-success">
+                                Admin WM sudah meng-approve order ini
+                            </div>
+                            <?php
+                        }
+                    }
+
+                    if ($whomustsignthisorder == 221) { //kepaladev
+
+                        $dataprod = $classnyak->read_data_produksi($kd_order);
+
+                        ?>
+                        <table id="data-table-default" class="table table-bordered table-td-valign-middle">
+                            <tr><td>Id</td><td><?php echo $dataprod->id; ?></td></tr>
+                            <tr><td>Tanggal Produksi</td><td><?php echo $dataprod->tanggal_produksi; ?></td></tr>
+                            <tr><td>Rencana Selesai</td><td><?php echo $dataprod->rencana_selesai; ?></td></tr>
+                            <tr><td>Total Barang Jadi</td><td><?php echo $dataprod->total_barang_jadi; ?></td></tr>
+                            <tr><td>Priority</td><td><?php echo $dataprod->priority; ?></td></tr>
+                            <tr><td>Material</td><td>
+                                <ul>
+                                    <?php
+                                    foreach ($dataprod->materialsdata as $key => $value) {
+                                        ?>
+                                        <li><?php echo $value->kd_material ?> (<?php echo $value->jumlah_bahan ?> Pcs)</li>
+                                        <?php
+                                    }
+                                    ?>
+                                </ul>
+
+                            </td></tr>
+                            <tr>
+                                <td>Mesin Digunakan</td>
+                                <td>
+                                    <ul>
+                                        <?php
+
+                                        $mu = json_decode($dataprod->machine_used, TRUE);
+
+                                        foreach ($mu as $key => $value) {
+                                            ?>
+                                            <li><?php echo $classnyak->getmachinedetail($value['machine_id'])->kd_mesin ?></li>
+                                            <table class="table table-sm table-hover">
+                                                <tr>
+                                                    <td>Estimasi Selesai per-barang</td>
+                                                    <td><?php echo $value['estimateddonepergoods'] ?> Minute(s)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alokasi Material</td>
+                                                    <td><?php echo $value['materialallocated'] ?> Pcs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alokasi Target Barang Jadi</td>
+                                                    <td><?php echo $value['goodsallocated'] ?> Pcs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shift</td>
+                                                    <td><?php if ($value['shift1']) {
+                                                        ?>
+                                                        <label class="badge bg-success">Shift 1</label>
+                                                        <?php
+                                                    } ?>
+                                                    <?php if ($value['shift2']) {
+                                                        ?>
+                                                        <label class="badge bg-success">Shift 2</label>
+                                                        <?php
+                                                    } ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Estimasi</td>
+                                                    <td><?php echo $value['etapermachine'] ?></td>
+                                                </tr>
+                                            </table>
+                                            <?php
+                                        }
+
+                                        ?>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr><td>User Id</td><td><?php echo $dataprod->user_id; ?></td></tr>
+                            <tr><td></td><td><button type="button" class="btn btn-info list-data"><i class="fas fa-undo"></i> Kembali</button></td></tr>
+                        </table>
+                        <?php
+
+                    }
+                }
 
                 ?>
-            </table> -->
-
-            <div class="formnya container">
-                <input type="hidden" name="id" value="<?php echo $order_id ?>">
-                <input type="hidden" name="kd_order" value="<?php echo $kd_order ?>">
-                <div class="row">
-                    <div class="col-7">
-                        <div class="row mb-15px">
-                            <label class="form-label col-form-label col-md-2">Check</label>
-                            <div class="col-md-10">
-                                <div style="display: inline-flex;">
-                                    <div class="form-check form-check-inline mb-15px">
-                                        <input type="checkbox" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus">
-                                        <label for="attachmentapprovestatus" class="form-check-label">Gambar Sesuai</label>
-                                        <a class="btn btn-primary btn-xs sketsa_preview" href="#modal-dialog-sketch-preview" picture="<?php echo $attachment; ?>" data-bs-toggle="modal"><i class="fas fa-eye"></i></a>
-                                    </div>
-
-                                    <div class="form-check form-check-inline mb-15px">
-                                        <input type="checkbox" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus">
-                                        <label for="materialavailablestatus" class="form-check-label">Material Tersedia</label>
-                                        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#modalMaterialFinder"><i class="fas fa-search"></i> </button>
-                                    </div>
-
-                                    <div class="form-check form-check-inline mb-15px">
-                                        <input type="checkbox" class="form-check-input approve-check" readonly name="kalkulasi" id="kalkulasi" style="pointer-events: none;">
-                                        <label for="kalkulasi" class="form-check-label" style="pointer-events: none;">Kalkulasi Selesai</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row mb-15px">
-                            <label class="form-label col-form-label col-md-2">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
-                            <div class="col-md-5">
-                                <input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
-                            </div>
-                            <div class="col-md-3">
-
-                                <div class="input-group clockpicker">
-                                  <input type="text" class="form-control jam-awal" name="jam_awal" value="08:00"/>
-                                  <span class="input-group-text input-group-addon">
-                                    <i class="fa fa-clock"></i>
-                                  </span>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="row mb-15px">
-                            <label class="form-label col-form-label col-md-2">Target Selesai</label>
-                            <div class="col-md-5">
-                                <input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                  <input type="text" class="form-control masked-input-date jam-akhir" readonly name="jam_akhir" value="16:00" />
-                                  <span class="input-group-text input-group-addon">
-                                    <i class="fa fa-clock"></i>
-                                  </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-15px">
-                            <label class="form-label col-form-label col-md-2">Qty Order</label>
-                            <div class="col-md-5">
-                                <input required type="number" class="form-control" readonly name="qty_order" id="qty_order" placeholder="Qty order" value="<?php echo $qty ?>"/>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-check form-switch mt-10px">
-                                    <input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" />
-                                    <label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="reject-note-wrapper mb-25px">
-                            <textarea class="form-control" name="txtrejectreason" rows="3"></textarea>
-                        </div>
-                        <div class="input-group input-group-button-action">
-                            <button type="submit" class="btn btn-success btn-approve" action="approve" style="display:none; flex: 15%;">Approve</button>
-                            <button style="flex: 15%;" type="submit" action="reject" class="btn btn-danger">Reject</button>
-                            <button style="flex: 15%;" type="button" class="btn btn-info waiting-list-data">Kembali</button>
-                        </div> 
-                    </div>
-
-                    <div class="col-5">
-                        <div id="available-schedule-wrapper" class="mb-25px">
-
-                        </div>
-                        <div class="alertnya mb-25px">
-                    
-                        </div>
-
-                        <table class="table table-hover table-sm tabel-machine">
-                            <thead>
-                                <tr>
-                                    <th>Machine</th>
-                                    <th>Throughput</th>
-                                    <th class="shiftmachine" hidden>Shift</th>
-                                    <th hidden>Material Processed</th>
-                                    <th>Products</th>
-                                    <th>Time</th>
-                                    <th hidden="hidden">T. Minutes</th>
-                                </tr>
-                            </thead>
-                            <tbody class="daftar_mesin">
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td class="shiftmachine" hidden></td>
-                                    <td></td>
-                                    <td style="text-align: right; font-size: 14px;"><b>Total</b></td>
-                                    <td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
-                                    <td><input type="text" readonly name="totalproductions" class="form-control-plaintext totalproductions"></td>
-                                    <td><input type="text" readonly name="predictiondone" class="form-control-plaintext predictiondone"></td>
-                                    <td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    
-                </div>
-            </div>
         </form>        
     </div>
 </div>
@@ -422,7 +532,7 @@
 
                         var arravailablemachinesaatini = []
 
-                        $('.available-machine').each(function(i) {
+                        $('.available-machine').each(function() {
 
                             var thisel = $(this)
 

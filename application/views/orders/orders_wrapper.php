@@ -433,7 +433,7 @@ if ($action == null) {
                 }
 
                 if (owo == 0) {
-                    message = 'Anda akan diarahkan ke laman tambah produksi untuk estimasi waktu pemrosesan order, lanjut dengan tindakan?'
+                    message = 'Semua requirement terpenuhi, konfirmasi tindakan?'
                 }
 
                 Swal.fire({

@@ -1,5 +1,5 @@
 
-<tr class="available-machine" id="<?php echo $value->mesin_id ?>">
+<tr class="available-machine" id="<?php echo $value->kd_mesin ?>">
 	<td>
 		<div class="form-check">
 			<input class="form-check-input checkboxmachine" name="machine_use[]" type="checkbox" id="checkbox<?php echo $value->mesin_id ?>" value="<?php echo $value->kd_mesin ?>"/>
