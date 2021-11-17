@@ -144,10 +144,10 @@ class Orders extends CI_Controller
 
             $realstep = $detectstepforthissigner;
 
-            echo 'before <br>';
-            echo '<pre>';
-                print_r($arr_appr);
-            echo '</pre>';
+            // echo 'before <br>';
+            // echo '<pre>';
+            //     print_r($arr_appr);
+            // echo '</pre>';
 
             $counted = count($arr_appr);
 
@@ -175,10 +175,10 @@ class Orders extends CI_Controller
                 }
             }
 
-            echo '<br><br>aFTER';
-            echo '<pre>';
-                print_r($init);
-            echo '</pre>';
+            // echo '<br><br>aFTER';
+            // echo '<pre>';
+            //     print_r($init);
+            // echo '</pre>';
 
             $updatedataorder = array(
                 'status' => $a,
@@ -802,7 +802,7 @@ class Orders extends CI_Controller
                 $data_temuan .= '
                 <tr>
                     <td><i class="fas fa-cog fa-spin"></i></td>
-                    <td><a href="#modaldetailproduksi" class="modal-dtl-produksi-right" idproduksi="'.$value->id.'" idorder="'.$value->kd_order.'" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
+                    <td><a href="#modalDetailProduksi" class="modal-dtl-produksi-right" idproduksi="'.$value->id.'" idorder="'.$value->kd_order.'" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
                     <td><label class="badge bg-danger">'.$value->priority.'</label></td>
                 </tr>';
             }
@@ -1024,7 +1024,7 @@ class Orders extends CI_Controller
         echo json_encode($dt);
     }
 
-    function read_data_produksi($kd_order)
+    public function read_data_produksi($kd_order)
     {
 
         $row = $this->Produksi_model->get_by_kd_order($kd_order);

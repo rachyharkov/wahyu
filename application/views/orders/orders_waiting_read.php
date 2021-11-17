@@ -157,15 +157,6 @@
                 <?php
 
                 if ($status == 'WAITING') {
-                    // $x = 'sekarang'; //untuk yang tanda tangan sekarang
-                    // $result = []; //untuk yang tanda tangan sekarang
-
-                    // $c = 'belum'; //untuk yang belum tanda tangan
-                    // $result2 = [];
-
-                    // $k = 'sudah'; //untuk yang sudah tanda tangan
-                    // $result3 = [];
-
                     $roleini = $this->session->userdata('level_id');
 
                     $whomustsignthisorder = '';
@@ -334,30 +325,18 @@
 
                         ?>
                         <table id="data-table-default" class="table table-bordered table-td-valign-middle">
-                            <tr><td>Id</td><td><?php echo $dataprod->id; ?></td></tr>
-                            <tr><td>Tanggal Produksi</td><td><?php echo $dataprod->tanggal_produksi; ?></td></tr>
-                            <tr><td>Rencana Selesai</td><td><?php echo $dataprod->rencana_selesai; ?></td></tr>
-                            <tr><td>Total Barang Jadi</td><td><?php echo $dataprod->total_barang_jadi; ?></td></tr>
-                            <tr><td>Priority</td><td><?php echo $dataprod->priority; ?></td></tr>
-                            <tr><td>Material</td><td>
-                                <ul>
-                                    <?php
-                                    foreach ($dataprod->materialsdata as $key => $value) {
-                                        ?>
-                                        <li><?php echo $value->kd_material ?> (<?php echo $value->jumlah_bahan ?> Pcs)</li>
-                                        <?php
-                                    }
-                                    ?>
-                                </ul>
-
-                            </td></tr>
+                            <tr><td>Id</td><td><?php echo $dataprod['id']; ?></td></tr>
+                            <tr><td>Tanggal Produksi</td><td><?php echo $dataprod['tanggal_produksi']; ?></td></tr>
+                            <tr><td>Rencana Selesai</td><td><?php echo $dataprod['rencana_selesai']; ?></td></tr>
+                            <tr><td>Total Barang Jadi</td><td><?php echo $dataprod['total_barang_jadi']; ?></td></tr>
+                            <tr><td>Priority</td><td><?php echo $dataprod['priority']; ?></td></tr>
                             <tr>
                                 <td>Mesin Digunakan</td>
                                 <td>
                                     <ul>
                                         <?php
 
-                                        $mu = json_decode($dataprod->machine_used, TRUE);
+                                        $mu = json_decode($dataprod['machine_used'], TRUE);
 
                                         foreach ($mu as $key => $value) {
                                             ?>
@@ -401,8 +380,8 @@
                                     </ul>
                                 </td>
                             </tr>
-                            <tr><td>User Id</td><td><?php echo $dataprod->user_id; ?></td></tr>
-                            <tr><td></td><td><button type="button" class="btn btn-info list-data"><i class="fas fa-undo"></i> Kembali</button></td></tr>
+                            <tr><td>User Id</td><td><?php echo $dataprod['user_id']; ?></td></tr>
+                            <tr><td></td><td><button type="button" class="btn btn-info waiting-list-data"><i class="fas fa-undo"></i> Kembali</button></td></tr>
                         </table>
                         <?php
 

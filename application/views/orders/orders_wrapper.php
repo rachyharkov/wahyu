@@ -82,6 +82,31 @@ if ($action == null) {
   </div>
 </div>
 
+<div class="modal fade" id="modalDetailProduksi">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Fetching...</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-sm table-dark">
+            <tr><td style="width: 90px;">Tanggal Order</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Pemesan</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Bagian</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Prioritas</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Approved by</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Status</td><td style="width: 5px;">:</td><td>test</td></tr>
+            <tr><td style="width: 90px;">Attachment</td><td style="width: 5px;">:</td><td>test</td></tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="modalMaterialFinder">
   <div class="modal-dialog">
     <div class="modal-content">
