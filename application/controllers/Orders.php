@@ -90,7 +90,6 @@ class Orders extends CI_Controller
 
                 $machine_used = $this->input->post('machine_use');
                 $estimateddonepergoodsinminute = $this->input->post('troughputperproduct');
-                $materialallocated = $this->input->post('materialallocated');
                 $goodsallocated = $this->input->post('goodsallocated');
                 $etapermachine = $this->input->post('timespentpermachine');
 
@@ -106,7 +105,6 @@ class Orders extends CI_Controller
                         $arraydetail[] = array(
                             'machine_id' => $machine_used[$i],
                             'estimateddonepergoods' => $estimateddonepergoodsinminute[$i],
-                            'materialallocated' => $materialallocated[$i],
                             'goodsallocated' => $goodsallocated[$i],
                             'shift1' => $shift1machine,
                             'shift2' => $shift2machine,
@@ -126,9 +124,12 @@ class Orders extends CI_Controller
                     'status' => 'WAITING',
                     'rencana_selesai' => $this->input->post('rencana_selesai',TRUE).' '.$this->input->post('jam_akhir', TRUE).':00',
                     'aktual_selesai' => null,
-                    'machine_use' => json_encode($arraydetail, true),
+                    'machine_use' => json_encode($arraydetail),
                     'user_id' => $this->session->userdata('userid'),
                 );
+                // echo '<pre>';
+                // print_r($data);
+                // echo '</pre>';
 
                 $this->Produksi_model->insert($data);
             }

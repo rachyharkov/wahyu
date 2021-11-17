@@ -347,10 +347,6 @@
                                                     <td><?php echo $value['estimateddonepergoods'] ?> Minute(s)</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Alokasi Material</td>
-                                                    <td><?php echo $value['materialallocated'] ?> Pcs</td>
-                                                </tr>
-                                                <tr>
                                                     <td>Alokasi Target Barang Jadi</td>
                                                     <td><?php echo $value['goodsallocated'] ?> Pcs</td>
                                                 </tr>
