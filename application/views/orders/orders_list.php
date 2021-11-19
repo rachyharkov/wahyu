@@ -82,8 +82,20 @@
 		<td><?php echo $orders->tanggal_order ?></td>
 		<td style="text-align:center" width="200px">
 			<button type="button" class="btn btn-success btn-sm read_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-eye" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-primary btn-sm update_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-danger btn-sm delete_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+
+            <?php
+            $cek = $classnyak->detectalreadysigned($orders->order_id);
+
+            if ($cek == 0) {
+                ?>
+
+                <button type="button" class="btn btn-primary btn-sm update_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-pencil-alt" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-danger btn-sm delete_data" id="<?php echo encrypt_url($orders->order_id) ?>"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+
+                <?php
+            }
+
+            ?>
             <button type="button" class="btn btn-info btn-sm copy_code" id="<?php echo $orders->kd_order ?>"  ><i class="fas fa-copy"></i></button>
 		</td>
 	</tr>

@@ -565,6 +565,18 @@ class Orders extends CI_Controller
             echo 'not found';
         }
     }
+
+    public function detectalreadysigned($order_id)
+    {
+        $data = $this->Orders_model->deteksi_already_signed($order_id);
+        if ($data) {
+            return 1;
+        }
+
+        if (!$data) {
+            return 0;
+        }
+    }
     
     public function update_action() 
     {
@@ -619,7 +631,7 @@ class Orders extends CI_Controller
             );
             // print_r($data);
 
-            $this->Orders_model->update($order_id, $data);
+            $this->Orders_model->update($id_order, $data);
             $this->list();
 
         } else {
@@ -643,7 +655,7 @@ class Orders extends CI_Controller
             );
             // print_r($data);
 
-            $this->Orders_model->update($order_id, $data);
+            $this->Orders_model->update($id_order, $data);
             $this->list();
         }
     }

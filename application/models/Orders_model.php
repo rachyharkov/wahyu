@@ -136,6 +136,12 @@ class Orders_model extends CI_Model
         return $this->db->get('flow_approved')->result();
     }
 
+    function deteksi_already_signed($order_id)
+    {
+        $this->db->where('order_id', $order_id);
+        $this->db->like('approved_by', 'sekarang');
+        return $this->db->get('orders')->result();
+    }
 }
 
 /* End of file Orders_model.php */

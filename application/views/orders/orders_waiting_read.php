@@ -324,6 +324,14 @@
                         $dataprod = $classnyak->read_data_produksi($kd_order);
 
                         ?>
+                        <input type="hidden" name="id" value="<?php echo $order_id ?>">
+
+                        <input type="checkbox" checked="true" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus" style="visibility: none; position: absolute;">
+                        <input type="checkbox" checked="true" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus" style="visibility: none; position: absolute;">
+                        <input type="checkbox" checked="true" class="form-check-input approve-check" readonly name="kalkulasi" id="kalkulasi" style="visibility: none; position: absolute;">
+
+                        <input type="text" name="signer" value="<?php echo $whomustsignthisorder ?>">
+                        <input type="text" name="kd_order" value="<?php echo $kd_order ?>">
                         <table id="data-table-default" class="table table-bordered table-td-valign-middle">
                             <tr><td>Id</td><td><?php echo $dataprod['id']; ?></td></tr>
                             <tr><td>Tanggal Produksi</td><td><?php echo $dataprod['tanggal_produksi']; ?></td></tr>
@@ -377,7 +385,17 @@
                                 </td>
                             </tr>
                             <tr><td>User Id</td><td><?php echo $dataprod['user_id']; ?></td></tr>
-                            <tr><td></td><td><button type="button" class="btn btn-info waiting-list-data"><i class="fas fa-undo"></i> Kembali</button></td></tr>
+                            <tr><td>Status</td><td>
+                                <select class="form-control approve_choice mb-15px" name="approve_status">
+                                    <option value="approve" selected>Approve</option>
+                                    <option value="reject">Reject</option>
+                                </select>
+
+                                <div class="reject-note-wrapper">
+                                    
+                                </div>
+                            </td></tr>
+                            <tr><td></td><td><button type="button" class="btn btn-info waiting-list-data"><i class="fas fa-undo"></i> Kembali</button> <button type="submit" action="approve" class="btn btn-success tombolsubmit">Update</button></td></tr>
                         </table>
                         <?php
 
@@ -961,7 +979,21 @@
                     checkAlokasiMelebihiTotalQtyOrder()
                 },500)
             }
-        });
+        })
+
+        $('.approve_choice').change(function() {
+
+            var thisval = $(this).val()
+
+            $('.reject-note-wrapper').html(``)
+            if (thisval == 'reject') {
+                $('.reject-note-wrapper').html(`
+                    <textarea class="form-control" name="txtrejectreason" rows="3" placeholder="Masukan reject reason"></textarea>
+                `)
+            }
+
+            $('.tombolsubmit').attr('action',thisval)
+        })
         <?php 
 
         if ($machine_list) {
