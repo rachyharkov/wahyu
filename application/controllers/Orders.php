@@ -81,7 +81,7 @@ class Orders extends CI_Controller
 
         if ($action == 'approve') {
 
-            $cekdataproduksi = $this->Produksi_model->get_by_kd_order($id);
+            $cekdataproduksi = $this->Produksi_model->get_by_kd_order($kd_order);
 
             if (!$cekdataproduksi) {
                 $kode = $this->Produksi_model->buat_kode(date('Y-m-d'));
@@ -169,6 +169,14 @@ class Orders extends CI_Controller
                     $a = 'ON PROGRESS';
                     $responsecode = 2;
                     //echo $a;
+
+
+                    $idprod = $this->input->post('idproduksi', TRUE);
+                    //last approval
+                    $dtoupdate = array(
+                        'status'=> 'READY'
+                    );
+                    $this->Produksi_model->update($idprod,$dtoupdate);
                 }
                 else
                 {
@@ -198,15 +206,15 @@ class Orders extends CI_Controller
                 'classnyak' => $this
             );
 
-            if ($responsecode == 1) {
-                
-                $arr = array(
-                    'response' => $responsecode,
-                    'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
-                );
 
-                echo json_encode($arr);
-            }
+            $arr = array(
+                'response' => $responsecode,
+                'page' => $this->load->view('orders/orders_waiting_list', $data, true)//$this->approve($id);
+            );
+
+            echo json_encode($arr);
+
+
 
             // if ($responsecode == 2) {
             //     $arr = array(
@@ -815,7 +823,7 @@ class Orders extends CI_Controller
                 $data_temuan .= '
                 <tr>
                     <td><i class="fas fa-cog fa-spin"></i></td>
-                    <td><a href="#modalDetailProduksi" class="modal-dtl-produksi-right" idproduksi="'.$value->id.'" idorder="'.$value->kd_order.'" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
+                    <td><a href="#modalDetailOrder" class="modal-dtl-produksi-right btn-info-order" id="'.$value->kd_order.'" data-bs-toggle="modal" style="text-decoration: none;">'.$value->id.'</a></td>
                     <td><label class="badge bg-danger">'.$value->priority.'</label></td>
                 </tr>';
             }

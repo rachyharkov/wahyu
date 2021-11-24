@@ -1,5 +1,9 @@
 <?php 
     
+    function isWeekend($date) {
+	    return (date('N', strtotime($date)) >= 6);
+	}
+
      //ubah timezone menjadi jakarta
                         // date_default_timezone_set("Asia/Jakarta");
 
@@ -96,7 +100,10 @@
           				$arrtgllibur = [];
 
           				foreach ($resp as $key => $value) {
-          					$arrtgllibur[] = $value['holiday_date'];
+
+          					if ($value['is_national_holiday'] == true) {
+          						$arrtgllibur[] = $value['holiday_date'];
+          					}
           				}
 
           				print_r($arrtgllibur);
@@ -104,7 +111,6 @@
 
 	          			$i = 1;
 	          			foreach ($dataproduksi as $key => $value) {
-	          				
 
 	          				$dataorder = $classnyak->get_data_order_njson($value->kd_order,$value->id);
 	          				// print_r($resp);
@@ -129,7 +135,7 @@
 	          								<?php
 	          							} else {
 	          								?>
-	          								<td style="background-color: green;"><?php echo $value->format('Y-m-j') ?></td>
+	          								<td style="background-color: green;"></td>
 	          								<?php
 	          							}
 	          						} else {
@@ -138,9 +144,17 @@
 	          								<td style="background-color: red;"></td>
 	          								<?php
 	          							} else {
-	          								?>
-	          								<td></td>
-	          								<?php
+	          								$weekdaykh = isWeekend($value->format('Y-m-d'));
+
+	          								if ($weekdaykh == 1) {
+	          									?>
+	          										<td style="background-color: red;"></td>
+	          									<?php
+	          								} else {
+	          									?>
+		          									<td></td>
+		          								<?php
+	          								}
 	          							}
 	          						}
 	          					}

@@ -185,7 +185,7 @@
                             
                             ?>
                             <div class="formnya container">
-                                <input type="text" name="signer" value="<?php echo $whomustsignthisorder ?>">
+                                <input type="hidden" name="signer" value="<?php echo $whomustsignthisorder ?>">
                                 <input type="hidden" name="id" value="<?php echo $order_id ?>">
                                 <input type="hidden" name="kd_order" value="<?php echo $kd_order ?>">
                                 <input type="hidden" name="priority" value="<?php echo $priority ?>">
@@ -218,7 +218,7 @@
 
                                         <div class="row mb-15px">
                                             <label class="form-label col-form-label col-md-2">Tanggal Produksi <?php echo form_error('tanggal_produksi') ?></label>
-                                            <div class="col-md-5">
+                                            <div class="col-md-7">
                                                 <input required type="date" class="form-control" name="tanggal_produksi" id="tanggal_produksi" placeholder="Tanggal Produksi" value="<?php echo $tanggal_produksi; ?>" />
                                             </div>
                                             <div class="col-md-3">
@@ -235,8 +235,14 @@
 
                                         <div class="row mb-15px">
                                             <label class="form-label col-form-label col-md-2">Target Selesai</label>
-                                            <div class="col-md-5">
-                                                <input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
+                                            <div class="col-md-7">
+                                                <div class="row">
+                                                    <div class="input-group">
+                                                      <input required type="date" class="form-control" readonly name="rencana_selesai" id="rencana_selesai" placeholder="Tanggal Produksi" value="<?php echo $rencana_selesai; ?>"/>
+                                                      <span class="input-group-text">/</span>
+                                                      <input type="date" class="form-control" readonly name="due_date" id="due_date" value="<?php echo $due_date ?>">
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="input-group">
@@ -250,7 +256,7 @@
 
                                         <div class="row mb-15px">
                                             <label class="form-label col-form-label col-md-2">Qty Order</label>
-                                            <div class="col-md-5">
+                                            <div class="col-md-7">
                                                 <input required type="number" class="form-control" readonly name="qty_order" id="qty_order" placeholder="Qty order" value="<?php echo $qty ?>"/>
                                             </div>
                                             <div class="col-md-3">
@@ -311,10 +317,86 @@
                             <?php
 
                         } else {
+                            $dataprod = $classnyak->read_data_produksi($kd_order);
                             ?>
                             <div class="alert alert-success">
                                 Admin WM sudah meng-approve order ini
                             </div>
+
+
+                            <table id="data-table-default" class="table table-bordered table-td-valign-middle">
+                                <tr><td>Id</td><td><?php echo $dataprod['id']; ?></td></tr>
+                                <tr><td>Tanggal Produksi</td><td><?php echo $dataprod['tanggal_produksi']; ?></td></tr>
+                                <tr><td>Rencana Selesai</td><td><?php echo $dataprod['rencana_selesai']; ?></td></tr>
+                                <tr><td>Total Barang Jadi</td><td><?php echo $dataprod['total_barang_jadi']; ?></td></tr>
+                                <tr><td>Priority</td><td>
+                                    
+                                    <?php 
+
+                                    $op = $dataprod['priority'];
+                                    $badge = '';
+                                    if ($op == 1) {
+                                        $badge = '<label class="badge bg-success">Biasa</label>';
+                                    }
+                                    if ($op == 2) {         
+                                        $badge = '<label class="badge bg-warning">Urgent</label>';
+                                    }
+                                    if ($op == 3) {
+                                        $badge = '<label class="badge bg-danger">Top Urgent</label>';
+                                    }
+                                    
+                                    echo $badge;
+                                    ?>
+                                </td></tr>
+                                <tr>
+                                    <td>Mesin Digunakan</td>
+                                    <td>
+                                        <ul>
+                                            <?php
+
+                                            $mu = json_decode($dataprod['machine_used'], TRUE);
+
+                                            foreach ($mu as $key => $value) {
+                                                ?>
+                                                <li><?php echo $classnyak->getmachinedetail($value['machine_id'])->kd_mesin ?></li>
+                                                <table class="table table-sm table-hover">
+                                                    <tr>
+                                                        <td>Estimasi Selesai per-barang</td>
+                                                        <td><?php echo $value['estimateddonepergoods'] ?> Minute(s)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Alokasi Target Barang Jadi</td>
+                                                        <td><?php echo $value['goodsallocated'] ?> Pcs</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Shift</td>
+                                                        <td><?php if ($value['shift1']) {
+                                                            ?>
+                                                            <label class="badge bg-success">Shift 1</label>
+                                                            <?php
+                                                        } ?>
+                                                        <?php if ($value['shift2']) {
+                                                            ?>
+                                                            <label class="badge bg-success">Shift 2</label>
+                                                            <?php
+                                                        } ?>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Estimasi</td>
+                                                        <td><?php echo $value['etapermachine'] ?></td>
+                                                    </tr>
+                                                </table>
+                                                <?php
+                                            }
+
+                                            ?>
+                                        </ul>
+                                    </td>
+                                </tr>
+
+                                <tr><td></td><td><button type="button" class="btn btn-info waiting-list-data"><i class="fas fa-undo"></i> Kembali</button></td></tr>
+                            </table>
                             <?php
                         }
                     }
@@ -333,11 +415,26 @@
                         <input type="text" name="signer" value="<?php echo $whomustsignthisorder ?>">
                         <input type="text" name="kd_order" value="<?php echo $kd_order ?>">
                         <table id="data-table-default" class="table table-bordered table-td-valign-middle">
-                            <tr><td>Id</td><td><?php echo $dataprod['id']; ?></td></tr>
+                            <tr><td>Id</td><td><?php echo $dataprod['id']; ?><input type="hidden" name="idproduksi" value="<?php echo $dataprod['id']; ?>"></td></tr>
                             <tr><td>Tanggal Produksi</td><td><?php echo $dataprod['tanggal_produksi']; ?></td></tr>
                             <tr><td>Rencana Selesai</td><td><?php echo $dataprod['rencana_selesai']; ?></td></tr>
                             <tr><td>Total Barang Jadi</td><td><?php echo $dataprod['total_barang_jadi']; ?></td></tr>
-                            <tr><td>Priority</td><td><?php echo $dataprod['priority']; ?></td></tr>
+                            <tr><td>Priority</td><td><?php 
+
+                            $op = $dataprod['priority'];
+                            $badge = '';
+                            if ($op == 1) {
+                                $badge = '<label class="badge bg-success">Biasa</label>';
+                            }
+                            if ($op == 2) {         
+                                $badge = '<label class="badge bg-warning">Urgent</label>';
+                            }
+                            if ($op == 3) {
+                                $badge = '<label class="badge bg-danger">Top Urgent</label>';
+                            }
+                            
+                            echo $badge;
+                            ?></td></tr>
                             <tr>
                                 <td>Mesin Digunakan</td>
                                 <td>
@@ -755,7 +852,6 @@
             $('.totalproductions').val(sumproduction)
 
             checkmaterialwillbeused(sumproduction)
-
         }
 
         function checkmaterialwillbeused(sumproduction) {
@@ -781,16 +877,27 @@
             })
         }
 
-        function checkAlokasiMelebihiTotalQtyOrder() {
+        function validation() {
             var sum = 0
             $('.goodsallocated').each(function() {
                 sum += parseInt($(this).val())  
             })
 
             $('.alertnya').html('')
-
+            $('.btn-approve').removeAttr('disabled')
             if (sum > parseInt($('#qty_order').val())) {
-                $('.alertnya').html('<div class="alert alert-danger"><b>Alokasi barang jadi Melebihi batas Quantity Order.</b> Kurangi target barang jadi anda pada mesin yang dipilih.</div>')
+                $('.btn-approve').attr('disabled','disabled')
+                $('.alertnya').append('<div class="alert alert-danger"><b>Alokasi barang jadi Melebihi batas Quantity Order.</b> Kurangi target barang jadi anda pada mesin yang dipilih.</div>')
+            }
+
+            var rs = $('#rencana_selesai').val()
+            var due_date = $('#due_date').val()
+
+            $('#due_date').removeClass('need-attention')
+            if (rs > due_date) {
+                $('#due_date').addClass('need-attention')
+                $('.alertnya').append('<div class="alert alert-danger"><b>Target selesai melebihi batas due date</b></div>')
+                $('.btn-approve').attr('disabled','disabled')
             }
         }
 
@@ -836,7 +943,7 @@
                 }
                 checkApproveRequirement()
                 sumETA()
-                checkAlokasiMelebihiTotalQtyOrder()
+                validation()
             }
         })
 
@@ -846,7 +953,7 @@
 
             if (thisel.parents('tr').hasClass('checked')) {
                 sumETA()
-                checkAlokasiMelebihiTotalQtyOrder()
+                validation()
             }
         })
 
@@ -868,7 +975,7 @@
             }
             sumETA()
             enableDisableInputMachine(thisel)
-            checkAlokasiMelebihiTotalQtyOrder()
+            validation()
         })
 
         $('#tanggal_produksi').on('change', function() {
@@ -878,7 +985,7 @@
             setTimeout(function() {
                 sumETA()
                 checkdisablecreateproductionbutton()
-                checkAlokasiMelebihiTotalQtyOrder()
+                validation()
             },500)
         })
 
@@ -976,7 +1083,7 @@
                 setTimeout(function() {
                     sumETA()
                     checkdisablecreateproductionbutton()
-                    checkAlokasiMelebihiTotalQtyOrder()
+                    validation()
                 },500)
             }
         })
