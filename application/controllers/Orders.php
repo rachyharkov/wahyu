@@ -91,7 +91,6 @@ class Orders extends CI_Controller
 
                 $machine_used = $this->input->post('machine_use');
                 $estimateddonepergoodsinminute = $this->input->post('troughputperproduct');
-                $goodsallocated = $this->input->post('goodsallocated');
                 $etapermachine = $this->input->post('timespentpermachine');
 
 
@@ -106,7 +105,6 @@ class Orders extends CI_Controller
                         $arraydetail[] = array(
                             'machine_id' => $machine_used[$i],
                             'estimateddonepergoods' => $estimateddonepergoodsinminute[$i],
-                            'goodsallocated' => $goodsallocated[$i],
                             'shift1' => $shift1machine,
                             'shift2' => $shift2machine,
                             'etapermachine' => $etapermachine[$i],
@@ -1065,6 +1063,64 @@ class Orders extends CI_Controller
         } else {
             echo 'not found';
         }
+    }
+
+
+    public function count_estimate_minutes()
+    {
+        $dateawal = $this->input->post('date_awal', TRUE);
+        $minutestoadd = $this->input->post('add_minutes', TRUE);
+
+
+        $time = new DateTime($dateawal);
+        $time->add(new DateInterval('PT' . $minutestoadd . 'M'));
+
+        $stamp = $time->format('Y-m-d H:i');
+
+        $arroy = array(
+            'target_selesai' => $stamp
+        );
+
+        echo json_encode($arroy, true);
+
+        // echo $dateawal;
+        // echo $stamp;
+
+        // //fungsi check tanggal merah
+        // function tanggalMerah($value) {
+        //     $array = json_decode(file_get_contents("https://raw.githubusercontent.com/guangrei/Json-Indonesia-holidays/master/calendar.json"), TRUE);
+
+        //     //check tanggal merah berdasarkan libur nasional
+        //     if(isset($array[$value])){
+        //         return "tanggal merah ".$array[$value]["deskripsi"];
+        //     }
+        //     //check tanggal merah berdasarkan hari minggu
+        //     elseif(date("D",strtotime($value))==="Sun") {
+        //         return "tanggal merah hari minggu";
+        //     }
+        //     //bukan tanggal merah
+        //     else {
+        //         return "bukan tanggal merah";
+        //     }
+        // }
+
+        // $begin = new DateTime($dateawal);
+        // $end = new DateTime($dateakhir);
+
+        // $interval = DateInterval::createFromDateString('1 day');
+        // $period = new DatePeriod($begin, $interval, $end);
+
+        // foreach ($period as $dt) {
+        //     echo $dt->format("Y-m-d").' >>>> '.tanggalMerah($dt->format("Ymd"));
+        // }
+
+
+
+        // //testing
+        // $hari_ini = date("Ymd");
+
+        // echo"<b>Check untuk hari ini (".date("d-m-Y",strtotime($hari_ini)).")</b><br>";
+        // tanggalMerah($hari_ini);
     }
 
 }

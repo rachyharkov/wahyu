@@ -260,10 +260,7 @@
                                                 <input required type="number" class="form-control" readonly name="qty_order" id="qty_order" placeholder="Qty order" value="<?php echo $qty ?>"/>
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-check form-switch mt-10px">
-                                                    <input class="form-check-input" type="checkbox" id="cbsmartallocate" name="cbsmartallocate" />
-                                                    <label class="form-check-label" for="cbsmartallocate">Smart Allocate</label>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                         <div class="reject-note-wrapper mb-25px">
@@ -291,7 +288,7 @@
                                                     <th>Throughput</th>
                                                     <th class="shiftmachine" hidden>Shift</th>
                                                     <th hidden>Material Processed</th>
-                                                    <th>Products</th>
+                                                    <!-- <th>Products</th> -->
                                                     <th>Time</th>
                                                     <th hidden="hidden">T. Minutes</th>
                                                 </tr>
@@ -304,7 +301,6 @@
                                                     <td></td>
                                                     <td style="text-align: right; font-size: 14px;"><b>Total</b></td>
                                                     <td hidden><input type="text" name="totalmaterialused" class="form-control-plaintext totalmaterialused"></td>
-                                                    <td><input type="text" readonly name="totalproductions" class="form-control-plaintext totalproductions"></td>
                                                     <td><input type="text" readonly name="predictiondone" class="form-control-plaintext predictiondone"></td>
                                                     <td hidden><input type="number" name="totalminuteseverymachine" class="totalminuteseverymachine" value="0"></td>
                                                 </tr>
@@ -363,10 +359,6 @@
                                                     <tr>
                                                         <td>Estimasi Selesai per-barang</td>
                                                         <td><?php echo $value['estimateddonepergoods'] ?> Minute(s)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Alokasi Target Barang Jadi</td>
-                                                        <td><?php echo $value['goodsallocated'] ?> Pcs</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Shift</td>
@@ -450,10 +442,6 @@
                                                 <tr>
                                                     <td>Estimasi Selesai per-barang</td>
                                                     <td><?php echo $value['estimateddonepergoods'] ?> Minute(s)</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Alokasi Target Barang Jadi</td>
-                                                    <td><?php echo $value['goodsallocated'] ?> Pcs</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Shift</td>
@@ -553,14 +541,6 @@
 
         $(".masked-input-date").mask("99:99");
 
-        let smartallocate = 0
-
-        // $('.total-material').change(function() {
-        //  if (smartallocate == 1) {
-        //      smartAllocate()
-        //  }
-        // })
-
         function getMachine(machine_id) {
             $.ajax({
                 type: "GET",
@@ -584,13 +564,11 @@
                 thisel.parents('tr').find('td').eq(3).find('input').removeAttr('readonly')
                 thisel.parents('tr').find('td').eq(4).find('input').removeAttr('readonly')
                 thisel.parents('tr').find('td').eq(5).find('input').removeAttr('readonly')
-                thisel.parents('tr').find('td').eq(6).find('input').removeAttr('readonly')
             } else {
                 thisel.parents('tr').find('td').eq(1).find('input').attr('readonly','readonly')
                 thisel.parents('tr').find('td').eq(3).find('input').attr('readonly','readonly')
                 thisel.parents('tr').find('td').eq(4).find('input').attr('readonly','readonly')
                 thisel.parents('tr').find('td').eq(5).find('input').attr('readonly','readonly')
-                thisel.parents('tr').find('td').eq(6).find('input').attr('readonly','readonly')
             }
         }
 
@@ -697,91 +675,31 @@
         }
 
         function sumthismachineETA(thisel) {
+            var getrow = thisel
+            var idmesin = getrow.attr('id')
+            var minutesperproduction = getrow.find('td').eq(1).find('input').val()
+            var productionpermachine = $('#qty_order').val()
 
-            if (smartallocate == 1) {
+            var o = 0
 
-                var getrow = thisel
-                var idmesin = getrow.attr('id')
-                var minutesperproduction = getrow.find('td').eq(1).find('input').val()
-                var productionpermachine = 0
-
-                //tetapkan jam kerja
-                var jamkerja = 0
-
-                var jamkerjashift1 = 480 //menit
-                var jamkerjashift2 = 420 //menit
-
-                var checkboxshift1 = $('#shift1machine' + idmesin).val()
-                var checkboxshift2 = $('#shift2machine' + idmesin).val()
-                //bagi 2 shift
-                
-                if (checkboxshift1 == 1) {
-                    jamkerja += jamkerjashift1
-                }
-
-                if (checkboxshift2 == 1) {
-                    jamkerja += jamkerjashift2
-                }
-
-                productionpermachine = jamkerja/minutesperproduction
-
-                // console.log(productionpermachine)
-
-                if (productionpermachine == null || productionpermachine == Infinity ) {
-                    productionpermachine = 0
-                }
-
-                getrow.find('td').eq(4).find('input').val(parseInt(productionpermachine))
-
-                var o = 0
-
-                if (productionpermachine > 0) {
-                    o = parseInt(minutesperproduction) * parseInt(productionpermachine)
-                } else {
-                    o = parseInt(productionpermachine) * 1
-                }
-
-                console.log(o)
-
-                getrow.find('td').eq(6).find('input').val(o)
-
-                var duration = moment.duration(o, 'minutes');
-
-                // var workhour = duration.hours()
-                // if (detectedhours) {}
-                
-                var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-                var eta = timeString
-                getrow.find('td').eq(5).find('input').val(eta)
+            if (productionpermachine > 0) {
+                o = parseInt(minutesperproduction) * parseInt(productionpermachine)
+            } else {
+                o = parseInt(productionpermachine) * 1
             }
 
-            if (smartallocate == 0) {
-                var getrow = thisel
-                var idmesin = getrow.attr('id')
-                var minutesperproduction = getrow.find('td').eq(1).find('input').val()
-                var productionpermachine = getrow.find('td').eq(4).find('input').val()
+            console.log(o)
 
-                var o = 0
+            getrow.find('td').eq(5).find('input').val(o)
 
-                if (productionpermachine > 0) {
-                    o = parseInt(minutesperproduction) * parseInt(productionpermachine)
-                } else {
-                    o = parseInt(productionpermachine) * 1
-                }
+            var duration = moment.duration(o, 'minutes');
 
-                console.log(o)
-
-                getrow.find('td').eq(6).find('input').val(o)
-
-                var duration = moment.duration(o, 'minutes');
-
-                // var workhour = duration.hours()
-                // if (detectedhours) {}
-                
-                var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
-                var eta = timeString
-                getrow.find('td').eq(5).find('input').val(eta)  
-            }
+            // var workhour = duration.hours()
+            // if (detectedhours) {}
+            
+            var timeString = duration.days() + ':' + duration.hours() + ':' + duration.minutes() + ':' + duration.seconds()
+            var eta = timeString
+            getrow.find('td').eq(4).find('input').val(eta)
 
         }
 
@@ -790,7 +708,7 @@
             var arrminutes = []
             var summinutes = 0;
 
-            var sumproduction = 0;
+            var sumproduction = $('#qty_order').val()
 
             var dateawal = moment($('#tanggal_produksi').val() + ' ' + $('.jam-awal').val(), 'YYYY-MM-DD HH:mm')
 
@@ -803,7 +721,7 @@
                     sumthismachineETA(thisel)
                     //kumpulin menit dulu terus jumlah
 
-                    var getminutestotal = thisel.find('td').eq(6).find('input').val()
+                    var getminutestotal = thisel.find('td').eq(5).find('input').val()
 
                     if (!getminutestotal) {
                         getminutestotal = 0
@@ -813,11 +731,9 @@
                     arrminutes.push(getminutestotal)
 
                     //umpulin produksi yang dihasilan dulu, terus jumlah
-                    var getproductiontotaal = thisel.find('td').eq(4).find('input').val()
-                    sumproduction += parseInt(getproductiontotaal)
+
                 } else {
                     arrminutes.push(0)
-                    sumproduction += 0
                 }
             })
 
@@ -827,6 +743,9 @@
 
             for (i = 0; i < arrminutes.length; i++) {                  
                 var durasimasingmasingmesin = arrminutes[i].toString();
+
+                // summinutes += parseInt(durasimasingmasingmesin)
+
                 tot.add(durasimasingmasingmesin, 'minutes');
             }
 
@@ -838,96 +757,38 @@
 
             //JIKA melebihi dari jumlah jam kerja shift 1 dan shift 2, tambah waktu durasinya hingga besok sampe jam masuk kerja (majuin 8 jem)
 
-            datetemp.add(summinutes, 'minutes')
+            // datetemp.add(summinutes, 'minutes')
 
             //8 jam ga ada kerja
+            ////////////////////////ANUO
+            // var test = summinutes - 900 //8 jam ga ada kerja
+            // console.log(test)
+            // if (test > 0) {
+            //     datetemp.add(540, 'minutes')
+            //     console.log('NEXT DAY!')
+            // }
 
-            var test = summinutes - 900 //8 jam ga ada kerja
-            console.log(test)
-            if (test > 0) {
-                datetemp.add(540, 'minutes')
-                console.log('NEXT DAY!')
-            }
+            // var dateakhir = datetemp
 
-            var dateakhir = datetemp
+            const tanggal_awal = dateawal
 
-            const currentMoment = moment(dateawal, 'YYYY-MM-DD HH:mm')
-            const endMoment = moment(dateakhir, 'YYYY-MM-DD HH:mm')
-            while (currentMoment.isBefore(endMoment, 'day')) {
-                
-                const weekday = currentMoment.format('dddd')
-                const isWeekend = weekday === 'Sunday' || weekday === 'Saturday'
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url() ?>orders/count_estimate_minutes",
+                data: {
+                    date_awal: moment(tanggal_awal).format('YYYY-MM-DD HH:mm'),
+                    add_minutes: summinutes
+                },
+                success: function(data){
 
-                if(isWeekend) {
-                    console.log(`Loop at ${currentMoment.format('YYYY-MM-DD')} is weekend`);
-                    currentMoment.add(1, 'days')
-                } else {
-                    console.log(`Loop at ${currentMoment.format('YYYY-MM-DD')}`)
-                }
-
-                currentMoment.add(1, 'days')
-            }
-
-            // console.log('dateawal:' + dateawal + '/dateakhir: ' + dateakhir)
-
-            //set rencana selesai
-            $('#rencana_selesai').val(moment(currentMoment).format('YYYY-MM-DD'))
-
-
-            $('.jam-akhir').val(moment(currentMoment).format('HH:mm'))
-
-            //set total target barang jadi
-            $('.totalproductions').val(sumproduction)
-
-            checkmaterialwillbeused(sumproduction)
-        }
-
-        function checkmaterialwillbeused(sumproduction) {
-            $('.qty-x-used').each(function(i) {
-
-                var nama_material = $(this).parents('tr').attr('id')
-
-                var getqty = parseInt($(this).parents('tr').find('td').eq(1).find('input').val())
-
-                var total = getqty * sumproduction
-
-                if (total == 0) {
-                    total = 1
-                }
-
-                $(this).parents('tr').removeClass('oops')
-
-                $(this).parents('tr').find('td').eq(2).find('input').val(total)
-                
-                if (parseInt($(this).val()) > parseInt($('.stock' + nama_material).val())) {
-                    $(this).parents('tr').addClass('oops')
+                    var dt = JSON.parse(data)
+                    console.log(dt.target_selesai)
+                    $('#rencana_selesai').val(moment(dt.target_selesai).format('YYYY-MM-DD'))
+                    $('.jam-akhir').val(moment(dt.target_selesai).format('HH:mm'))
                 }
             })
         }
 
-        function validation() {
-            var sum = 0
-            $('.goodsallocated').each(function() {
-                sum += parseInt($(this).val())  
-            })
-
-            $('.alertnya').html('')
-            $('.btn-approve').removeAttr('disabled')
-            if (sum > parseInt($('#qty_order').val())) {
-                $('.btn-approve').attr('disabled','disabled')
-                $('.alertnya').append('<div class="alert alert-danger"><b>Alokasi barang jadi Melebihi batas Quantity Order.</b> Kurangi target barang jadi anda pada mesin yang dipilih.</div>')
-            }
-
-            var rs = $('#rencana_selesai').val()
-            var due_date = $('#due_date').val()
-
-            $('#due_date').removeClass('need-attention')
-            if (rs > due_date) {
-                $('#due_date').addClass('need-attention')
-                $('.alertnya').append('<div class="alert alert-danger"><b>Target selesai melebihi batas due date</b></div>')
-                $('.btn-approve').attr('disabled','disabled')
-            }
-        }
 
         function checkdisablecreateproductionbutton() {
             if ($('.available-machine').length > 0 ){
@@ -936,27 +797,6 @@
                 $('.btn-create-produksi').attr('disabled',true).addClass('disabled');
             }
         }
-
-        $('#cbsmartallocate').on('change', function() {
-            if (this.checked) {
-                smartallocate = 1
-                $('.shiftmachine').removeAttr('hidden')
-                $('.available-machine').each(function(){
-                    $(this).find('td').eq(4).find('input').addClass('form-control-plaintext').removeClass('form-control').attr('readonly',true)
-                })
-            } else {
-                smartallocate = 0
-                $('.shiftmachine').attr('hidden','')
-                $('.available-machine').each(function(){
-                    if (!$(this).hasClass('checked')) {
-                        $(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control')
-                    } else {
-                        $(this).find('td').eq(4).find('input').removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly')
-                    }
-
-                })
-            }
-        })
 
         $('.daftar_mesin').on('input','.troughputperproduct',function() {
             
@@ -971,17 +811,7 @@
                 }
                 checkApproveRequirement()
                 sumETA()
-                validation()
-            }
-        })
 
-        $('.daftar_mesin').on('input','.goodsallocated',function() {
-            
-            var thisel = $(this)
-
-            if (thisel.parents('tr').hasClass('checked')) {
-                sumETA()
-                validation()
             }
         })
 
@@ -995,15 +825,13 @@
                 thisel.parents('tr').removeClass('checked')
                 thisel.parents('tr').find('td').eq(1).find('input').val(0)
                 thisel.parents('tr').find('td').eq(3).find('input').val(0)
-                thisel.parents('tr').find('td').eq(4).find('input').val(0)
-                thisel.parents('tr').find('td').eq(5).find('input').val('')
-                thisel.parents('tr').find('td').eq(6).find('input').val(0)
+                thisel.parents('tr').find('td').eq(4).find('input').val('')
+                thisel.parents('tr').find('td').eq(5).find('input').val(0)
                 $('.approve-check#kalkulasi').prop('checked',false)
                 checkApproveRequirement()
             }
             sumETA()
             enableDisableInputMachine(thisel)
-            validation()
         })
 
         $('#tanggal_produksi').on('change', function() {
@@ -1013,7 +841,6 @@
             setTimeout(function() {
                 sumETA()
                 checkdisablecreateproductionbutton()
-                validation()
             },500)
         })
 
@@ -1111,7 +938,7 @@
                 setTimeout(function() {
                     sumETA()
                     checkdisablecreateproductionbutton()
-                    validation()
+
                 },500)
             }
         })
