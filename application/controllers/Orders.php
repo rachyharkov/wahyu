@@ -490,8 +490,8 @@ class Orders extends CI_Controller
             $filenamee = 'prodattach-'.date('ymdhms').'-'.substr(sha1(rand()),0,10);
 
             $config['upload_path']          = './assets/internal'; 
-            $config['allowed_types']        = 'jpg|png|pdf';
-            $config['max_size']             = 10000;
+            $config['allowed_types']        = 'jpg|jpeg|png|pdf|rar';
+            $config['max_size']             = 50000;
             $config['file_name']            = $filenamee;
 
             $_FILES['file']['name'] = $_FILES['attachment']['name'];
