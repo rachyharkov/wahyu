@@ -400,14 +400,14 @@
                         ?>
                         <input type="hidden" name="id" value="<?php echo $order_id ?>">
 
-                        <input type="checkbox" checked="true" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus" style="visibility: none; position: absolute;">
-                        <input type="checkbox" checked="true" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus" style="visibility: none; position: absolute;">
-                        <input type="checkbox" checked="true" class="form-check-input approve-check" readonly name="kalkulasi" id="kalkulasi" style="visibility: none; position: absolute;">
+                        <input type="checkbox" checked="true" class="form-check-input approve-check" name="attachmentapprovestatus" id="attachmentapprovestatus" style="visibility: hidden; position: absolute;">
+                        <input type="checkbox" checked="true" class="form-check-input approve-check" name="materialavailablestatus" id="materialavailablestatus" style="visibility: hidden; position: absolute;">
+                        <input type="checkbox" checked="true" class="form-check-input approve-check" readonly name="kalkulasi" id="kalkulasi" style="visibility: hidden; position: absolute;">
 
-                        <input type="text" name="signer" value="<?php echo $whomustsignthisorder ?>">
-                        <input type="text" name="kd_order" value="<?php echo $kd_order ?>">
+                        <input type="hidden" name="signer" value="<?php echo $whomustsignthisorder ?>">
+                        <input type="hidden" name="kd_order" value="<?php echo $kd_order ?>">
                         <table id="data-table-default" class="table table-bordered table-td-valign-middle">
-                            <tr><td>Id</td><td><?php echo $dataprod['id']; ?><input type="hidden" name="idproduksi" value="<?php echo $dataprod['id']; ?>"></td></tr>
+                            <tr><td>Id Produksi</td><td><?php echo $dataprod['id']; ?><input type="hidden" name="idproduksi" value="<?php echo $dataprod['id']; ?>"></td></tr>
                             <tr><td>Tanggal Produksi</td><td><?php echo $dataprod['tanggal_produksi']; ?></td></tr>
                             <tr><td>Rencana Selesai</td><td><?php echo $dataprod['rencana_selesai']; ?></td></tr>
                             <tr><td>Total Barang Jadi</td><td><?php echo $dataprod['total_barang_jadi']; ?></td></tr>

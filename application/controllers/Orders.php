@@ -31,13 +31,17 @@ class Orders extends CI_Controller
                 redirect('not_access');
             }
         }
-        
-        $data = array(
-            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
-            'action' => $action,
-            'classnyak' => $this
-        );
-        $this->template->load('template','orders/orders_wrapper', $data);
+
+        if ($action == 'finish_confirm') {
+            $this->confirm_order();
+        } else {
+            $data = array(
+                'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+                'action' => $action,
+                'classnyak' => $this
+            );
+            $this->template->load('template','orders/orders_wrapper', $data);
+        }
     }
 
     public function list()
@@ -118,7 +122,7 @@ class Orders extends CI_Controller
                     'created_at' => date('Y-m-d h:m:s'),
                     'kd_order' => $kd_order,
                     'tanggal_produksi' => $this->input->post('tanggal_produksi',TRUE).' '.$this->input->post('jam_awal', TRUE).':00',
-                    'total_barang_jadi' => $this->input->post('totalproductions',TRUE),
+                    'total_barang_jadi' => $this->input->post('qty_order',TRUE),
                     'priority' => $this->input->post('priority',TRUE),
                     'status' => 'WAITING',
                     'rencana_selesai' => $this->input->post('rencana_selesai',TRUE).' '.$this->input->post('jam_akhir', TRUE).':00',
@@ -1044,6 +1048,42 @@ class Orders extends CI_Controller
         echo json_encode($dt);
     }
 
+    function get_data_order_pure($kdorder,$kdprod)
+    {
+        $data = $this->Orders_model->get_by_kd_orders_pure($kdorder);
+        $dataprod = $this->Produksi_model->get_by_id($kdprod);
+        
+        $op = $data->priority;
+        $badge = '';
+        if ($op == 1) {
+            $badge = '<label class="badge bg-success">Biasa</label>';
+        }
+        if ($op == 2) {         
+            $badge = '<label class="badge bg-warning">Urgent</label>';
+        }
+        if ($op == 3) {
+            $badge = '<label class="badge bg-danger">Top Urgent</label>';
+         
+        }
+
+        $dt = array(
+            'kdorder' => $kdorder,
+            'tanggal_order' => $data->tanggal_order,
+            'due_date' => $data->due_date,
+            'nama_pemesan' => $data->nama_pemesan,
+            'bagian' => $this->getbagiandata($data->bagian)->nama_bagian,
+            'priority' => $badge,
+            'status' => $data->status,
+            'attachment' => $data->attachment,
+            'barang' => $data->nama_barang,
+            'qty' => $data->qty,
+            'tanggal_produksi' => $dataprod->tanggal_produksi,
+            'rencana_selesai' => $dataprod->rencana_selesai
+        );
+
+        return $dt;
+    }
+
     public function read_data_produksi($kd_order)
     {
 
@@ -1121,6 +1161,63 @@ class Orders extends CI_Controller
 
         // echo"<b>Check untuk hari ini (".date("d-m-Y",strtotime($hari_ini)).")</b><br>";
         // tanggalMerah($hari_ini);
+    }
+
+
+
+
+    // CONFIRM ORDER SECTION
+    public function confirm_order()
+    {
+        is_allowed($this->uri->segment(1),null);
+
+        $data = array(
+            'sett_apps' =>$this->Setting_app_model->get_by_id(1),
+            'kode_order' => '',
+            'classnyak' => $this
+        );
+        $this->template->load('template','orders/orders_confirm_wrapper', $data);
+    }
+
+    public function get_order_toconfirm_data()
+    {
+        $kd_order = $this->input->post('kd_order');
+        $row = $this->Orders_model->get_by_kd_orders_pure($kd_order);
+        $row2 = $this->Produksi_model->get_by_kd_order($kd_order);
+        if ($row) {
+            $data = array(
+                'status' => 'ok',
+                'order_id' => $row->order_id,
+                'nama_pemesan' => $row->nama_pemesan,
+                'bagian' => $row->bagian,
+                'keterangan' => $row->keterangan,
+                'kd_order' => $row->kd_order,
+                'nama_barang' => $row->nama_barang,
+                'tanggal_order' => $row->tanggal_order,
+                'qty' => $row->qty,
+                'due_date' => $row->due_date,
+                'note' => $row->note,
+                'no_kontak' => $row->no_kontak,
+
+                'priority' => $row->priority,
+                'approved_by' => $row->approved_by,
+                'attachment' => $row->attachment,
+                'status' => $row->status,
+                'reject_note' => $row->reject_note,
+
+                'produksi_id' => $row2->id,
+                'tanggal_produksi' => $row2->tanggal_produksi,
+                'rencana_selesai' => $row2->rencana_selesai,
+                'total_barang_jadi' => $row2->total_barang_jadi,
+                'priority' => $row2->priority,
+                'machine_used' => $row2->machine_use,
+
+                'classnyak' => $this
+            );
+            $this->load->view('orders/orders_confirm_read', $data);
+        } else {
+            echo 'not found';
+        }
     }
 
 }
