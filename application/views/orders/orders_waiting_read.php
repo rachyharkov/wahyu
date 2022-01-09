@@ -541,6 +541,14 @@
 
         $(".masked-input-date").mask("99:99");
 
+        function deteksiMelebihiDueDate() {
+            if ($('#rencana_selesai').val() > $('#due_date').val()) {
+                $('.alertnya').html('<div class="alert alert-danger"><b>Rencana selesai melebihi due date.</b> Silahkan sesuaikan tanggal produksi agar tidak melebihi batas due date permintaan customer.</div>')
+            } else {
+                $('.alertnya').html('')
+            }
+        }
+
         function getMachine(machine_id) {
             $.ajax({
                 type: "GET",
@@ -811,6 +819,7 @@
                 }
                 checkApproveRequirement()
                 sumETA()
+                deteksiMelebihiDueDate()
 
             }
         })
@@ -841,70 +850,9 @@
             setTimeout(function() {
                 sumETA()
                 checkdisablecreateproductionbutton()
+                deteksiMelebihiDueDate()
             },500)
         })
-
-        var typingTimer;
-        var doneTypingInterval = 3000;
-
-        //on keyup, start the countdown
-        $('#kode_order').on('input',function(){
-            clearTimeout(typingTimer);
-
-            $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button>')
-
-            if ($('#kode_order').val()) {
-                $('.button-ceg').replaceWith('<button type="button" class="btn btn-primary button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-sync fa-spin"></i></button>')
-                $('#smart_assist_title').text('Sedang mencari...')
-                $('#smart_assist_message').html(`Sistem sedang mendeteksi kode order yang diinput, mohon tunggu...
-                    <div class="progress rounded-pill mb-2 mt-2">
-                        <div class="progress-bar bg-indigo progress-bar-striped progress-bar-animated rounded-pill fs-10px fw-bold" style="width: 100%"></div>
-                    </div>
-                    `)
-                $('#smart_assist_recommendation').html("")
-                typingTimer = setTimeout(doneTyping, doneTypingInterval);
-            }
-        });
-
-        //user is "finished typing," do something
-        function doneTyping() {
-            var id = $('#kode_order').val()
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url() ?>orders/cek_kode_order_ready",
-                data: {
-                    id: id,
-                },
-                success: function(data){
-                    var dt = JSON.parse(data)
-
-                    if (dt.status == 'ok') {
-                        // alert('sip')
-                        $('.button-ceg').replaceWith('<button type="button" class="btn btn-success button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-check"></i></button>')
-                        $('#smart_assist_title').text('Data Order')
-                        $('#smart_assist_message').html(dt.message)
-                        $('#smart_assist_recommendation').html("")
-                        $('.input-group-kdorder').html('<button type="button" class="btn btn-purple list-data tombol-kembali-input-kdorder">Kembali</button><button type="button" class="btn btn-success btn-next">Konfirmasi</button>')
-                        $('#priority').val(dt.priority)
-                        $('#qty_order').val(dt.qty)
-                    } else {
-                        // alert('no!')
-                        $('.button-ceg').replaceWith('<button type="button" class="btn btn-danger button-ceg input-group-button" style="pointer-events: none;"><i class="fas fa-times"></i></button>')
-                        $('#smart_assist_title').text('Order tidak ditemukan!')
-                        $('#smart_assist_message').html('Cek kembali inputan, pastikan semua huruf adalah besar dan angka sudah sesuai. Jika memang sesuai, mungkin order tersebut sedang on progress atau sudah selesai produksinya')
-                        $('#smart_assist_recommendation').html("")
-                    }
-                },
-                error: function(error) {
-                    Swal.fire({
-                      icon: 'error',
-                      title: "Oops!",
-                      text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
-                    })
-                }
-            });
-        }
 
         $(document).on('click','.btn-reject', function() {
             $('.reject-note-wrapper').html(`
@@ -938,7 +886,7 @@
                 setTimeout(function() {
                     sumETA()
                     checkdisablecreateproductionbutton()
-
+                    deteksiMelebihiDueDate()
                 },500)
             }
         })
