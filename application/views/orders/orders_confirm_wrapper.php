@@ -13,12 +13,14 @@
                     </div>
                 </div>
                 <div class="panel-body" id="panel-body">
-                    <div class="input-group" style="max-width: 70%;; margin: auto;">
-					    <input type="text" id="tbkdorder" class="form-control" placeholder="Masukan Kode Order" value="<?php echo $kode_order ?>">
-					    <span class="input-group-btn">
-					        <button class="btn btn-primary" id="btnsearchkdorder" type="button">Cari</button>
-					    </span>
-					</div>
+                    <form id="search_kd_order_form">
+                        <div class="input-group" style="max-width: 70%;; margin: auto;">
+    					    <input type="text" required id="tbkdorder" class="form-control" placeholder="Masukan Kode Order" value="<?php echo $kode_order ?>">
+    					    <span class="input-group-btn">
+    					        <button type="submit" class="btn btn-primary" id="btnsearchkdorder">Cari</button>
+    					    </span>
+    					</div>
+                    </form>
 
 					<div id="infowrapper" class="text-white" style="margin-top: 3vh;">
 					    <div class="info" style="display: flex;
@@ -85,8 +87,13 @@
 
     $(document).ready(function() {
 
-    	$('#btnsearchkdorder').on('click', function() {
-    		initSearch()
+    	$('#search_kd_order_form').on('submit', function(e) {
+
+            e.preventDefault()
+                
+            if ($(this).valid) return false;
+    		
+            initSearch()
     	})
 
     })
