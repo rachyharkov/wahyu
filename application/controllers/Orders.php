@@ -1184,7 +1184,7 @@ class Orders extends CI_Controller
         $kd_order = $this->input->post('kd_order');
         $row = $this->Orders_model->get_by_kd_orders_pure($kd_order);
         $row2 = $this->Produksi_model->get_by_kd_order($kd_order);
-        if ($row) {
+        if ($row->status != 'WAITING') {
             $data = array(
                 'status' => 'ok',
                 'order_id' => $row->order_id,
@@ -1209,15 +1209,55 @@ class Orders extends CI_Controller
                 'tanggal_produksi' => $row2->tanggal_produksi,
                 'rencana_selesai' => $row2->rencana_selesai,
                 'total_barang_jadi' => $row2->total_barang_jadi,
+                'aktual_selesai' => $row2->aktual_selesai,
                 'priority' => $row2->priority,
                 'machine_used' => $row2->machine_use,
 
                 'classnyak' => $this
             );
-            $this->load->view('orders/orders_confirm_read', $data);
+
+            $arr = array(
+                'status' => 'ok',
+                'page' => $this->load->view('orders/orders_confirm_read', $data, TRUE)
+            );
+
+            echo json_encode($arr);
         } else {
-            echo 'not found';
+
+            $arr = array(
+                'status' => 'not found',
+            );
+
+            echo json_encode($arr);
         }
+    }
+
+    public function order_confirm_action()
+    {
+        $kd_order = $this->input->post('kd_order');
+
+        $tanggal = date('Y-m-d', strtotime($this->input->post('tanggal_actual', TRUE)));
+
+        $jam = $this->input->post('jam_actual', TRUE);
+
+        $dataupdateproduksi = array(
+            'status' => 'DONE',
+            'aktual_selesai' => $tanggal.' '.$jam.':00'
+        );
+
+        $this->Produksi_model->update_by_kd_order($kd_order, $dataupdateproduksi);
+
+        $dataupdateorder = array(
+            'status' => 'DONE'
+        );
+
+        $this->Orders_model->update_by_kd_order($kd_order, $dataupdateorder);
+
+        $arr = array(
+            'status' => 'ok'
+        );
+
+        echo json_encode($arr);
     }
 
 }

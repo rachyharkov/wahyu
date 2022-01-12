@@ -63,9 +63,25 @@
             },
             success: function(data){
                 // const dt = JSON.parse(data)
-                setTimeout(function(){
-                    $('#infowrapper').html(data);
-                },2000)
+                const dt = JSON.parse(data)
+
+                if (dt.status == 'ok') {
+                    setTimeout(function(){
+                        $('#infowrapper').html(dt.page);
+                    },2000)
+                } else {
+                    $('#infowrapper').html(`
+                        <div class="info" style="display: flex;
+                        flex-direction: column;
+                        text-align: center;
+                        height: 50vh;
+                        justify-content: center;">
+                            <div class="icon"> <i class="fas fa-times"></i></div>
+                            <h3 class="title" style="color: #9d9d9d;s">Data tidak ditemukan</h3>
+                        <div>
+                        `);
+                }
+
             },
             error: function(e){
               setTimeout(function(){
@@ -75,8 +91,8 @@
 						text-align: center;
 						height: 50vh;
 						justify-content: center;">
-                        	<div class="icon"> <i class="fas fa-spinner fa-spin fa-3x"></i></div>
-                        	<h3 class="title" style="color: #9d9d9d;s">Mohon Tunggu...</h3>
+                        	<div class="icon"> <i class="fas fa-times"></i></div>
+                        	<h3 class="title" style="color: #9d9d9d;s">Ada masalah dengan server, silahkan coba lagi</h3>
                     	<div>
 
                     	`);
@@ -96,6 +112,68 @@
             initSearch()
     	})
 
+          $(document).on('submit','#form_confirm_order', function(e) {
+              e.preventDefault()
+                
+                if ($(this).valid) return false;
+
+                var a = this
+
+                var btnselected = $(document.activeElement)
+
+                Swal.fire({
+                    title: 'Konfirmasi Tindakan',
+                    text: 'Yakin ingin menuntaskan order ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        btnselected.html('<i class="fas fa-sync fa-spin"></i>').addClass('disabled').attr('disabled')
+
+                        $.ajax({
+                            type: "POST",
+                            url: "<?php echo base_url() ?>orders/order_confirm_action",
+                            data:new FormData(a), //penggunaan FormData
+                            processData:false,
+                            contentType:false,
+                            cache:false,
+                            async:false,
+                            success: function(data) {
+                                var dt = JSON.parse(data)
+
+                                if (dt.status == 'ok') {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: "Sukses",
+                                        text: 'Data orders berhasil diupdate'
+                                    })
+                                    initSearch()
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: "Terjadi kesalahan",
+                                        text: 'Server mengembalikan respon yang bukan seharusnya...'
+                                    })
+                                    btnselected.html('Konfirmasi Selesai').removeClass('disabled').removeAttr('disabled')
+                                }
+                                                                
+                            },
+                            error: function(error) {
+                                Swal.fire({
+                                  icon: 'error',
+                                  title: "Oops!",
+                                  text: 'Tidak dapat tersambung dengan server, pastikan koneksi anda aktif, jika masih terjadi hubungi admin IT'
+                                })
+                                btnselected.html('Konfirmasi Selesai').removeClass('disabled').removeAttr('disabled')
+                            }
+                        });
+                    }
+                })  
+            })
     })
 
 
