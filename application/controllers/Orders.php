@@ -1108,59 +1108,36 @@ class Orders extends CI_Controller
 
     public function count_estimate_minutes()
     {
-        $dateawal = $this->input->post('date_awal', TRUE);
-        $minutestoadd = $this->input->post('add_minutes', TRUE);
+        $dateStart = $this->input->post('date_awal', TRUE);
+        $minutesToAdd = $this->input->post('add_minutes', TRUE);
+        // Fungsi untuk kalkulasi tanggal akhir/selesai
+        function calcEndDate($dateStart, $minutesToAdd) {
+            
+            // Hitung ada berapa hari dari menit yang dimasukkan
+            // dengan cara membagi $minutesToAdd dengn MINUTES_WORK
+            $days = intdiv($minutesToAdd, MINUTES_WORK);
+            
+            // Hitung ada berapa sisa menit di hari itu
+            $minutes = $minutesToAdd % MINUTES_WORK;
+            
+            $dateEnd = new DateTime($dateStart);
+            $dateEnd->modify("+{$days} days");
+            $dateEnd->modify("+{$minutes} minutes");
+            
+            return $dateEnd->format('Y-m-d H:i');
+        }
 
-
-        $time = new DateTime($dateawal);
-        $time->add(new DateInterval('PT' . $minutestoadd . 'M'));
-
-        $stamp = $time->format('Y-m-d H:i');
-
+        // Definisikan variabel konstan untuk jam kerja
+        // yaitu 8 jam / 480 menit setiap harinya
+        define('MINUTES_WORK', 480);
+        
+        $dateEnd      = calcEndDate($dateStart, $minutesToAdd);
+        
         $arroy = array(
-            'target_selesai' => $stamp
+            'target_selesai' => $dateEnd
         );
 
         echo json_encode($arroy, true);
-
-        // echo $dateawal;
-        // echo $stamp;
-
-        // //fungsi check tanggal merah
-        // function tanggalMerah($value) {
-        //     $array = json_decode(file_get_contents("https://raw.githubusercontent.com/guangrei/Json-Indonesia-holidays/master/calendar.json"), TRUE);
-
-        //     //check tanggal merah berdasarkan libur nasional
-        //     if(isset($array[$value])){
-        //         return "tanggal merah ".$array[$value]["deskripsi"];
-        //     }
-        //     //check tanggal merah berdasarkan hari minggu
-        //     elseif(date("D",strtotime($value))==="Sun") {
-        //         return "tanggal merah hari minggu";
-        //     }
-        //     //bukan tanggal merah
-        //     else {
-        //         return "bukan tanggal merah";
-        //     }
-        // }
-
-        // $begin = new DateTime($dateawal);
-        // $end = new DateTime($dateakhir);
-
-        // $interval = DateInterval::createFromDateString('1 day');
-        // $period = new DatePeriod($begin, $interval, $end);
-
-        // foreach ($period as $dt) {
-        //     echo $dt->format("Y-m-d").' >>>> '.tanggalMerah($dt->format("Ymd"));
-        // }
-
-
-
-        // //testing
-        // $hari_ini = date("Ymd");
-
-        // echo"<b>Check untuk hari ini (".date("d-m-Y",strtotime($hari_ini)).")</b><br>";
-        // tanggalMerah($hari_ini);
     }
 
 
