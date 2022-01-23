@@ -1110,8 +1110,16 @@ class Orders extends CI_Controller
     {
         $dateStart = $this->input->post('date_awal', TRUE);
         $minutesToAdd = $this->input->post('add_minutes', TRUE);
+
+        $getalltanggallibur = $this->db->get('tanggal_libur')->result();
+
+        $arraytanggallibur = [];
+
+        foreach ($getalltanggallibur as $p) {
+            $arraytanggallibur[] = $p->tanggal;
+        }
         // Fungsi untuk kalkulasi tanggal akhir/selesai
-        function calcEndDate($dateStart, $minutesToAdd) {
+        function calcEndDate($dateawal, $minutesToAdd) {
             
             // Hitung ada berapa hari dari menit yang dimasukkan
             // dengan cara membagi $minutesToAdd dengn MINUTES_WORK
@@ -1120,21 +1128,40 @@ class Orders extends CI_Controller
             // Hitung ada berapa sisa menit di hari itu
             $minutes = $minutesToAdd % MINUTES_WORK;
             
-            $dateEnd = new DateTime($dateStart);
+            $dateEnd = new DateTime($dateawal);
             $dateEnd->modify("+{$days} days");
             $dateEnd->modify("+{$minutes} minutes");
-            
+
             return $dateEnd->format('Y-m-d H:i');
         }
 
         // Definisikan variabel konstan untuk jam kerja
         // yaitu 8 jam / 480 menit setiap harinya
-        define('MINUTES_WORK', 480);
+
+        $jam_kerja = $this->Setting_app_model->get_by_id(1)->jam_kerja;
+
+        define('MINUTES_WORK', $jam_kerja);
         
         $dateEnd      = calcEndDate($dateStart, $minutesToAdd);
         
+        // Loop between timestamps, 24 hours at a time
+
+        $ds = new DateTime($dateStart);
+        $de = new DateTime($dateEnd);
+
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($ds, $interval, $de);
+
+        foreach ($period as $dt) {
+            $thisDate = $dt->format("Y-m-d");
+            if (in_array($thisDate, $arraytanggallibur)) {
+                // echo 'detected';
+                $de->modify("+1 days");
+            }
+        }
+
         $arroy = array(
-            'target_selesai' => $dateEnd
+            'target_selesai' => $de->format('Y-m-d H:i')
         );
 
         echo json_encode($arroy, true);
